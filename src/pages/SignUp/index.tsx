@@ -1,6 +1,6 @@
 import React from 'react'
 
-function SignUP  ()  {
+function SignUp  ()  {
   return (
     <div>
         <h1>회원가입 페이지입니다.</h1>
@@ -8,4 +8,4 @@ function SignUP  ()  {
   )
 }
 
-export default SignUP
+export default SignUp
