@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { Nav } from '../utils';
+import { Nav } from '../components';
 import { UserHome, Login, SignUp, Schedule, EditProfile, Salary, Attendance,
     EmployeeList, AdminHome, SalaryRequest
  } from '../pages';
