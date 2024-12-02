@@ -1,0 +1,112 @@
+:root {
+    --color-primary: #63A002;
+    --color-secondary: #85976E;
+    --color-tertiary: #4D9D98;
+    --color-success: var(--color-tertiary);
+    --color-danger: #FF5449;
+    --color-nuetral: #91918B;  
+    --color-nuetral-variant: #8F9285;
+    --color-dark: var(--color-neutral-30);
+    --color-light: #ffffff;
+
+    --color-hover-primary: var(--color-primary-95);
+    --color-hover-secondary: var(--color-secondary-95);
+    --color-hover-tertiary: var(--color-tertiary-95);
+    --color-hover-success: var(--color-tertiary-95);
+    --color-hover-danger: var(--color-danger-95);
+
+    --color-background : var(--color-nuetral);
+    --color-background-light: var(--color-neutral-95);
+    --color-background-dark: var(--color-nuetral-variant);
+
+    --color-text-dark : var(--color-dark);
+    --color-text-light: var(--color-light);
+    --color-text-gray: var(--color-nuetral);
+
+
+    /** 색상 **/
+
+    /* Primary 계열 */
+    --color-primary-100: #F1F8E9;
+    --color-primary-99: #E5F4DD;
+    --color-primary-95: #C8E6A6; /* hover */
+    --color-primary-90: #A6CC82;
+    --color-primary-80: #8EBF5F;
+    --color-primary-70: #75B443;
+    --color-primary-60: #5E9E34;
+    --color-primary-50: #4A8328;
+    --color-primary-40: #3D621A;
+    --color-primary-30: #324E11;
+    --color-primary-20: #28390C;
+    --color-primary-10: #202709;
+
+    /* Secondary 계열 */
+    --color-secondary-100: #F6F8F0;
+    --color-secondary-99: #E9ECE4;
+    --color-secondary-95: #D5DEC8;
+    --color-secondary-90: #BFC5B2;
+    --color-secondary-80: #A4AA94;
+    --color-secondary-70: #8A9279;
+    --color-secondary-60: #737A63;
+    --color-secondary-50: #5E6450;
+    --color-secondary-40: #4B503E;
+    --color-secondary-30: #393E2E;
+    --color-secondary-20: #2A2F21;
+    --color-secondary-10: #1D2115;
+
+    /* Tertiary 계열 */
+    --color-tertiary-100: #E7F9F5;
+    --color-tertiary-99: #DFF4F0;
+    --color-tertiary-95: #BFE7E1;
+    --color-tertiary-90: #A4D7CC;
+    --color-tertiary-80: #8CC9BA;
+    --color-tertiary-70: #6AB6A7;
+    --color-tertiary-60: #4E9E91;
+    --color-tertiary-50: #367F74;
+    --color-tertiary-40: #265C53;
+    --color-tertiary-30: #1B483F;
+    --color-tertiary-20: #12342E;
+    --color-tertiary-10: #0B241E;
+
+    /* Neutral 계열 */
+    --color-neutral-100: #FFFFFF;
+    --color-neutral-99: #FAFAFA;
+    --color-neutral-95: #EAEAEA;
+    --color-neutral-90: #DADADA;
+    --color-neutral-80: #C7C7C3;
+    --color-neutral-70: #B0B0AC;
+    --color-neutral-60: #989792;
+    --color-neutral-50: #7D7C76;
+    --color-neutral-40: #626158;
+    --color-neutral-30: #4A493F;
+    --color-neutral-20: #35342A;
+    --color-neutral-10: #211F14;
+
+    /* Neutral Variant 계열 */
+    --color-neutral-variant-100: #F7F8F5;
+    --color-neutral-variant-99: #EFF0ED;
+    --color-neutral-95: #D6D7D3;
+    --color-neutral-90: #C2C3BE;
+    --color-neutral-80: #A6A6A1;
+    --color-neutral-70: #8C8C87;
+    --color-neutral-60: #70706B;
+    --color-neutral-50: #54564F;
+    --color-neutral-40: #3D3F38;
+    --color-neutral-30: #2A2B24;
+    --color-neutral-20: #1A1A14;
+    --color-neutral-10: #0E0E09;
+
+    /* Error 계열 */
+    --color-danger-100: #FFF8F8;
+    --color-danger-99: #FFEDEA;
+    --color-danger-95: #FFCFCB;
+    --color-danger-90: #FFB3AE;
+    --color-danger-80: #FF8581;
+    --color-danger-70: #FF5449;
+    --color-danger-60: #E53935;
+    --color-danger-50: #B71C1C;
+    --color-danger-40: #931515;
+    --color-danger-30: #6D1010;
+    --color-danger-20: #4A0B0B;
+    --color-danger-10: #2E0606;
+}
