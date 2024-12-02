@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Husky를 실행합니다."
+exit 0  # 성공적으로 훅이 실행되었음을 나타냄
