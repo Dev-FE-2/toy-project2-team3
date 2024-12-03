@@ -13,6 +13,7 @@ export interface user {
   department: string;
   isAdmin: boolean;
   isActivated: boolean;
+  schedule?: string; // 오늘의 일정
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
 }

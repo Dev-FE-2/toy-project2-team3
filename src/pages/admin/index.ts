@@ -1,5 +1,2 @@
-
-import { default as EmployeeList} from './EmployeeList'
-import { default as SalaryRequest} from './SalaryRequest'
-
-export { EmployeeList, SalaryRequest };
+export { default as EmployeeList } from './EmployeeList';
+export { default as SalaryRequest } from './SalaryRequest';
