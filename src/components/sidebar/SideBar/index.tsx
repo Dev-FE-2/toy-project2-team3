@@ -5,7 +5,7 @@ import SideBarTop from '../SideBarTop';
 import SideBarMiddle from '../SideBarMiddle';
 import SideBarBottom from '../SideBarBottom';
 
-const Container = styled.div`
+const StyledSideBarContainer = styled.div`
   display: flex; 
 `;
 
@@ -13,21 +13,21 @@ const StyledSideBar = styled.div`
   position: relative;
   width: 16.67vw;
   height: 100vh; 
-  padding-left: 20px;
-  padding-right: 20px;
-  overflow: hidden; // 자식 요소가 넘치지 않도록 설정
+  padding: 0 1vw;
+  overflow: hidden;
+  border-right: 0.7px solid #91918B
 `;
 
 const SideBar = () => {
   return (
-    <Container>
+    <StyledSideBarContainer>
       <StyledSideBar>
         <SideBarTop />
         <SideBarMiddle />
-        <SideBarBottom /> {/* SideBarBottom이 맨 아래에 위치 */}
+        <SideBarBottom />
       </StyledSideBar>
       <Outlet /> {/* 메인 콘텐츠 */}
-    </Container>
+    </StyledSideBarContainer>
   );
 }
 

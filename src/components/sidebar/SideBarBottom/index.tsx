@@ -1,53 +1,109 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from "firebase/auth"; 
+import fetchUserInfo, { User } from '../../../firebase/user/fetchUserInfo'; 
+import logout from '../../../assets/icons/logout.png';
 import styled from 'styled-components';
 
-const BottomContainer = styled.div`
+const StyledBottomContainer = styled.div`
   position: absolute; 
   bottom: 0; 
-  width: 80%; 
-  height: 10vh; // 높이 조정
-  background-color: #FF5449;
+  width: 100%; 
+  height: 10vh; 
   display: flex; 
   align-items: center; 
   padding: 10px; 
-  box-sizing: border-box; // padding을 포함한 크기 계산
-`;
+  box-sizing: border-box; 
+  color: #4A493F;
+  margin-bottom: 0.5vw;
 
-const ProfileImage = styled.img`
-  width: 50px; // 프로필 이미지 크기 조정
-  height: 50px; // 프로필 이미지 크기 조정
-  border-radius: 50%; // 원형으로 만들기
-  margin-right: 10px; // 이미지와 이름 사이 간격
+  img {
+    width: 3vw; 
+    height: 6vh; 
+    border-radius: 10px; 
+    cursor: pointer; // 커서 변경
+  }
 `;
 
 const UserInfo = styled.div`
-  display: flex; // 플렉스 박스 사용
-  flex-direction: column; // 세로로 쌓이게 설정
-`
-const Name = styled.span`
-  font-size: 1.2em; // 이름 크기 조정
-  color: #fff; // 텍스트 색상
+  display: flex; 
+  flex-direction: column; 
+  margin-left: 20px;
+  margin-right: 25%; 
+  box-sizing: border-box; 
 `;
+
+const Name = styled.span`
+  font-weight: 700;
+  font-size: 1.5em; 
+`;
+
 const Schedule = styled.span`
-  font-size: 0.6em; // 이름 크기 조정
-  color: #fff; // 텍스트 색상
-`
-const Photo = styled.img`
-  width: 50px; // 사진 크기 조정
-  height: 50px; // 사진 크기 조정
-  margin-left: 10px; // 이름과 사진 사이 간격
+  font-weight: 700;
+  font-size: 0.8em; 
+  color: #91918B;
 `;
 
 const SideBarBottom = () => {
+  const [userInfo, setUserInfo] = useState<User | null>(null); 
+  const [loading, setLoading] = useState<boolean>(true); 
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const unsubscribe = fetchUserInfo((info) => {
+      setUserInfo(info);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []); 
+
+  const handleProfile = () => {
+    navigate('/editProfile'); 
+  }
+
+  const handleLogout = () => {
+    const auth = getAuth();
+    
+    signOut(auth).then(() => {
+      console.log("로그아웃 성공");
+      setUserInfo(null); // 로그아웃 시 사용자 정보 초기화
+      navigate('/login'); // 로그아웃 후 /login으로 리다이렉션
+    }).catch((error) => {
+      console.error("로그아웃 중 오류 발생:", error);
+      // 사용자에게 오류 메시지를 보여주는 방법 추가 (예: alert)
+    });
+  };
+
   return (
-    <BottomContainer>
-      <ProfileImage src="path_to_profile_image.jpg" alt="Profile" />
-      <UserInfo>
-        <Name>이름</Name>
-        <Schedule>스케쥴(현재 스케쥴)</Schedule>
-      </UserInfo>
-      <Photo src="/assets/icons/logout.png" alt="logout" />
-    </BottomContainer>
+    <StyledBottomContainer>
+      {loading ? (
+        <p>사용자 정보를 불러오는 중...</p> 
+      ) : userInfo ? (
+        <>
+          <img 
+            src={userInfo.profileImgUrl} 
+            alt="Profile" 
+            onClick={handleProfile} 
+            role="button" 
+            tabIndex={0} // 접근성을 위한 속성 추가
+          />
+          <UserInfo>
+            <Name>{userInfo.name}</Name>
+            <Schedule>{userInfo.schedule || "스케줄 정보 없음"}</Schedule>
+          </UserInfo>
+          <img 
+            src={logout} 
+            alt="logout" 
+            onClick={handleLogout} 
+            role="button" 
+            tabIndex={0} // 접근성을 위한 속성 추가
+          />
+        </>
+      ) : (
+        <p>사용자 정보가 없습니다.</p>
+      )}
+    </StyledBottomContainer>
   );
 }
 
