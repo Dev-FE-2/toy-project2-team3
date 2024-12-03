@@ -1,20 +1,20 @@
 export interface user {
-  userId: string
-  email: string
-  password: string
-  phoneNumber: string
-  name: string
-  employeeNumber: string
-  address: string
-  addressDetail: string
-  profileImgUrl: string
-  position: string
-  team: string
-  department: string
-  isAdmin: boolean
+  userId: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  name: string;
+  employeeNumber: string;
+  address: string;
+  addressDetail: string;
+  profileImgUrl: string;
+  position: string;
+  team: string;
+  department: string;
+  isAdmin: boolean;
   isActivated: boolean;
-  createdAt: string // ISO timestamp
-  updatedAt: string // ISO timestamp
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
 }
 
 export interface Schedule {
