@@ -1,9 +1,24 @@
-import React from 'react'
+import styled from 'styled-components';
+import ScheduleHeader from './ScheduleHeader';
+import ScheduleMain from './ScheduleMain';
+import ScheduleSideBar from './ScheduleSideBar';
+
+const StyledContent = styled.div``;
 
 const Schedule = () => {
   return (
-    <div><h1>Schedule페이지입니다.</h1></div>
-  )
-}
+    <StyledWrapper>
+      <ScheduleSideBar />
+      <StyledContent>
+        <ScheduleHeader />
+        <ScheduleMain />
+      </StyledContent>
+    </StyledWrapper>
+  );
+};
 
-export default Schedule
+const StyledWrapper = styled.div`
+  display: flex;
+`;
+
+export default Schedule;
