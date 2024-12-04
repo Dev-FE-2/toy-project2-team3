@@ -1,5 +1,13 @@
-import styled from "styled-components"
-import MonthPicker from "./MonthPicker"
+import styled from 'styled-components';
+import MonthPicker from './MonthPicker';
+
+const ScheduleHeader = () => {
+  return (
+    <StyledHeader>
+      <MonthPicker />
+    </StyledHeader>
+  );
+};
 
 const StyledHeader = styled.div`
   width: 75rem;
@@ -8,15 +16,7 @@ const StyledHeader = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid black;
-  border-radius: 0 .5rem 0 0;
-`
+  border-radius: 0 0.5rem 0 0;
+`;
 
-const ScheduleHeader = () => {
-  return (
-    <StyledHeader>
-      <MonthPicker />
-    </StyledHeader>
-  )
-}
-
-export default ScheduleHeader
+export default ScheduleHeader;

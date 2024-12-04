@@ -1,6 +1,40 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const MainCalendarDaysWrapper = styled.div`
+const MainCalendarDays = () => {
+  return (
+    <StyledMainCalendarDaysWrapper>
+      <StyledMainCalendarDaysNumber>22</StyledMainCalendarDaysNumber>
+      <StyledMainCalendarDaysContentsWrapper>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+        <StyledMainCalendarDaysContents>
+          누구의 어떤 일정입니다
+        </StyledMainCalendarDaysContents>
+      </StyledMainCalendarDaysContentsWrapper>
+    </StyledMainCalendarDaysWrapper>
+  );
+};
+
+const StyledMainCalendarDaysWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,13 +47,13 @@ const MainCalendarDaysWrapper = styled.div`
   cursor: pointer;
 `;
 
-const MainCalendarDaysNumber = styled.div`
+const StyledMainCalendarDaysNumber = styled.div`
   position: absolute;
   top: 5%;
   left: 5%;
 `;
 
-const MainCalendarDaysContentsWrapper = styled.div`
+const StyledMainCalendarDaysContentsWrapper = styled.div`
   width: 80%;
   max-height: calc(1.375rem * 4 + 0.25rem * 3); // 5개의 컨텐츠 + 간격
   /* height: 6.25rem; */
@@ -29,50 +63,16 @@ const MainCalendarDaysContentsWrapper = styled.div`
   overflow: hidden; /* 초과된 일정 숨김 */
 `;
 
-const MainCalendarDaysContents = styled.div`
-  width: calc(100% - .5rem - 2px);
+const StyledMainCalendarDaysContents = styled.div`
+  width: calc(100% - 0.5rem - 2px);
   min-height: 1rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   border: 1px solid black;
   border-radius: 0.25rem;
-  padding: .125rem .25rem;
+  padding: 0.125rem 0.25rem;
   overflow: hidden; /* 텍스트 넘침 방지 */
   white-space: nowrap; /* 한 줄로 제한 */
   text-overflow: ellipsis; /* 넘치는 텍스트 ... 표시 */
 `;
-
-const MainCalendarDays = () => {
-  return (
-    <MainCalendarDaysWrapper>
-      <MainCalendarDaysNumber>22</MainCalendarDaysNumber>
-      <MainCalendarDaysContentsWrapper>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-        <MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </MainCalendarDaysContents>
-      </MainCalendarDaysContentsWrapper>
-    </MainCalendarDaysWrapper>
-  );
-};
 
 export default MainCalendarDays;

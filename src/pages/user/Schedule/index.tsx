@@ -1,11 +1,7 @@
-import styled from "styled-components";
-import ScheduleHeader from "./ScheduleHeader";
-import ScheduleMain from "./ScheduleMain";
-import ScheduleSideBar from "./ScheduleSideBar";
-
-const StyledWrapper = styled.div`
-  display: flex;
-`;
+import styled from 'styled-components';
+import ScheduleHeader from './ScheduleHeader';
+import ScheduleMain from './ScheduleMain';
+import ScheduleSideBar from './ScheduleSideBar';
 
 const StyledContent = styled.div``;
 
@@ -20,5 +16,9 @@ const Schedule = () => {
     </StyledWrapper>
   );
 };
+
+const StyledWrapper = styled.div`
+  display: flex;
+`;
 
 export default Schedule;
