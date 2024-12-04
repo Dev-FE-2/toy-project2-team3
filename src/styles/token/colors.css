@@ -1,13 +1,13 @@
 :root {
-  --color-primary: #63a002;
-  --color-secondary: #85976e;
-  --color-tertiary: #4d9d98;
+  --color-primary: var(--color-primary-60);
+  --color-secondary: var(--color-secondary-60);
+  --color-tertiary: var(--color-tertiary-60);
   --color-success: var(--color-tertiary);
-  --color-danger: #ff5449;
-  --color-nuetral: #91918b;
-  --color-nuetral-variant: #8f9285;
+  --color-danger: var(--color-danger-60);
+  --color-nuetral: var(--color-neutral-60);
+  --color-nuetral-variant: var(--color-nuetral-variant-60);
   --color-dark: var(--color-neutral-30);
-  --color-light: #ffffff;
+  --color-light: var(--color-neutral-100);
 
   --color-hover-primary: var(--color-primary-95);
   --color-hover-secondary: var(--color-secondary-95);
@@ -80,18 +80,18 @@
   --color-neutral-10: #211f14;
 
   /* Neutral Variant 계열 */
-  --color-neutral-variant-100: #f7f8f5;
-  --color-neutral-variant-99: #eff0ed;
-  --color-neutral-95: #d6d7d3;
-  --color-neutral-90: #c2c3be;
-  --color-neutral-80: #a6a6a1;
-  --color-neutral-70: #8c8c87;
-  --color-neutral-60: #70706b;
-  --color-neutral-50: #54564f;
-  --color-neutral-40: #3d3f38;
-  --color-neutral-30: #2a2b24;
-  --color-neutral-20: #1a1a14;
-  --color-neutral-10: #0e0e09;
+  --color-nuetral-variant-100: #f7f8f5;
+  --color-nuetral-variant-99: #eff0ed;
+  --color-nuetral-variant-95: #d6d7d3;
+  --color-nuetral-variant-90: #c2c3be;
+  --color-nuetral-variant-80: #a6a6a1;
+  --color-nuetral-variant-70: #8c8c87;
+  --color-nuetral-variant-60: #70706b;
+  --color-nuetral-variant-50: #54564f;
+  --color-nuetral-variant-40: #3d3f38;
+  --color-nuetral-variant-30: #2a2b24;
+  --color-nuetral-variant-20: #1a1a14;
+  --color-nuetral-variant-10: #0e0e09;
 
   /* Error 계열 */
   --color-danger-100: #fff8f8;
