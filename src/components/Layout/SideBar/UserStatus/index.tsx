@@ -72,6 +72,7 @@ const UserStatus = () => {
         setUserInfo(null); // 로그아웃 시 사용자 정보 초기화
         navigate('/login'); // 로그아웃 후 /login으로 리다이렉션
       })
+
       .catch((error) => {
         console.error('로그아웃 중 오류 발생:', error);
         // 사용자에게 오류 메시지를 보여주는 방법 추가 (예: alert)
