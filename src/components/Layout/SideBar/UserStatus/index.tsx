@@ -74,8 +74,6 @@ const UserStatus = () => {
   );
 };
 
-export default UserStatus;
-
 const StyledBottomContainer = styled.div`
   position: absolute;
   bottom: 0;
@@ -114,3 +112,5 @@ const StyledSchedule = styled.span`
   font-size: 0.8em;
   color: #91918b;
 `;
+
+export default UserStatus;

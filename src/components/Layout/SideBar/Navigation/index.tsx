@@ -188,8 +188,6 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
-
 // 공통 CSS 스타일 정의
 const baseContainerStyles = css<BaseContainerProps>`
   display: flex;
@@ -252,3 +250,5 @@ const StyledRowContainer = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none; // 링크의 기본 밑줄 제거
 `;
+
+export default Navigation;

@@ -10,8 +10,6 @@ const BrandLogo = () => {
   );
 };
 
-export default BrandLogo;
-
 const StyledSideBarTop = styled.div`
   display: flex;
   align-items: center;
@@ -29,3 +27,5 @@ const StyledSideBarTop = styled.div`
     margin-right: 2vh;
   }
 `;
+
+export default BrandLogo;
