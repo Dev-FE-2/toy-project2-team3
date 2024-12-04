@@ -33,10 +33,6 @@ const MainCalendar = ({ year, month }: MainCalendarProps) => {
     (_, i) => i + 1
   );
 
-  console.log(PREV_MONTH_DAYS)
-  console.log(CURRENT_MONTH_DAYS)
-  console.log(NEXT_MONTH_DAYS)
-
   const ALL_DAYS = [
     ...PREV_MONTH_DAYS,
     ...CURRENT_MONTH_DAYS,
@@ -46,7 +42,14 @@ const MainCalendar = ({ year, month }: MainCalendarProps) => {
   return (
     <StyledMainCalendarWrapper>
       {ALL_DAYS.map((day, index) => (
-        <MainCalendarDays key={index} day={day} />
+        <MainCalendarDays
+          key={index}
+          day={day}
+          isCurrentMonth={
+            index >= PREV_MONTH_DAYS.length &&
+            index < PREV_MONTH_DAYS.length + CURRENT_MONTH_DAYS.length
+          }
+        />
       ))}
     </StyledMainCalendarWrapper>
   );

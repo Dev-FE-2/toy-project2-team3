@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import { colors } from '../../../../../../styles/token/colors';
 
 interface MainCalendarDaysProps {
   day: number;
+  isCurrentMonth: boolean;
 }
 
-const MainCalendarDays = ({ day }: MainCalendarDaysProps) => {
+const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
   return (
-    <StyledMainCalendarDaysWrapper >
+    <StyledMainCalendarDaysWrapper isCurrentMonth={isCurrentMonth}>
       <StyledMainCalendarDaysNumber>{day}</StyledMainCalendarDaysNumber>
       <StyledMainCalendarDaysContentsWrapper>
         <StyledMainCalendarDaysContents>
@@ -17,17 +19,24 @@ const MainCalendarDays = ({ day }: MainCalendarDaysProps) => {
   );
 };
 
-const StyledMainCalendarDaysWrapper = styled.div`
+const StyledMainCalendarDaysWrapper = styled.div<{ isCurrentMonth: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   background-color: white;
+  color: ${({ isCurrentMonth }) =>
+    isCurrentMonth ? colors.semantic.dark : colors.semantic.disabled};
   border: 1px solid black;
   padding-bottom: 0.5rem;
   position: relative;
   overflow: hidden; /* 상위 요소 크기 초과 내용 숨김 */
-  cursor: pointer;
+  cursor: ${({ isCurrentMonth }) =>
+    isCurrentMonth ? 'pointer' : 'not-allowed'};
+  &:hover {
+    background-color: ${({ isCurrentMonth }) =>
+      isCurrentMonth ? colors.semantic.hover.primary : colors.semantic.light};
+  }
 `;
 
 const StyledMainCalendarDaysNumber = styled.div`
