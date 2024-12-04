@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PokemonLogo from '../../../../assets/PokemonLogo.png';
+import PokemonLogo from '../../../../../public/PokemonLogo.png';
 
 const BrandLogo = () => {
   return (
