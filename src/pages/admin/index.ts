@@ -1,5 +1,2 @@
-import { default as AdminHome } from './AdminHome';
-import { default as EmployeeList} from './EmployeeList'
-import { default as SalaryRequest} from './SalaryRequest'
-
-export { AdminHome, EmployeeList, SalaryRequest };
+export { default as EmployeeList } from './EmployeeList';
+export { default as SalaryRequest } from './SalaryRequest';
