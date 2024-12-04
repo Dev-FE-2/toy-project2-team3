@@ -5,7 +5,7 @@ export const border = {
   width: '1px',
   style: 'solid',
   color: colors.semantic.border,
-  default: colors.semantic.border,
+  default: `1px solid ${colors.semantic.border}`,
   radius: {
     xs: '4px',
     lg: '32px',
