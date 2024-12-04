@@ -20,7 +20,6 @@ const MainCalendarDaysNumber = styled.div`
 `;
 
 const MainCalendarDaysContentsWrapper = styled.div`
-  background-color: antiquewhite;
   width: 80%;
   max-height: calc(1.375rem * 4 + 0.25rem * 3); // 5개의 컨텐츠 + 간격
   /* height: 6.25rem; */

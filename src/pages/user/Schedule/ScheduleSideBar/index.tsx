@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import TeamList from "./TeamList";
+import TeamList from "../core/TeamList";
 
 const StyledWrapper = styled.div`
   border: 1px solid black;
