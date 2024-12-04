@@ -2,18 +2,20 @@ import styled from 'styled-components';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
-
-const StyledContent = styled.div``;
+import TempScheduleCreator from './TempScheduleCreator';
 
 const Schedule = () => {
   return (
-    <StyledWrapper>
-      <ScheduleSideBar />
-      <StyledContent>
-        <ScheduleHeader />
-        <ScheduleMain />
-      </StyledContent>
-    </StyledWrapper>
+    <>
+      <StyledWrapper>
+        <ScheduleSideBar />
+        <div>
+          <ScheduleHeader />
+          <ScheduleMain />
+        </div>
+      </StyledWrapper>
+      <TempScheduleCreator />
+    </>
   );
 };
 

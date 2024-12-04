@@ -1,31 +1,14 @@
 import styled from 'styled-components';
 
-const MainCalendarDays = () => {
+interface MainCalendarDaysProps {
+  day: number;
+}
+
+const MainCalendarDays = ({ day }: MainCalendarDaysProps) => {
   return (
-    <StyledMainCalendarDaysWrapper>
-      <StyledMainCalendarDaysNumber>22</StyledMainCalendarDaysNumber>
+    <StyledMainCalendarDaysWrapper >
+      <StyledMainCalendarDaysNumber>{day}</StyledMainCalendarDaysNumber>
       <StyledMainCalendarDaysContentsWrapper>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
-        <StyledMainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </StyledMainCalendarDaysContents>
         <StyledMainCalendarDaysContents>
           누구의 어떤 일정입니다
         </StyledMainCalendarDaysContents>
