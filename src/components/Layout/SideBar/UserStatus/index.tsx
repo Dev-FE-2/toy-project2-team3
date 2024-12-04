@@ -6,45 +6,6 @@ import type { user } from '../../../../types/interface';
 import logout from '../../../../assets/icons/logout.png';
 import styled from 'styled-components';
 
-const StyledBottomContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 10vh;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  box-sizing: border-box;
-  color: #4a493f;
-  margin-bottom: 0.5vw;
-
-  img {
-    width: 3vw;
-    height: 6vh;
-    border-radius: 10px;
-    cursor: pointer; // 커서 변경
-  }
-`;
-
-const StyledUserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
-  margin-right: 25%;
-  box-sizing: border-box;
-`;
-
-const StyledName = styled.span`
-  font-weight: 700;
-  font-size: 1.5em;
-`;
-
-const StyledSchedule = styled.span`
-  font-weight: 700;
-  font-size: 0.8em;
-  color: #91918b;
-`;
-
 const UserStatus = () => {
   const [userInfo, setUserInfo] = useState<user | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -114,3 +75,42 @@ const UserStatus = () => {
 };
 
 export default UserStatus;
+
+const StyledBottomContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #4a493f;
+  margin-bottom: 0.5vw;
+
+  img {
+    width: 3vw;
+    height: 6vh;
+    border-radius: 10px;
+    cursor: pointer; // 커서 변경
+  }
+`;
+
+const StyledUserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 25%;
+  box-sizing: border-box;
+`;
+
+const StyledName = styled.span`
+  font-weight: 700;
+  font-size: 1.5em;
+`;
+
+const StyledSchedule = styled.span`
+  font-weight: 700;
+  font-size: 0.8em;
+  color: #91918b;
+`;

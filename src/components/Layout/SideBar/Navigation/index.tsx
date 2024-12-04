@@ -18,69 +18,6 @@ type BaseContainerProps = {
   isHovered?: boolean;
 };
 
-// 공통 CSS 스타일 정의
-const baseContainerStyles = css<BaseContainerProps>`
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  text-align: left;
-  height: 6vh;
-  margin-bottom: 1.5vh;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 8px;
-
-  /* 클릭 또는 호버에 대한 설정 */
-  color: ${(props) => (props.isActive ? '#fff' : '#4A493F')};
-  background-color: ${(props) =>
-    props.isActive ? '#63A002' : props.isHovered ? '#E5F4DD' : '#fff'};
-`;
-
-const StyledMainContainer = styled.div<BaseContainerProps>`
-  ${baseContainerStyles}
-  font-size: 20px;
-
-  img {
-    width: 24px;
-    height: auto;
-    margin-right: 1vh;
-    padding-left: 0.5vw;
-    filter: ${(props) =>
-      props.isActive
-        ? 'brightness(0) invert(1)'
-        : 'none'}; // 활성화 상태일 때 흰색으로 변경
-  }
-
-  .arrow {
-    margin-left: auto;
-    width: 1vw;
-    height: auto;
-    display: ${(props) =>
-      props.isActive ? 'block' : 'none'}; // 활성화 상태일 때만 표시
-  }
-`;
-
-const StyledSubContainer = styled.div<BaseContainerProps>`
-  ${baseContainerStyles}
-  width: 13vw;
-  padding-left: 1vw;
-  font-size: 14px;
-  height: 4vh;
-  margin-bottom: 0.5vh;
-`;
-
-const StyledRowContainer = styled.div`
-  border-left: 1.5px solid #63a002;
-  margin-left: 1vh;
-  padding-left: 0.5vw;
-  display: flex; // 가로로 정렬
-  flex-direction: column; // 세로로 쌓이게 설정
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none; // 링크의 기본 밑줄 제거
-`;
-
 const items = [
   { id: 0, src: home, alt: 'home', text: 'Pokemon ERP', link: '/userHome' },
   {
@@ -252,3 +189,66 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
+// 공통 CSS 스타일 정의
+const baseContainerStyles = css<BaseContainerProps>`
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  text-align: left;
+  height: 6vh;
+  margin-bottom: 1.5vh;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 8px;
+
+  /* 클릭 또는 호버에 대한 설정 */
+  color: ${(props) => (props.isActive ? '#fff' : '#4A493F')};
+  background-color: ${(props) =>
+    props.isActive ? '#63A002' : props.isHovered ? '#E5F4DD' : '#fff'};
+`;
+
+const StyledMainContainer = styled.div<BaseContainerProps>`
+  ${baseContainerStyles}
+  font-size: 20px;
+
+  img {
+    width: 24px;
+    height: auto;
+    margin-right: 1vh;
+    padding-left: 0.5vw;
+    filter: ${(props) =>
+      props.isActive
+        ? 'brightness(0) invert(1)'
+        : 'none'}; // 활성화 상태일 때 흰색으로 변경
+  }
+
+  .arrow {
+    margin-left: auto;
+    width: 1vw;
+    height: auto;
+    display: ${(props) =>
+      props.isActive ? 'block' : 'none'}; // 활성화 상태일 때만 표시
+  }
+`;
+
+const StyledSubContainer = styled.div<BaseContainerProps>`
+  ${baseContainerStyles}
+  width: 13vw;
+  padding-left: 1vw;
+  font-size: 14px;
+  height: 4vh;
+  margin-bottom: 0.5vh;
+`;
+
+const StyledRowContainer = styled.div`
+  border-left: 1.5px solid #63a002;
+  margin-left: 1vh;
+  padding-left: 0.5vw;
+  display: flex; // 가로로 정렬
+  flex-direction: column; // 세로로 쌓이게 설정
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none; // 링크의 기본 밑줄 제거
+`;

@@ -1,6 +1,17 @@
 import styled from 'styled-components';
 import PokemonLogo from '../../../../assets/PokemonLogo.png';
 
+const BrandLogo = () => {
+  return (
+    <StyledSideBarTop>
+      <img src={PokemonLogo} alt="Pokemon Logo" />
+      Pokemon ERP
+    </StyledSideBarTop>
+  );
+};
+
+export default BrandLogo;
+
 const StyledSideBarTop = styled.div`
   display: flex;
   align-items: center;
@@ -18,14 +29,3 @@ const StyledSideBarTop = styled.div`
     margin-right: 2vh;
   }
 `;
-
-const BrandLogo = () => {
-  return (
-    <StyledSideBarTop>
-      <img src={PokemonLogo} alt="Pokemon Logo" />
-      Pokemon ERP
-    </StyledSideBarTop>
-  );
-};
-
-export default BrandLogo;
