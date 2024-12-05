@@ -2,17 +2,21 @@ import styled from 'styled-components';
 import MainCalendarDays from './MainCalendarDays';
 
 interface MainCalendarProps {
-  year: number;
-  month: number;
+  currentYear: number;
+  currentMonth: number;
 }
 
-const MainCalendar = ({ year, month }: MainCalendarProps) => {
-  const FIRST_DAY_OF_MONTH = new Date(year, month - 1, 1);
-  const LAST_DAY_OF_MONTH = new Date(year, month, 0);
+const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
+  const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
+  const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
   const TOTAL_DAYS = LAST_DAY_OF_MONTH.getDate();
 
   const START_DAY_OF_WEEK = FIRST_DAY_OF_MONTH.getDay();
-  const LAST_DAY_OF_PREV_MONTH = new Date(year, month - 1, 0).getDate();
+  const LAST_DAY_OF_PREV_MONTH = new Date(
+    currentYear,
+    currentMonth - 1,
+    0
+  ).getDate();
   const PREV_MONTH_DAYS = Array.from(
     { length: START_DAY_OF_WEEK },
     (_, i) => LAST_DAY_OF_PREV_MONTH - START_DAY_OF_WEEK + i + 1

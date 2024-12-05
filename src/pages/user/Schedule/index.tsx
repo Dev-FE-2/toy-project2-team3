@@ -26,8 +26,7 @@ const Schedule = () => {
             currentYear={currentYear}
             handleYearMonthChange={handleYearMonthChange}
           />
-          <ScheduleMain
-          />
+          <ScheduleMain currentMonth={currentMonth} currentYear={currentYear} />
         </div>
       </StyledWrapper>
       <TempScheduleCreator />
