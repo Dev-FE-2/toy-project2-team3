@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
-import TempScheduleCreator from './TempScheduleCreator';
 import { useState } from 'react';
 
 const Schedule = () => {
@@ -29,7 +28,6 @@ const Schedule = () => {
           <ScheduleMain currentMonth={currentMonth} currentYear={currentYear} />
         </div>
       </StyledWrapper>
-      <TempScheduleCreator />
     </>
   );
 };

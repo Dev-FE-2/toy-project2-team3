@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import MonthPickerDetail from './MonthPickerDetail';
+import { border } from '../../../../styles';
 
 interface ScheduleHeaderProps {
   currentMonth: number;
@@ -18,7 +19,7 @@ const ScheduleHeader = ({
 
   const handleMonthClick = (clickedMonth: number) => {
     handleYearMonthChange(currentYear, clickedMonth + 1);
-    setIsMonthPickerDetailOpen(false)
+    setIsMonthPickerDetailOpen(false);
   };
 
   return (
@@ -41,13 +42,12 @@ const ScheduleHeader = ({
 };
 
 const StyledHeader = styled.div`
-  width: 75rem;
+  width: 75.1rem;
   height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
-  border-radius: 0 0.5rem 0 0;
+  border: ${border.default};
 `;
 
 export default ScheduleHeader;

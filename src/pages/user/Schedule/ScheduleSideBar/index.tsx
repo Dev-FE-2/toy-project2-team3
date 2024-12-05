@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import TeamList from '../core/TeamList';
+import { border } from '../../../../styles';
 
 const teams = [
   {
@@ -45,12 +46,10 @@ const ScheduleSideBar = () => {
 };
 
 const StyledWrapper = styled.div`
-  border: 1px solid black;
-  border-radius: 0.5rem 0 0 0.5rem;
+  border: ${border.default};
   width: 10rem;
   height: 80dvh;
   padding: 1rem 0;
-  box-sizing: border-box;
 `;
 
 const StyledContent = styled.div`

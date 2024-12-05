@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { styles } from '../../../../../styles';
+import { colors, border } from '../../../../../styles';
 import { MONTHS } from '../constants';
 
 interface MonthPickerDetailProps {
@@ -34,11 +34,11 @@ const MonthPickerDetail = ({
 };
 
 const StyledWrapper = styled.div`
-  border-bottom: 1px solid ${styles.colors.semantic.neutral};
-  border-left: 1px solid ${styles.colors.semantic.neutral};
-  border-right: 1px solid ${styles.colors.semantic.neutral};
-  border-radius: 0 0 ${styles.border.radius.xs} ${styles.border.radius.xs};
-  background-color: ${styles.colors.semantic.light};
+  border-bottom: ${border.default};
+  border-left: ${border.default};
+  border-right: ${border.default};
+  border-radius: 0 0 ${border.radius.xs} ${border.radius.xs};
+  background-color: ${colors.semantic.light};
   width: 15rem;
   position: absolute;
   top: 2.25rem;
@@ -67,21 +67,21 @@ const StyledMonthItems = styled.div`
   align-items: center;
   width: 80%;
   padding: 0.25rem 0;
-  border-radius: ${styles.border.radius.xs};
+  border-radius: ${border.radius.xs};
   cursor: pointer;
 
   &:hover {
-    background-color: ${styles.colors.semantic.hover.primary};
+    background-color: ${colors.semantic.hover.primary};
   }
 
   &:active {
-    background-color: ${styles.colors.semantic.primary};
-    color: ${styles.colors.semantic.light};
+    background-color: ${colors.semantic.primary};
+    color: ${colors.semantic.light};
   }
 
   &.current-month {
-    background-color: ${styles.colors.semantic.primary};
-    color: ${styles.colors.semantic.light};
+    background-color: ${colors.semantic.primary};
+    color: ${colors.semantic.light};
   }
 `;
 

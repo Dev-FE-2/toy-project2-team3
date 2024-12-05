@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { styles } from '../../../../../styles';
+import { border } from '../../../../../styles';
 import { MONTHS } from '../constants';
 
 interface SetIsMonthPickerDetailOpen {
@@ -139,8 +139,8 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid ${styles.colors.semantic.neutral};
-  border-radius: ${styles.border.radius.xs};
+  border: ${border.default};
+  border-radius: ${border.radius.xs};
 
   div {
     display: flex;
