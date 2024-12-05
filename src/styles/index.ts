@@ -3,7 +3,7 @@ import { padding } from './token/padding';
 import { font } from './token/font';
 import { border } from './token/border';
 
-export const styles = {
+export {
   padding,
   font,
   border,
