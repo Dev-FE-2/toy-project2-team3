@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import MainCalendar from './MainCalendar';
 
-const ScheduleMain = () => {
+interface ScheduleMainProps {
+  currentMonth: number;
+  currentYear: number;
+}
+
+const ScheduleMain = ({ currentMonth, currentYear }: ScheduleMainProps) => {
   return (
     <StyledWrapper>
-      <MainCalendar />
+      <MainCalendar currentYear={currentYear} currentMonth={currentMonth} />
     </StyledWrapper>
   );
 };
