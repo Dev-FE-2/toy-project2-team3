@@ -1,11 +1,4 @@
-import { colors } from './token/colors';
-import { padding } from './token/padding';
-import { font } from './token/font';
-import { border } from './token/border';
-
-export {
-  padding,
-  font,
-  border,
-  colors,
-};
+export { colors } from './token/colors';
+export { padding } from './token/padding';
+export { font } from './token/font';
+export { border } from './token/border';
