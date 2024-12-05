@@ -27,7 +27,8 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
     (_, i) => i + 1
   );
 
-  const TOTAL_DISPLAYED_DAYS = 35;
+  const TOTAL_DISPLAYED_DAYS =
+    PREV_MONTH_DAYS.length + CURRENT_MONTH_DAYS.length > 35 ? 42 : 35;
   const NEXT_MONTH_DAYS = Array.from(
     {
       length:
@@ -43,8 +44,13 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
     ...NEXT_MONTH_DAYS,
   ];
 
+  console.log(ALL_DAYS.length);
+  console.log(PREV_MONTH_DAYS);
+  console.log(CURRENT_MONTH_DAYS);
+  console.log(NEXT_MONTH_DAYS);
+
   return (
-    <StyledMainCalendarWrapper>
+    <StyledMainCalendarWrapper daysCount={ALL_DAYS.length}>
       {ALL_DAYS.map((day, index) => (
         <MainCalendarDays
           key={index}
@@ -59,13 +65,14 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
   );
 };
 
-const StyledMainCalendarWrapper = styled.div`
+const StyledMainCalendarWrapper = styled.div<{ daysCount: number }>`
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 가로 7칸 */
-  grid-template-rows: repeat(5, 1fr); /* 세로 5칸 */
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: ${(prop) =>
+    prop.daysCount > 35 ? 'repeat(6, 1fr)' : 'repeat(5, 1fr)'};
   width: 100%;
-  height: 100%;
-  aspect-ratio: 7 / 5;
+  height: ${(prop) => (prop.daysCount > 35 ? '120%' : '100%')};
+  aspect-ratio: ${(prop) => (prop.daysCount > 35 ? '7 / 6' : '7 / 5')};
 `;
 
 export default MainCalendar;
