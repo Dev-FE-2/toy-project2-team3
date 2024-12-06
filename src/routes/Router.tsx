@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { default as SideBar } from '../components/layout/SideBar';
+import { default as Layout } from '../components/Layout';
 import {
   UserHome,
   Login,
@@ -17,9 +17,9 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SideBar />}>
+        <Route path="/" element={<Layout />}>
           {' '}
-          {/* 사이드 바 중첩 라우팅 */}
+          {/* Layout 중첩 라우팅 */}
           <Route index element={<Navigate to="/login" replace />} />{' '}
           {/* 기본 경로는 로그인 페이지로 리다이렉트 */}
           {/* user */}
