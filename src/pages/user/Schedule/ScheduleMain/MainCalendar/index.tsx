@@ -42,7 +42,7 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
   console.log(nextMonthDays);
 
   return (
-    <StyledMainCalendarWrapper daysCount={allDays.length}>
+    <S.MainCalendarWrapper daysCount={allDays.length}>
       {allDays.map((day, index) => (
         <MainCalendarDays
           key={index}
@@ -53,18 +53,20 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
           }
         />
       ))}
-    </StyledMainCalendarWrapper>
+    </S.MainCalendarWrapper>
   );
 };
 
-const StyledMainCalendarWrapper = styled.div<{ daysCount: number }>`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: ${(prop) =>
-    prop.daysCount > 35 ? 'repeat(6, 1fr)' : 'repeat(5, 1fr)'};
-  width: 100%;
-  height: ${(prop) => (prop.daysCount > 35 ? '120%' : '100%')};
-  aspect-ratio: ${(prop) => (prop.daysCount > 35 ? '7 / 6' : '7 / 5')};
-`;
+const S = {
+  MainCalendarWrapper: styled.div<{ daysCount: number }>`
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: ${(prop) =>
+      prop.daysCount > 35 ? 'repeat(6, 1fr)' : 'repeat(5, 1fr)'};
+    width: 100%;
+    height: ${(prop) => (prop.daysCount > 35 ? '120%' : '100%')};
+    aspect-ratio: ${(prop) => (prop.daysCount > 35 ? '7 / 6' : '7 / 5')};
+  `,
+};
 
 export default MainCalendar;

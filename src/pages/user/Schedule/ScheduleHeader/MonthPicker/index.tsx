@@ -44,7 +44,7 @@ const MonthPicker = ({
   };
 
   return (
-    <StyledWrapper>
+    <S.Wrapper>
       <div onClick={isMonthPickerDetailOpen ? handlePrevYear : handlePrevMonth}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -129,24 +129,26 @@ const MonthPicker = ({
           </div>
         </>
       )} */}
-    </StyledWrapper>
+    </S.Wrapper>
   );
 };
 
-const StyledWrapper = styled.div`
-  width: 15rem;
-  padding: 0.25rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: ${border.default};
-  border-radius: ${border.radius.xs};
-
-  div {
+const S = {
+  Wrapper: styled.div`
+    width: 15rem;
+    padding: 0.25rem 0;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-  }
-`;
+    border: ${border.default};
+    border-radius: ${border.radius.xs};
+
+    div {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  `,
+};
 
 export default MonthPicker;

@@ -8,15 +8,17 @@ interface ScheduleMainProps {
 
 const ScheduleMain = ({ currentMonth, currentYear }: ScheduleMainProps) => {
   return (
-    <StyledWrapper>
+    <S.Wrapper>
       <MainCalendar currentYear={currentYear} currentMonth={currentMonth} />
-    </StyledWrapper>
+    </S.Wrapper>
   );
 };
 
-const StyledWrapper = styled.div`
-  width: calc(75rem + 2px);
-  height: calc(80dvh - 50px);
-`;
+const S = {
+  Wrapper: styled.div`
+    width: calc(75rem + 2px);
+    height: calc(80dvh - 50px);
+  `,
+};
 
 export default ScheduleMain;

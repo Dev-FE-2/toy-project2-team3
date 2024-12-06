@@ -17,7 +17,7 @@ const Schedule = () => {
 
   return (
     <>
-      <StyledWrapper>
+      <S.Wrapper>
         <ScheduleSideBar />
         <div>
           <ScheduleHeader
@@ -27,13 +27,15 @@ const Schedule = () => {
           />
           <ScheduleMain currentMonth={currentMonth} currentYear={currentYear} />
         </div>
-      </StyledWrapper>
+      </S.Wrapper>
     </>
   );
 };
 
-const StyledWrapper = styled.div`
+const S = {
+  Wrapper: styled.div`
   display: flex;
-`;
+`
+}
 
 export default Schedule;

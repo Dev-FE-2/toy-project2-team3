@@ -23,7 +23,7 @@ const ScheduleHeader = ({
   };
 
   return (
-    <StyledHeader>
+    <S.Header>
       <MonthPicker
         currentMonth={currentMonth}
         currentYear={currentYear}
@@ -37,17 +37,19 @@ const ScheduleHeader = ({
           handleMonthClick={handleMonthClick}
         />
       )}
-    </StyledHeader>
+    </S.Header>
   );
 };
 
-const StyledHeader = styled.div`
+const S = {
+  Header: styled.div`
   width: 75.1rem;
   height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   border: ${border.default};
-`;
+`
+}
 
 export default ScheduleHeader;
