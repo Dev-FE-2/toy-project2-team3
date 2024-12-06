@@ -7,18 +7,26 @@ interface ScheduleMainProps {
   setIsSixWeek: (prop: boolean) => void;
 }
 
-const ScheduleMain = ({ currentMonth, currentYear, setIsSixWeek }: ScheduleMainProps) => {
+const ScheduleMain = ({
+  currentMonth,
+  currentYear,
+  setIsSixWeek,
+}: ScheduleMainProps) => {
   return (
     <S.Wrapper>
-      <MainCalendar currentYear={currentYear} currentMonth={currentMonth} setIsSixWeek={setIsSixWeek} />
+      <MainCalendar
+        currentYear={currentYear}
+        currentMonth={currentMonth}
+        setIsSixWeek={setIsSixWeek}
+      />
     </S.Wrapper>
   );
 };
 
 const S = {
   Wrapper: styled.div`
-    width: calc(75rem + 2px);
-    height: calc(80dvh - 50px);
+    width: 1250px;
+    height: calc(80% - 3rem);
   `,
 };
 

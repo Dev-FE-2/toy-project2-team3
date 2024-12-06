@@ -33,9 +33,12 @@ const MainCalendar = ({
     prevMonthDays.length + currentMonthDays.length > 35 ? 42 : 35;
 
   const isSixWeekCalendar = () => TOTAL_DISPLAYED_DAYS === 42;
+  console.log(isSixWeekCalendar());
 
   if (isSixWeekCalendar()) {
-    setIsSixWeek(true)
+    setIsSixWeek(true);
+  } else {
+    setIsSixWeek(false);
   }
 
   const nextMonthDays = Array.from(

@@ -43,13 +43,13 @@ const ScheduleHeader = ({
 
 const S = {
   Header: styled.div`
-  width: 75.1rem;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: ${border.default};
-`
-}
+    width: 1250px;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: ${border.default};
+  `,
+};
 
 export default ScheduleHeader;
