@@ -74,7 +74,7 @@ const S = {
     grid-template-rows: ${(prop) =>
       prop.daysCount > 35 ? 'repeat(6, 1fr)' : 'repeat(5, 1fr)'};
     width: 100%;
-    height: ${(prop) => (prop.daysCount > 35 ? '120%' : '100%')};
+    height: ${(prop) => (prop.daysCount > 35 ? '120.7%' : '100%')};
     aspect-ratio: ${(prop) => (prop.daysCount > 35 ? '7 / 6' : '7 / 5')};
   `,
 };
