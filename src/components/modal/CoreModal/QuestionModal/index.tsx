@@ -4,7 +4,7 @@ import help from '../../../../assets/icons/help.svg';
 import styled from 'styled-components';
 import type { ModalProps } from '../../CoreModal';
 
-const QuestionModal: React.FC<ModalProps> = ({ onClose, message }) => {
+const QuestionModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
   const handleConfirm = () => {
     console.log('확인 버튼 클릭');
     onClose(); // 모달 닫기
@@ -18,7 +18,7 @@ const QuestionModal: React.FC<ModalProps> = ({ onClose, message }) => {
   return (
     <>
       <img src={help} alt="help" />
-      {message}
+      {ModalMessage}
       <StyledButtonContainer>
         <StyledCancelButton onClick={handleCancel}>취소</StyledCancelButton>
         <StyledCheckButton onClick={handleConfirm}>확인</StyledCheckButton>

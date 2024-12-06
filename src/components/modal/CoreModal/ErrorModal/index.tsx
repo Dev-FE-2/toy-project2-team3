@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import warning from '../../../../assets/icons/warning.svg';
 import { StyledCancelButton, StyledCheckButton } from '../../../Button';
 import type { ModalProps } from '../../CoreModal';
-const ErrorModal: React.FC<ModalProps> = ({ onClose, message }) => {
+
+const ErrorModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
   const handleConfirm = () => {
     console.log('확인 버튼 클릭');
     onClose(); // 모달 닫기
@@ -14,7 +15,7 @@ const ErrorModal: React.FC<ModalProps> = ({ onClose, message }) => {
   return (
     <>
       <img src={warning} alt="help" />
-      {message}
+      {ModalMessage}
       <StyledButtonContainer>
         <StyledCheckButton onClick={handleConfirm}>확인</StyledCheckButton>
         <StyledCancelButton onClick={handleRetry}>다시시도</StyledCancelButton>

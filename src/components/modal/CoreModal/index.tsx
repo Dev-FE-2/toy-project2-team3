@@ -13,7 +13,7 @@ type CoreModalProps = {
 
 export type ModalProps = {
   onClose: () => void;
-  message: string;
+  ModalMessage: string;
 };
 
 // CoreModal 컴포넌트
@@ -22,24 +22,14 @@ const CoreModal: React.FC<CoreModalProps> = ({
   modalMessage,
   onClose,
 }) => {
-  let content;
-
-  if (modalType === 'check') {
-    content = <SuccessModal onClose={onClose} message={modalMessage} />;
-  } else if (modalType === 'error') {
-    content = <ErrorModal onClose={onClose} message={modalMessage} />;
-  } else if (modalType === 'question') {
-    content = <QuestionModal onClose={onClose} message={modalMessage} />;
-  }
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -48,7 +38,15 @@ const CoreModal: React.FC<CoreModalProps> = ({
   return (
     <StyledModalBackground onClick={onClose}>
       <StyledModalContainer onClick={(e) => e.stopPropagation()}>
-        {content}
+        {modalType === 'check' ? (
+          <SuccessModal onClose={onClose} ModalMessage={modalMessage} />
+        ) : modalType === 'error' ? (
+          <ErrorModal onClose={onClose} ModalMessage={modalMessage} />
+        ) : modalType === 'question' ? (
+          <QuestionModal onClose={onClose} ModalMessage={modalMessage} />
+        ) : (
+          <div> No type Modal </div>
+        )}
       </StyledModalContainer>
     </StyledModalBackground>
   );

@@ -1,3 +1,1 @@
-import CoreModal from './CoreModal';
-
-export { CoreModal };
+export { default as CoreModal } from './CoreModal';
