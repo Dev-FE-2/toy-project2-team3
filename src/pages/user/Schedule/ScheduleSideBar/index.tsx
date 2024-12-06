@@ -33,7 +33,12 @@ const teams = [
   },
 ];
 
-const ScheduleSideBar = () => {
+interface ScheduleSideBarProps {
+  isSixWeek: boolean;
+}
+
+const ScheduleSideBar = ({isSixWeek}: ScheduleSideBarProps) => {
+  
   return (
     <StyledWrapper>
       <StyledContent>

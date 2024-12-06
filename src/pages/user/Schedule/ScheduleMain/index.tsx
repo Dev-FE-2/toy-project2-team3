@@ -4,12 +4,13 @@ import MainCalendar from './MainCalendar';
 interface ScheduleMainProps {
   currentMonth: number;
   currentYear: number;
+  setIsSixWeek: (prop: boolean) => void;
 }
 
-const ScheduleMain = ({ currentMonth, currentYear }: ScheduleMainProps) => {
+const ScheduleMain = ({ currentMonth, currentYear, setIsSixWeek }: ScheduleMainProps) => {
   return (
     <S.Wrapper>
-      <MainCalendar currentYear={currentYear} currentMonth={currentMonth} />
+      <MainCalendar currentYear={currentYear} currentMonth={currentMonth} setIsSixWeek={setIsSixWeek} />
     </S.Wrapper>
   );
 };

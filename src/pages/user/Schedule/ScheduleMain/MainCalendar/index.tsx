@@ -4,9 +4,14 @@ import MainCalendarDays from './MainCalendarDays';
 interface MainCalendarProps {
   currentYear: number;
   currentMonth: number;
+  setIsSixWeek: (prop: boolean) => void;
 }
 
-const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
+const MainCalendar = ({
+  currentYear,
+  currentMonth,
+  setIsSixWeek,
+}: MainCalendarProps) => {
   const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
   const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
   const totalDays = LAST_DAY_OF_MONTH.getDate();
@@ -26,6 +31,13 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
 
   const TOTAL_DISPLAYED_DAYS =
     prevMonthDays.length + currentMonthDays.length > 35 ? 42 : 35;
+
+  const isSixWeekCalendar = () => TOTAL_DISPLAYED_DAYS === 42;
+
+  if (isSixWeekCalendar()) {
+    setIsSixWeek(true)
+  }
+
   const nextMonthDays = Array.from(
     {
       length:
@@ -35,11 +47,6 @@ const MainCalendar = ({ currentYear, currentMonth }: MainCalendarProps) => {
   );
 
   const allDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
-
-  console.log(allDays.length);
-  console.log(prevMonthDays);
-  console.log(currentMonthDays);
-  console.log(nextMonthDays);
 
   return (
     <S.MainCalendarWrapper daysCount={allDays.length}>

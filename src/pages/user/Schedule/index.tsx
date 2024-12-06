@@ -9,6 +9,7 @@ const Schedule = () => {
   const CURRENT_YEAR = new Date().getFullYear();
   const [currentMonth, setCurrentMonth] = useState(CURRENT_MONTH);
   const [currentYear, setCurrentYear] = useState(CURRENT_YEAR);
+  const [isSixWeek, setIsSixWeek] = useState(false)
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -18,14 +19,14 @@ const Schedule = () => {
   return (
     <>
       <S.Wrapper>
-        <ScheduleSideBar />
+        <ScheduleSideBar isSixWeek={isSixWeek} />
         <div>
           <ScheduleHeader
             currentMonth={currentMonth}
             currentYear={currentYear}
             handleYearMonthChange={handleYearMonthChange}
           />
-          <ScheduleMain currentMonth={currentMonth} currentYear={currentYear} />
+          <ScheduleMain currentMonth={currentMonth} currentYear={currentYear} setIsSixWeek={setIsSixWeek} />
         </div>
       </S.Wrapper>
     </>
