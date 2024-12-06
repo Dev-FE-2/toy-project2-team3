@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles/token/colors';
+import { border } from '../../../../../../styles';
 
 interface MainCalendarDaysProps {
   day: number;
@@ -28,7 +29,7 @@ const S = {
     background-color: white;
     color: ${({ isCurrentMonth }) =>
       isCurrentMonth ? colors.semantic.dark : colors.semantic.disabled};
-    border: 1px solid black;
+    border: ${border.default};
     padding-bottom: 0.5rem;
     position: relative;
     overflow: hidden;
@@ -46,7 +47,7 @@ const S = {
   `,
   MainCalendarDaysContentsWrapper: styled.div`
     width: 80%;
-    max-height: calc(1.375rem * 4 + 0.25rem * 3); 
+    max-height: calc(1.375rem * 4 + 0.25rem * 3);
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -56,8 +57,8 @@ const S = {
     width: calc(100% - 0.5rem - 2px);
     min-height: 1rem;
     font-size: 0.875rem;
-    border: 1px solid black;
-    border-radius: 0.25rem;
+    border: ${border.default};
+    border-radius: ${border.radius.xs};
     padding: 0.125rem 0.25rem;
     overflow: hidden;
     white-space: nowrap;
