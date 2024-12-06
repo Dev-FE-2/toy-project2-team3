@@ -1,3 +1,5 @@
+import { Login, SignUp } from './sign';
+import { EmployeeList, SalaryRequest } from './admin';
 import {
   UserHome,
   Schedule,
@@ -6,9 +8,7 @@ import {
   SalaryCorrection,
   SalaryDetails,
 } from './user';
-import { EmployeeList, SalaryRequest } from './admin';
-import { default as Login } from './Login';
-import { default as SignUp } from './SignUp';
+
 export {
   UserHome,
   Login,
