@@ -22,25 +22,25 @@ const MonthPicker = ({
   };
 
   const handlePrevMonth = () => {
-    const NEW_YEAR = currentMonth === 1 ? currentYear - 1 : currentYear;
-    const NEW_MONTH = currentMonth === 1 ? 12 : currentMonth - 1;
-    handleYearMonthChange(NEW_YEAR, NEW_MONTH);
+    const newYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+    const newMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+    handleYearMonthChange(newYear, newMonth);
   };
 
   const handlePrevYear = () => {
-    const NEW_YEAR = currentYear - 1;
-    handleYearMonthChange(NEW_YEAR, currentMonth);
+    const newYear = currentYear - 1;
+    handleYearMonthChange(newYear, currentMonth);
   };
 
   const handleNextMonth = () => {
-    const NEW_YEAR = currentMonth === 12 ? currentYear + 1 : currentYear;
-    const NEW_MONTH = currentMonth === 12 ? 1 : currentMonth + 1;
-    handleYearMonthChange(NEW_YEAR, NEW_MONTH);
+    const newYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+    const newMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+    handleYearMonthChange(newYear, newMonth);
   };
 
   const handleNextYear = () => {
-    const NEW_YEAR = currentYear + 1;
-    handleYearMonthChange(NEW_YEAR, currentMonth);
+    const newYear = currentYear + 1;
+    handleYearMonthChange(newYear, currentMonth);
   };
 
   return (

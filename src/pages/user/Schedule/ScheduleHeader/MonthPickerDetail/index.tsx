@@ -13,8 +13,6 @@ const MonthPickerDetail = ({
 }: MonthPickerDetailProps) => {
   const MONTHS_ARRAY = Object.values(MONTHS);
 
-  console.log(MONTHS_ARRAY);
-
   return (
     <StyledWrapper>
       <StyledMonth>
