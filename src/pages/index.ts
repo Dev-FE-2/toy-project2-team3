@@ -1,6 +1,6 @@
-import { Login, SignUp } from './sign';
-import { EmployeeList, SalaryRequest } from './admin';
-import {
+export { Login, SignUp } from './sign';
+export { EmployeeList, SalaryRequest } from './admin';
+export {
   UserHome,
   Schedule,
   EditProfile,
@@ -8,16 +8,3 @@ import {
   SalaryCorrection,
   SalaryDetails,
 } from './user';
-
-export {
-  UserHome,
-  Login,
-  SignUp,
-  Schedule,
-  EditProfile,
-  Attendance,
-  EmployeeList,
-  SalaryRequest,
-  SalaryCorrection,
-  SalaryDetails,
-};
