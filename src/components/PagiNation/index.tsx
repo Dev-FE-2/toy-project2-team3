@@ -1,92 +1,113 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles/';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentPage, AppDispatch, RootState } from '../../state/store';
+
 type PagiNationProps = {
-  maxPage: number; // 최대 페이지 수
-  visiblePageCount: number; // 한 번에 보여줄 페이지 수
-  currentPage: number; // 현재 페이지
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>; // 페이지 변경 함수
-  // 우선 단순히 currentPage의 상태를 업데이트하는 함수라고 이해했습니다
+  maxPage: number;
 };
 
-const PagiNation: React.FC<PagiNationProps> = ({
-  maxPage,
-  visiblePageCount,
-  currentPage,
-  setCurrentPage,
-}) => {
-  // 현재 페이지 그룹의 시작 페이지 계산
+const PagiNation: React.FC<PagiNationProps> = ({ maxPage }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
+  const visiblePageCount = 10; // 한 페이지당 최대 10개의 버튼 생성
+
   const currentPageBase =
     Math.floor((currentPage - 1) / visiblePageCount) * visiblePageCount + 1;
 
-  // 페이지 목록 생성
   const pageList = useMemo(() => {
     const pages = [];
     for (let i = 0; i < visiblePageCount; i++) {
       const page = currentPageBase + i;
-      if (page <= maxPage) pages.push(page); // maxPage를 넘지 않도록
+      if (page <= maxPage) pages.push(page);
     }
-    return [...pages]; //순수함을 지키기 위해 새로운 배열을 생성
-  }, [currentPage, maxPage, visiblePageCount, currentPageBase]);
+    return pages;
+  }, [currentPageBase, maxPage, visiblePageCount]);
+
+  const handlePageChange = (newPage: number) => {
+    dispatch(setCurrentPage(newPage)); // currentPage 상태 업데이트
+    const currentPath = window.location.pathname; // 현재 페이지 URL 경로 가져오기
+    window.history.pushState({ page: newPage }, `Page ${newPage}`, currentPath); // history에 추가
+  };
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        dispatch(setCurrentPage(event.state.page)); // 이전 페이지로 이동
+      } else {
+        dispatch(setCurrentPage(1)); // 상태가 없으면 기본 페이지로 이동
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [dispatch]);
 
   return (
-    <StyledPaginationContainer>
-      <StyledMoveButton
-        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} // 1페이지 이하로 내려가지 않도록
+    <S.PaginationContainer>
+      <S.MoveButton
+        onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
         disabled={currentPage === 1}
       >
         Previous
-      </StyledMoveButton>
+      </S.MoveButton>
       {pageList.map((page) => (
-        <StyledPageButton
+        <S.PageButton
           key={page}
-          onClick={() => setCurrentPage(page)}
+          onClick={() => handlePageChange(page)}
           isActive={page === currentPage}
         >
           {page}
-        </StyledPageButton>
+        </S.PageButton>
       ))}
-      <StyledMoveButton
-        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, maxPage))} // maxPage 이상으로 올라가지 않도록
+      <S.MoveButton
+        onClick={() => handlePageChange(Math.min(currentPage + 1, maxPage))}
         disabled={currentPage === maxPage}
       >
         Next
-      </StyledMoveButton>
-    </StyledPaginationContainer>
+      </S.MoveButton>
+    </S.PaginationContainer>
   );
 };
 
-const StyledPaginationContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledPageButton = styled.button<{ isActive: boolean }>`
-  background-color: ${({ isActive }) =>
-    isActive
-      ? `${colors.semantic.primary}`
-      : `${colors.semantic.background.light}`};
-  color: ${({ isActive }) => (isActive ? `${colors.semantic.text.light}` : '')};
-  border-radius: 8px;
-  padding: 0.26vw 0.625vw;
-  cursor: pointer;
-  margin-right: 0.78vw;
-  &:hover {
+const S = {
+  PaginationContainer: styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `,
+  PageButton: styled.button<{ isActive: boolean }>`
     background-color: ${({ isActive }) =>
       isActive
-        ? `${colors.semantic.hover.primary}`
-        : `${colors.semantic.hover.tertiary}`};
-  }
-  &:disabled {
-    background-color: ${colors.semantic.disabled};
-  }
-`;
-
-const StyledMoveButton = styled.button`
-  margin-right: 0.78vw;
-  cursor: pointer;
-  color: ${colors.semantic.text.gray};
-`;
+        ? `${colors.semantic.primary}`
+        : `${colors.semantic.background.light}`};
+    color: ${({ isActive }) =>
+      isActive ? `${colors.semantic.text.light}` : ''};
+    border-radius: 8px;
+    padding: 0.26vw 0.625vw;
+    cursor: pointer;
+    margin-right: 0.78vw;
+    &:hover {
+      background-color: ${({ isActive }) =>
+        isActive
+          ? `${colors.semantic.hover.primary}`
+          : `${colors.semantic.hover.tertiary}`};
+    }
+    &:disabled {
+      background-color: ${colors.semantic.disabled};
+    }
+  `,
+  MoveButton: styled.button`
+    margin-right: 0.78vw;
+    cursor: pointer;
+    color: ${colors.semantic.text.gray};
+  `,
+};
 
 export default PagiNation;
