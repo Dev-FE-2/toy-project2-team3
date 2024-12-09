@@ -1,8 +1,9 @@
 import React, { useMemo, useEffect } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles/';
+import { colors } from '../../styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPage, AppDispatch, RootState } from '../../state/store';
+import { AppDispatch, RootState } from '../../state/store';
+import { setCurrentPage } from '../../slices/pagination/action';
 
 type PagiNationProps = {
   maxPage: number;
@@ -29,9 +30,18 @@ const PagiNation: React.FC<PagiNationProps> = ({ maxPage }) => {
 
   const handlePageChange = (newPage: number) => {
     dispatch(setCurrentPage(newPage)); // currentPage 상태 업데이트
+    sessionStorage.setItem('currentPage', newPage.toString()); // sessionStorage에 페이지 저장
     const currentPath = window.location.pathname; // 현재 페이지 URL 경로 가져오기
     window.history.pushState({ page: newPage }, `Page ${newPage}`, currentPath); // history에 추가
   };
+
+  useEffect(() => {
+    // 페이지가 처음 로드될 때 sessionStorage에서 currentPage 상태를 확인
+    const savedPage = sessionStorage.getItem('currentPage');
+    const initialPage = savedPage ? Number(savedPage) : 1; // sessionStorage 값이 있으면 사용, 없으면 기본값 1
+
+    dispatch(setCurrentPage(initialPage)); // 초기 페이지 설정
+  }, [dispatch]);
 
   useEffect(() => {
     const handlePopState = (event) => {
