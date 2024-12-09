@@ -9,7 +9,7 @@ type PagiNationProps = {
   maxPage: number;
 };
 
-const PagiNation: React.FC<PagiNationProps> = ({ maxPage }) => {
+const Pagination: React.FC<PagiNationProps> = ({ maxPage }) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentPage = useSelector(
     (state: RootState) => state.pagination.currentPage
@@ -120,4 +120,4 @@ const S = {
   `,
 };
 
-export default PagiNation;
+export default Pagination;
