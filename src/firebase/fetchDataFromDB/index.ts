@@ -2,13 +2,13 @@ import { ref, get, DatabaseReference } from 'firebase/database';
 import { database } from '../../firebaseConfig';
 
 export async function fetchDataFromDB<T>(
-  collectionName: string,
-  docName: string | null = null
+  table: string,
+  key: string | null = null
 ): Promise<T | Record<string, T> | null> {
   try {
-    const dbRef: DatabaseReference = docName
-      ? ref(database, `${collectionName}/${docName}`)
-      : ref(database, collectionName);
+    const dbRef: DatabaseReference = key
+      ? ref(database, `${table}/${key}`)
+      : ref(database, table);
 
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
@@ -27,7 +27,7 @@ export async function fetchDataFromDB<T>(
 /*
   import fetchDataFromDB from '~~~~'
 
-  const USER_DATA = fetchDataFromDB('Users', docName)
-  // docName은 문서의 이름 혹은 null이 들어갈 수 있다.
-    // 인자 docName을 null로 전달할 경우 'Users'의 모든 데이터를 가져온다.
+  const USER_DATA = fetchDataFromDB('Users', key)
+  // key는 문서의 이름 혹은 null이 들어갈 수 있다.
+    // 인자 key를 null로 전달할 경우 'Users'의 모든 데이터를 가져온다.
 */

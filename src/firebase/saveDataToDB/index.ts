@@ -2,18 +2,16 @@ import { ref, set, push } from 'firebase/database';
 import { database } from '../../firebaseConfig';
 
 export async function saveDataToDB<T>(
-  collectionName: string,
-  docName: string | null,
+  table: string,
+  key: string | null,
   data: T
 ) {
   try {
-    const dbRef = docName
-      ? ref(database, `${collectionName}/${docName}`)
-      : ref(database, collectionName);
+    const dbRef = key ? ref(database, `${table}/${key}`) : ref(database, table);
 
-    if (docName) {
+    if (key) {
       await set(dbRef, data);
-      return docName;
+      return key;
     } else {
       const newRef = push(dbRef);
       await set(newRef, data);
@@ -29,8 +27,8 @@ export async function saveDataToDB<T>(
 /*
   import saveDataToDB from '~~~~'
 
-  await saveDataToDB('user', docName, data)
-  // docName은 문서의 이름 혹은 null이 들어갈 수 있다.
-    // 인자 docName을 null로 전달할 경우 uid로 저장된다
+  await saveDataToDB('user', key, data)
+  // key는 문서의 이름 혹은 null이 들어갈 수 있다.
+    // 인자 key를 null로 전달할 경우 uid로 저장된다
   // data는 저장할 데이터
 */
