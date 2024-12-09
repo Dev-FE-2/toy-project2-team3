@@ -1,6 +1,6 @@
 import { getDatabase, ref, get } from 'firebase/database';
-import { auth } from '../../../firebaseConfig'; // Firebase 설정 파일에서 auth 가져오기
-import { user } from '../../../types/interface';
+import { auth } from '../../firebaseConfig'; // Firebase 설정 파일에서 auth 가져오기
+import { user } from '../../types/interface';
 
 // 사용자 정보 가져오는 함수
 const fetchUserInfo = (callback: (userInfo: user | null) => void) => {

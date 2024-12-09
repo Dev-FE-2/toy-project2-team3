@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import fetchUserInfo from '../../../../firebase/user/fetchUserInfo';
+import fetchUserInfo from '../../../../firebase/fetchUserInfo';
 import type { user } from '../../../../types/interface';
 import styled from 'styled-components';
 
