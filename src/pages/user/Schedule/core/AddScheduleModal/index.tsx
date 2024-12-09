@@ -1,12 +1,36 @@
 import styled from 'styled-components';
 import { border, colors, padding } from '../../../../../styles';
 import AddScheduleModalContents from './AddScheduleModalContents';
+import { MouseEvent } from 'react';
 
-const AddScheduleModal = () => {
+type AddScheduleModalProps = {
+  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
+};
+
+const AddScheduleModal = ({
+  setIsAddScheduleModalOpen,
+}: AddScheduleModalProps) => {
+  const handleOnCloseModal = () => {
+    setIsAddScheduleModalOpen(false);
+  };
+
+  const handleBackgroundClick = () => {
+    handleOnCloseModal();
+  };
+
+  const handleWrapperClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
   return (
-    <S.ModalBackground>
-      <S.ModalWrapper>
-        <S.CloseIcon className="material-symbols-outlined">close</S.CloseIcon>
+    <S.ModalBackground onClick={handleBackgroundClick}>
+      <S.ModalWrapper onClick={handleWrapperClick}>
+        <S.CloseIcon
+          onClick={handleOnCloseModal}
+          className="material-symbols-outlined"
+        >
+          close
+        </S.CloseIcon>
         <AddScheduleModalContents />
       </S.ModalWrapper>
     </S.ModalBackground>
@@ -40,6 +64,7 @@ const S = {
   CloseIcon: styled.div`
     position: absolute;
     right: 16px;
+    cursor: pointer;
   `,
 };
 

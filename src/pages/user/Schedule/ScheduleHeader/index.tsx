@@ -3,17 +3,20 @@ import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import MonthPickerDetail from './MonthPickerDetail';
 import { border } from '../../../../styles';
+import { StyledCheckButton } from '../../../../components/Button';
 
 interface ScheduleHeaderProps {
   currentMonth: number;
   currentYear: number;
   handleYearMonthChange: (year: number, month: number) => void;
+  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
 }
 
 const ScheduleHeader = ({
   currentMonth,
   currentYear,
   handleYearMonthChange,
+  setIsAddScheduleModalOpen,
 }: ScheduleHeaderProps) => {
   const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
 
@@ -37,6 +40,10 @@ const ScheduleHeader = ({
           handleMonthClick={handleMonthClick}
         />
       )}
+      <StyledCheckButton onClick={() => setIsAddScheduleModalOpen(true)}>
+        등록
+      </StyledCheckButton>{' '}
+      {/* 임시 */}
     </S.Header>
   );
 };
