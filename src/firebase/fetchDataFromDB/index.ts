@@ -27,6 +27,7 @@ export async function fetchDataFromDB<T>(
 /*
   import fetchDataFromDB from '~~~~'
 
-  const USER_DATA = fetchDataFromDB('user', docName)
+  const USER_DATA = fetchDataFromDB('Users', docName)
   // docName은 문서의 이름 혹은 null이 들어갈 수 있다.
+    // 인자 docName을 null로 전달할 경우 'Users'의 모든 데이터를 가져온다.
 */
