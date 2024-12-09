@@ -1,34 +1,41 @@
 import { ref, set, push } from 'firebase/database';
 import { database } from '../../firebaseConfig';
 
-export async function saveDataToDB<T>(
-  table: string,
-  key: string | null,
-  data: T
-) {
+interface saveDataParams<T> {
+  table: string;
+  key?: string;
+  data: T;
+}
+
+export async function saveDataToDB<T>({ table, key, data }: saveDataParams<T>) {
   try {
     const dbRef = key ? ref(database, `${table}/${key}`) : ref(database, table);
 
     if (key) {
       await set(dbRef, data);
+
       return key;
     } else {
       const newRef = push(dbRef);
       await set(newRef, data);
+
       return newRef.key;
     }
   } catch (error) {
     console.error('데이터 저장 실패:', error);
+
     throw error;
   }
 }
 
-// 사용방법
-/*
-  import saveDataToDB from '~~~~'
-
-  await saveDataToDB('user', key, data)
-  // key는 문서의 이름 혹은 null이 들어갈 수 있다.
-    // 인자 key를 null로 전달할 경우 uid로 저장된다
-  // data는 저장할 데이터
-*/
+/** 사용방법
+ * await saveDataToDB({ table, key, data });
+ * ex) await saveDataToDB({ 'Users', 'p0qTmHR3PU1LJ3', { ... } });
+ *
+ * 매개변수는 { table, key, data } 객체 형태
+ *
+ * table의 값은 firebase realtime database의 collection name이다.
+ * key의 값은 collection의 하위 데이터를 분류하는 문서 이름 혹은 null이 들어갈 수 있다. (optional)
+ * key를 null로 전달할 경우 자동으로 uid로 저장된다.
+ * data는 저장할 데이터이다.
+ */
