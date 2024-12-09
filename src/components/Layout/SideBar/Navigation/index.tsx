@@ -9,7 +9,7 @@ import home from '../../../../assets/icons/home.png';
 import paid from '../../../../assets/icons/paid.png';
 import schedule from '../../../../assets/icons/schedule.png';
 import supervisor_account from '../../../../assets/icons/supervisor_account.png';
-import fetchUserInfo from '../../../../firebase/user/fetchUserInfo';
+import fetchUserInfo from '../../../../firebase/fetchUserInfo';
 import type { user } from '../../../../types/interface';
 
 // 타입 정의
