@@ -32,7 +32,7 @@ const PagiNation: React.FC<PagiNationProps> = ({ maxPage }) => {
     dispatch(setCurrentPage(newPage)); // currentPage 상태 업데이트
     sessionStorage.setItem('currentPage', newPage.toString()); // sessionStorage에 페이지 저장
     const currentPath = window.location.pathname; // 현재 페이지 URL 경로 가져오기
-    window.history.pushState({ page: newPage }, `Page ${newPage}`, currentPath); // history에 추가
+    window.history.pushState({ page: newPage }, `Page ${newPage}`, currentPath);
   };
 
   useEffect(() => {
