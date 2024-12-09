@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import fetchUserInfo from '../../../../firebase/fetchUserInfo';
 import type { user } from '../../../../types/interface';
-import logout from '../../../../assets/icons/logout.png';
 import styled from 'styled-components';
 
 const UserStatus = () => {
@@ -59,13 +58,14 @@ const UserStatus = () => {
               {userInfo.schedule || '스케줄 정보 없음'}
             </StyledSchedule>
           </StyledUserInfo>
-          <img
-            src={logout}
-            alt="logout"
+          <div
+            className="material-symbols-outlined"
             onClick={handleLogout}
             role="button"
             tabIndex={0} // 접근성을 위한 속성 추가
-          />
+          >
+            logout
+          </div>
         </>
       ) : (
         <p>사용자 정보가 없습니다.</p>
@@ -86,10 +86,9 @@ const StyledBottomContainer = styled.div`
   color: #4a493f;
   margin-bottom: 0.5vw;
 
-  img {
-    width: 3vw;
-    height: 6vh;
-    border-radius: 10px;
+  .material-symbols-outlined {
+    font-size: 42px; // 아이콘 크기 조정
+    margin-left: 10px; // 왼쪽 여백 추가
     cursor: pointer; // 커서 변경
   }
 `;
