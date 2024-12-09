@@ -1,6 +1,6 @@
 import { getDatabase, ref, get } from 'firebase/database';
 import { auth } from '../../firebaseConfig'; // Firebase 설정 파일에서 auth 가져오기
-import { User } from '../../types/interface';
+import type { User } from '../../types/interface';
 
 export const fetchUserInfo = (callback: (userInfo: User | null) => void) => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {

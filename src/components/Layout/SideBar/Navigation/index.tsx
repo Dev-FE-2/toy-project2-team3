@@ -9,8 +9,8 @@ import home from '../../../../assets/icons/home.png';
 import paid from '../../../../assets/icons/paid.png';
 import schedule from '../../../../assets/icons/schedule.png';
 import supervisor_account from '../../../../assets/icons/supervisor_account.png';
-import fetchUserInfo from '../../../../firebase/fetchUserInfo';
-import type { user } from '../../../../types/interface';
+import { fetchUserInfo } from '../../../../firebase';
+import type { User } from '../../../../types/interface';
 
 // 타입 정의
 type BaseContainerProps = {
@@ -49,7 +49,7 @@ const Navigation = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null); // 활성화 항목
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // hovered 항목
   const [expandedSalary, setExpandedSalary] = useState(false); // 세부사항
-  const [userInfo, setUserInfo] = useState<user | null>(null); // fetch한 user 정보
+  const [userInfo, setUserInfo] = useState<User | null>(null); // fetch한 user 정보
   const location = useLocation();
 
   // 유저 정보 가져오기
