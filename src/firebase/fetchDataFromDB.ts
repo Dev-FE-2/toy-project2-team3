@@ -1,5 +1,5 @@
 import { ref, get, DatabaseReference } from 'firebase/database';
-import { database } from '../../firebaseConfig';
+import { database } from '../firebaseConfig';
 
 type FetchData<T> = Promise<T | Record<string, T> | null>;
 
@@ -8,10 +8,10 @@ interface FetchDataParams {
   key?: string;
 }
 
-export async function fetchDataFromDB<T>({
+const fetchDataFromDB = async <T>({
   table,
   key,
-}: FetchDataParams): FetchData<T> {
+}: FetchDataParams): FetchData<T> => {
   try {
     const dbRef: DatabaseReference = key
       ? ref(database, `${table}/${key}`)
@@ -31,7 +31,9 @@ export async function fetchDataFromDB<T>({
 
     throw error;
   }
-}
+};
+
+export { fetchDataFromDB };
 
 /** 사용 방법
  * await fetchDataFromDB({ table, key });

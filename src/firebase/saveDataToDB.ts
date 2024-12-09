@@ -1,5 +1,5 @@
 import { ref, set, push } from 'firebase/database';
-import { database } from '../../firebaseConfig';
+import { database } from '../firebaseConfig';
 
 interface saveDataParams<T> {
   table: string;
@@ -7,7 +7,7 @@ interface saveDataParams<T> {
   data: T;
 }
 
-export async function saveDataToDB<T>({ table, key, data }: saveDataParams<T>) {
+const saveDataToDB = async <T>({ table, key, data }: saveDataParams<T>) => {
   try {
     const dbRef = key ? ref(database, `${table}/${key}`) : ref(database, table);
 
@@ -26,7 +26,9 @@ export async function saveDataToDB<T>({ table, key, data }: saveDataParams<T>) {
 
     throw error;
   }
-}
+};
+
+export { saveDataToDB };
 
 /** 사용방법
  * await saveDataToDB({ table, key, data });
