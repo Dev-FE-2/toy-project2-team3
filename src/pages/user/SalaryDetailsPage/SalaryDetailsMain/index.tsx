@@ -122,22 +122,22 @@ const SalaryDetailsMain = () => {
 
   return (
     <S.MainContainer>
-      <S.MainTitle>
-        <S.TitleItem>근무 년월</S.TitleItem>
-        <S.TitleItem>총 근무 시간(야간, 주말 포함)</S.TitleItem>
-        <S.TitleItem>기본급</S.TitleItem>
-        <S.TitleItem>초과 근무 수당</S.TitleItem>
-        <S.TitleItem>총 금액</S.TitleItem>
-      </S.MainTitle>
+      <S.Title>
+        <div className="title-item">근무 년월</div>
+        <div className="title-item">총 근무 시간(야간, 주말 포함)</div>
+        <div className="title-item">기본급</div>
+        <div className="title-item">초과 근무 수당</div>
+        <div className="title-item">총 금액</div>
+      </S.Title>
 
       {currentPageItems.map((item) => (
-        <S.MainItem key={item.id}>
-          <S.MainItem>{item.date}</S.MainItem>
-          <S.MainItem>{item.totalTime}시간</S.MainItem>
-          <S.MainItem>{item.basicSalary}원</S.MainItem>
-          <S.MainItem>{item.overSalary}원</S.MainItem>
-          <S.MainItem>{item.totalSalary}원</S.MainItem>
-        </S.MainItem>
+        <S.Content key={item.id}>
+          <div className="data-item">{item.date}</div>
+          <div className="data-item">{item.totalTime}시간</div>
+          <div className="data-item">{item.basicSalary}원</div>
+          <div className="data-item">{item.overSalary}원</div>
+          <div className="data-item">{item.totalSalary}원</div>
+        </S.Content>
       ))}
 
       <S.PaginationContainer>
@@ -156,31 +156,36 @@ const S = {
     display: flex;
     flex-direction: column;
   `,
-  MainTitle: styled.div`
+
+  Title: styled.div`
     width: 100%;
-    height: 9%;
+    min-height: 9%;
     background-color: ${colors.semantic.background.light};
     display: flex;
     margin-bottom: 2vh;
-  `,
-  TitleItem: styled.div`
-    color: ${colors.semantic.text.dark};
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-  `,
-  MainItem: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 7.5%;
-    cursor: pointer;
-    margin-bottom: 0.6vh;
-    width: 100%;
-    height: 7%;
 
+    .title-item {
+      color: ${colors.semantic.text.dark};
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+    }
+  `,
+
+  Content: styled.div`
+    width: 100%;
+    min-height: 7.8%;
+    display: flex;
+
+    .data-item {
+      color: ${colors.semantic.text.dark};
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     &:hover {
       background-color: ${colors.semantic.hover.primary};
     }
@@ -188,6 +193,7 @@ const S = {
       background-color: ${colors.semantic.primary};
     }
   `,
+
   PaginationContainer: styled.div`
     margin-top: auto;
     padding: 1rem;

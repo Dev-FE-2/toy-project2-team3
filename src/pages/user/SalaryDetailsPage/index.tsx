@@ -6,9 +6,9 @@ const SalaryDetails = () => {
   return (
     <S.SalaryContainer>
       <SalaryDetailsHeader />
-      <S.MainWrapper>
+      <S.MainContainer>
         <SalaryDetailsMain />
-      </S.MainWrapper>
+      </S.MainContainer>
     </S.SalaryContainer>
   );
 };
@@ -21,7 +21,7 @@ const S = {
     justify-content: center;
     height: 100vh;
   `,
-  MainWrapper: styled.div`
+  MainContainer: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
