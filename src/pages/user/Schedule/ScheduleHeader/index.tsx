@@ -3,7 +3,7 @@ import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import MonthPickerDetail from './MonthPickerDetail';
 import { border } from '../../../../styles';
-import { MONTHS } from './constants';
+import { MONTHS } from '../constants';
 
 interface ScheduleHeaderProps {
   currentMonth: number;
