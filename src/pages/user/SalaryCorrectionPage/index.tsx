@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import SalaryCorrectionHeader from './SalaryCorrectionHeader';
-import SalaryCorrectionMiddle from './SalaryCorrectionMiddle';
+import SalaryCorrectionMiddle from './SalaryCorrectionMain';
 
 const SalaryCorrection = () => {
   const [isVisible, setIsVisible] = useState(false);

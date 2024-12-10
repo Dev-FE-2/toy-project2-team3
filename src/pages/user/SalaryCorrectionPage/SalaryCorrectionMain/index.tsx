@@ -7,9 +7,7 @@ type Props = {
 };
 
 const SalaryCorrectionMiddle: React.FC<Props> = ({ isVisible }) => {
-  return (
-    <>{isVisible ? <SalaryCorrectionApply /> : <SalaryCorrectionList />}</>
-  );
+  return isVisible ? <SalaryCorrectionApply /> : <SalaryCorrectionList />;
 };
 
 export default SalaryCorrectionMiddle;

@@ -32,7 +32,7 @@ const S = {
     margin-left: 3vw;
     margin-top: 15vh;
     font-size: 32px;
-    margin-right: auto; /* 오른쪽 여백을 자동으로 설정하여 제목을 왼쪽으로 정렬 */
+    margin-right: auto;
   `,
 };
 
