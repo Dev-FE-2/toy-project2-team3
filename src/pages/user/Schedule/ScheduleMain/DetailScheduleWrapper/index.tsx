@@ -30,17 +30,19 @@ const DetailScheduleWrapper: React.FC = () => {
   return (
     <>
       <S.ScheduleContainer teamMembersLength={TEAM_MEMBERS_LENGTH}>
-        <S.HeaderCell>
+        <S.Cell type={'header'}>
           <div className="material-symbols-outlined">schedule</div>
-        </S.HeaderCell>
+        </S.Cell>
         {TEMP_TEAM_MEMBERS.map((member) => (
-          <S.HeaderCell key={member}>{member}</S.HeaderCell>
+          <S.Cell type={'header'} key={member}>
+            {member}
+          </S.Cell>
         ))}
         {generateCells(TEMP_TEAM_MEMBERS).map(({ hour, cells }) => (
           <S.CellsContainer key={hour}>
-            <S.TimeCell>{hour}</S.TimeCell>
+            <S.Cell type={'time'}>{hour}</S.Cell>
             {cells.map(({ member }) => (
-              <S.Cell key={`${member}-${hour}`} />
+              <S.Cell type={''} key={`${member}-${hour}`} />
             ))}
           </S.CellsContainer>
         ))}
@@ -64,40 +66,33 @@ const S = {
     overflow-y: auto;
     position: relative;
   `,
-  HeaderCell: styled.div`
-    /* box-sizing: border-box; */
-    background-color: ${colors.semantic.background.light};
-    border: ${border.default};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: bold;
-    height: 40px;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-  `,
   CellsContainer: styled.div`
     display: contents;
   `,
-  Cell: styled.div`
+  Cell: styled.div<{ type: string }>`
     border: ${border.default};
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
-  `,
-  TimeCell: styled.div`
-    height: 80px;
-    width: 3rem;
-    border: ${border.default};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-    background-color: ${colors.semantic.background.light};
+    ${(props) =>
+      props.type === 'header' &&
+      `
+        background-color: ${colors.semantic.background.light};
+        font-weight: bold;
+        height: 40px;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        `}
+    ${(props) =>
+      props.type === 'time' &&
+      `
+        height: 80px;
+        width: 3rem;
+        font-weight: bold;
+        background-color: ${colors.semantic.background.light};
+        `}
   `,
   CurrentTimeLine: styled.div`
     position: absolute;
