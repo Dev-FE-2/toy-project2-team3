@@ -5,12 +5,7 @@ import { default as Loading } from '../../../components/Loading';
 const Login = () => {
   const { data, error, isLoading } = useFetchUsers();
 
-  if (isLoading)
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+  if (isLoading) return <Loading />;
   if (error) return <div>오류 발생: {error.message}</div>;
 
   return (
