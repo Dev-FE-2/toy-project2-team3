@@ -1,20 +1,21 @@
-import { useState } from 'react';
 import MainCalendarWrapper from './MainCalendarWrapper';
 import DetailScheduleWrapper from './DetailScheduleWrapper';
 
 interface ScheduleMainProps {
   currentMonth: number;
   currentYear: number;
+  isDayClick: boolean;
   setIsSixWeek: (prop: boolean) => void;
+  setIsDayClick: (prop: boolean) => void;
 }
 
 const ScheduleMain = ({
   currentMonth,
   currentYear,
+  isDayClick,
   setIsSixWeek,
+  setIsDayClick,
 }: ScheduleMainProps) => {
-  const [isDayClick, setIsDayClick] = useState(false);
-
   return (
     <>
       {!isDayClick ? (

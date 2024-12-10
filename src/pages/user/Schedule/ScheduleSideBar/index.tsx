@@ -5,11 +5,14 @@ import { TEAMS } from '../constants';
 
 interface ScheduleSideBarProps {
   isSixWeek: boolean;
+  isDayClick: boolean;
 }
 
-const ScheduleSideBar = ({ isSixWeek }: ScheduleSideBarProps) => {
+const ScheduleSideBar = ({ isSixWeek, isDayClick }: ScheduleSideBarProps) => {
+  const SIDEBAR_HEIGHT_STATUS = isSixWeek && !isDayClick;
+
   return (
-    <S.Wrapper isSixWeek={isSixWeek}>
+    <S.Wrapper sideBarHeightStatus={SIDEBAR_HEIGHT_STATUS}>
       <S.Content>
         {TEAMS.map((team) => (
           <TeamList key={team.name} name={team.name} members={team.members} />
@@ -20,10 +23,10 @@ const ScheduleSideBar = ({ isSixWeek }: ScheduleSideBarProps) => {
 };
 
 const S = {
-  Wrapper: styled.div<{ isSixWeek: boolean }>`
+  Wrapper: styled.div<{ sideBarHeightStatus: boolean }>`
     border: ${border.default};
     width: 190px;
-    height: ${(prop) => (prop.isSixWeek ? '95%' : '80%')};
+    height: ${(prop) => (prop.sideBarHeightStatus ? '95%' : '80%')};
     padding: 1rem 0;
   `,
   Content: styled.div`
