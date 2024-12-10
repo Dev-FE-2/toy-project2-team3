@@ -3,7 +3,24 @@ import styled from 'styled-components';
 import { border, colors } from '../../../../../styles';
 import { TEAMS } from '../../constants';
 
-const DetailScheduleWrapper: React.FC = () => {
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
+interface DetailScheduleWrapperProps {
+  currentSchedule: CurrentSchedule;
+}
+
+const DetailScheduleWrapper = ({
+  currentSchedule,
+}: DetailScheduleWrapperProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const TEMP_TEAM_MEMBERS = TEAMS[0].members;
   const TEAM_MEMBERS_LENGTH = TEMP_TEAM_MEMBERS.length;
@@ -11,6 +28,8 @@ const DetailScheduleWrapper: React.FC = () => {
   const MINUTES = currentTime.getMinutes();
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
   const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 80 + 40;
+
+  console.log(currentSchedule); // 삭제 필요
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {

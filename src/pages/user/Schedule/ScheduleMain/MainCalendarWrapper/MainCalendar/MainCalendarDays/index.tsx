@@ -1,27 +1,43 @@
 import styled from 'styled-components';
 import { colors, border } from '../../../../../../../styles';
+import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
 
 interface MainCalendarDaysProps {
+  currentSchedule: CurrentSchedule;
   day: number;
   isCurrentMonth: boolean;
-  onClick: () => void;
+  setIsDayClick: (prop: boolean) => void;
 }
 
 const MainCalendarDays = ({
+  currentSchedule,
   day,
   isCurrentMonth,
-  onClick,
+  setIsDayClick,
 }: MainCalendarDaysProps) => {
+  const handleDayClick = () => {
+    setIsDayClick(true);
+  };
+
   return (
     <S.MainCalendarDaysWrapper
-      onClick={onClick}
+      onClick={handleDayClick}
       isCurrentMonth={isCurrentMonth}
     >
       <S.MainCalendarDaysNumber>{day}</S.MainCalendarDaysNumber>
       <S.MainCalendarDaysContentsWrapper>
-        <S.MainCalendarDaysContents>
-          누구의 어떤 일정입니다
-        </S.MainCalendarDaysContents>
+        <MainCalendarDaysSchedules currentSchedule={currentSchedule} />
       </S.MainCalendarDaysContentsWrapper>
     </S.MainCalendarDaysWrapper>
   );
@@ -59,17 +75,6 @@ const S = {
     flex-direction: column;
     gap: 0.25rem;
     overflow: hidden;
-  `,
-  MainCalendarDaysContents: styled.div`
-    width: calc(100% - 0.5rem - 2px);
-    min-height: 1rem;
-    font-size: 0.875rem;
-    border: ${border.default};
-    border-radius: ${border.radius.xs};
-    padding: 0.125rem 0.25rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   `,
 };
 

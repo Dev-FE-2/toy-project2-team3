@@ -5,6 +5,7 @@ import ScheduleSideBar from './ScheduleSideBar';
 import { useEffect, useState } from 'react';
 import AddScheduleModal from './core/AddScheduleModal';
 import { fetchDataFromDB } from '../../../firebase/fetchDataFromDB';
+
 interface TeamData {
   id: string;
   name: string;
@@ -16,6 +17,12 @@ interface TeamMembersData {
   userId: string;
 }
 
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
 const Schedule = () => {
   const CURRENT_MONTH = new Date().getMonth() + 1;
   const CURRENT_YEAR = new Date().getFullYear();
@@ -24,7 +31,11 @@ const Schedule = () => {
   const [isSixWeek, setIsSixWeek] = useState(false);
   const [isAddScheduleModalOpen, setIsAddScheduleModalOpen] = useState(false);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
-  const [currentSchedule, setCurrentSchedule] = useState({ type: '', id: '' });
+  const [currentSchedule, setCurrentSchedule] = useState<CurrentSchedule>({
+    type: '',
+    teamId: [],
+    userId: '',
+  });
   const [isDayClick, setIsDayClick] = useState(false);
 
   const handleYearMonthChange = (year: number, month: number) => {

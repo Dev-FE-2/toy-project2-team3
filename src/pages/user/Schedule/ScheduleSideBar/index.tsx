@@ -15,7 +15,8 @@ interface TeamMembersData {
 
 interface CurrentSchedule {
   type: string;
-  id: string;
+  teamId: TeamMembersData[];
+  userId?: string;
 }
 
 interface ScheduleSideBarProps {
@@ -39,7 +40,6 @@ const ScheduleSideBar = ({
         {teamData.map((team) => (
           <TeamList
             key={team.id}
-            teamId={team.id}
             name={team.name}
             members={team.members}
             setCurrentSchedule={setCurrentSchedule}

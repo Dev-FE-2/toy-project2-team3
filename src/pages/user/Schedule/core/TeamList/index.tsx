@@ -7,26 +7,38 @@ interface TeamMembersData {
 
 interface CurrentSchedule {
   type: string;
-  id: string;
+  teamId: TeamMembersData[];
+  userId?: string;
 }
 
 interface Team {
-  teamId: string;
   name: string;
   members: TeamMembersData[];
   setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
 }
-const TeamList = ({ teamId, name, members, setCurrentSchedule }: Team) => {
-  const handleTeamOrUserClick = (type: string, id: string) => {
-    setCurrentSchedule({ type, id });
+const TeamList = ({ name, members, setCurrentSchedule }: Team) => {
+  const handleTeamOrUserClick = ({ type, teamId, userId }: CurrentSchedule) => {
+    setCurrentSchedule({ type, teamId, userId });
   };
+
+  console.log(members);
 
   return (
     <S.Ul>
-      <div onClick={() => handleTeamOrUserClick('team', teamId)}>{name}</div>
+      <div
+        onClick={() => handleTeamOrUserClick({ type: 'team', teamId: members })}
+      >
+        {name}
+      </div>
       {members.map((member) => (
         <li
-          onClick={() => handleTeamOrUserClick('user', member.userId)}
+          onClick={() =>
+            handleTeamOrUserClick({
+              type: 'user',
+              teamId: members,
+              userId: member.userId,
+            })
+          }
           key={member.userId}
         >
           {member.name}

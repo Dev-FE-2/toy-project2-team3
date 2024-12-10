@@ -3,7 +3,19 @@ import MainCalendar from './MainCalendar';
 import { border } from '../../../../../styles';
 import { DAYS_OF_WEEK_LIST } from '../../constants';
 
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
 interface MainCalendarWrapperProps {
+  currentSchedule: CurrentSchedule;
   currentMonth: number;
   currentYear: number;
   setIsSixWeek: (prop: boolean) => void;
@@ -11,6 +23,7 @@ interface MainCalendarWrapperProps {
 }
 
 const MainCalendarWrapper = ({
+  currentSchedule,
   currentMonth,
   currentYear,
   setIsSixWeek,
@@ -25,6 +38,7 @@ const MainCalendarWrapper = ({
       </S.DaysOfWeekWrapper>
       <S.CalendarWrapper>
         <MainCalendar
+          currentSchedule={currentSchedule}
           currentYear={currentYear}
           currentMonth={currentMonth}
           setIsSixWeek={setIsSixWeek}
