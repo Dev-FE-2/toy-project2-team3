@@ -30,7 +30,7 @@ const S = {
   `,
   Title: styled.div`
     margin-left: 3vw;
-    margin-top: 15vh;
+    margin-top: 10vh;
     font-size: 32px;
     margin-right: auto;
   `,

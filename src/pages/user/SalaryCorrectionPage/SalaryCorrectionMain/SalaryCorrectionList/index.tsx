@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors, font } from '../../../../../styles';
+import PagiNation from '../../../../../components/Pagination';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../state/store';
 
-const items = [
+type Item = {
+  id: number;
+  date: string;
+  title: string;
+  status: string;
+  reason: string;
+};
+const items: Item[] = [
   {
     id: 0,
     date: '2024-11-27',
@@ -24,9 +34,86 @@ const items = [
     status: '거부',
     reason: '돈이 없어요',
   },
+  {
+    id: 3,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 4,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 5,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 6,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 7,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 8,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 9,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 10,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
+  {
+    id: 11,
+    date: '2024-09-25',
+    title: '2024년 08월 급여 정산 오류',
+    status: '승인',
+    reason: '',
+  },
 ];
 
 const SalaryCorrectionList = () => {
+  const ITEMPERPAGE = 10;
+  const [currentPageItems, setCurrentPageItems] = useState<Item[]>([]);
+
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
+
+  useEffect(() => {
+    const indexOfLastItem = currentPage * ITEMPERPAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEMPERPAGE;
+    const currentItemsSlice = items.slice(indexOfFirstItem, indexOfLastItem);
+    setCurrentPageItems(currentItemsSlice);
+  }, [currentPage]);
+
   return (
     <S.SalaryContainer>
       <S.SalaryLabelContainer>
@@ -44,7 +131,7 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {items.map((item) => (
+        {currentPageItems.map((item) => (
           <div className="salary__item-container" key={item.id}>
             <div className="item-ceil">
               <span>{item.date}</span>
@@ -67,6 +154,9 @@ const SalaryCorrectionList = () => {
           </div>
         ))}
       </S.SalaryMainContainer>
+      <S.PaginationContainer>
+        <PagiNation maxPage={2} />
+      </S.PaginationContainer>
     </S.SalaryContainer>
   );
 };
@@ -74,7 +164,7 @@ const SalaryCorrectionList = () => {
 const S = {
   SalaryContainer: styled.div`
     width: 71.35vw;
-    height: 57.5vh;
+    height: 74vh;
     margin-top: 2vh;
     margin-left: 5.5vw;
     border: solid 1px black;
@@ -105,10 +195,18 @@ const S = {
     margin-left: 6vw;
     border-top: 3px solid ${colors.semantic.border};
     margin-right: 6vw;
+    cursor: pointer;
+
     .salary__item-container {
       display: flex;
       flex-direction: row;
       margin-top: 2vh;
+      &:hover {
+        background-color: ${colors.semantic.hover.primary};
+      }
+      &:active {
+        background-color: ${colors.semantic.primary};
+      }
     }
     .status {
       color: ${colors.semantic.text.light};
@@ -130,6 +228,11 @@ const S = {
         background-color: ${colors.semantic.primary};
       }
     }
+  `,
+
+  PaginationContainer: styled.div`
+    margin-top: auto;
+    padding: 1rem;
   `,
 };
 

@@ -41,7 +41,7 @@ const items: Item[] = [
   },
   {
     id: 3,
-    date: '2025년 1월',
+    date: '2025년 01월',
     totalTime: '180',
     basicSalary: '3,000,000',
     overSalary: '1,500,000',
@@ -49,7 +49,7 @@ const items: Item[] = [
   },
   {
     id: 4,
-    date: '2025년 2월',
+    date: '2025년 02월',
     totalTime: '168',
     basicSalary: '2,750,600',
     overSalary: '1,250,300',
@@ -57,7 +57,7 @@ const items: Item[] = [
   },
   {
     id: 5,
-    date: '2025년 3월',
+    date: '2025년 03월',
     totalTime: '160',
     basicSalary: '2,980,400',
     overSalary: '1,100,200',
@@ -65,7 +65,7 @@ const items: Item[] = [
   },
   {
     id: 6,
-    date: '2025년 4월',
+    date: '2025년 04월',
     totalTime: '176',
     basicSalary: '2,850,750',
     overSalary: '1,300,500',
@@ -73,7 +73,7 @@ const items: Item[] = [
   },
   {
     id: 7,
-    date: '2025년 5월',
+    date: '2025년 05월',
     totalTime: '180',
     basicSalary: '3,100,200',
     overSalary: '1,400,300',
@@ -81,7 +81,7 @@ const items: Item[] = [
   },
   {
     id: 8,
-    date: '2025년 6월',
+    date: '2025년 06월',
     totalTime: '168',
     basicSalary: '2,920,000',
     overSalary: '1,200,100',
@@ -89,7 +89,7 @@ const items: Item[] = [
   },
   {
     id: 9,
-    date: '2025년 7월',
+    date: '2025년 07월',
     totalTime: '160',
     basicSalary: '2,700,500',
     overSalary: '1,100,800',
@@ -97,7 +97,7 @@ const items: Item[] = [
   },
   {
     id: 10,
-    date: '2025년 8월',
+    date: '2025년 08월',
     totalTime: '176',
     basicSalary: '2,800,100',
     overSalary: '1,300,600',
