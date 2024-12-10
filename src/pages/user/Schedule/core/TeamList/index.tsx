@@ -1,21 +1,36 @@
 import styled from 'styled-components';
 
-interface Team {
-  name: string;
-  members: TeamMembersData[];
-}
-
 interface TeamMembersData {
   name: string;
   userId: string;
 }
 
-const TeamList = ({ name, members }: Team) => {
+interface CurrentSchedule {
+  type: string;
+  id: string;
+}
+
+interface Team {
+  teamId: string;
+  name: string;
+  members: TeamMembersData[];
+  setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
+}
+const TeamList = ({ teamId, name, members, setCurrentSchedule }: Team) => {
+  const handleTeamOrUserClick = (type: string, id: string) => {
+    setCurrentSchedule({ type, id });
+  };
+
   return (
     <S.Ul>
-      {name}
+      <div onClick={() => handleTeamOrUserClick('team', teamId)}>{name}</div>
       {members.map((member) => (
-        <li key={member.userId}>{member.name}</li>
+        <li
+          onClick={() => handleTeamOrUserClick('user', member.userId)}
+          key={member.userId}
+        >
+          {member.name}
+        </li>
       ))}
     </S.Ul>
   );

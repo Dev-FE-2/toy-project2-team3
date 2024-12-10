@@ -13,17 +13,33 @@ interface TeamMembersData {
   userId: string;
 }
 
+interface CurrentSchedule {
+  type: string;
+  id: string;
+}
+
 interface ScheduleSideBarProps {
   isSixWeek: boolean;
   teamData: TeamData[];
+  setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
 }
 
-const ScheduleSideBar = ({ isSixWeek, teamData }: ScheduleSideBarProps) => {
+const ScheduleSideBar = ({
+  isSixWeek,
+  teamData,
+  setCurrentSchedule,
+}: ScheduleSideBarProps) => {
   return (
     <S.Wrapper isSixWeek={isSixWeek}>
       <S.Content>
         {teamData.map((team) => (
-          <TeamList key={team.id} name={team.name} members={team.members} />
+          <TeamList
+            key={team.id}
+            teamId={team.id}
+            name={team.name}
+            members={team.members}
+            setCurrentSchedule={setCurrentSchedule}
+          />
         ))}
       </S.Content>
     </S.Wrapper>

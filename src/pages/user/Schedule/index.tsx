@@ -14,6 +14,7 @@ const Schedule = () => {
   const [isSixWeek, setIsSixWeek] = useState(false);
   const [isAddScheduleModalOpen, setIsAddScheduleModalOpen] = useState(false);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
+  const [currentSchedule, setCurrentSchedule] = useState({ type: '', id: '' });
 
   interface TeamData {
     id: string;
@@ -41,7 +42,6 @@ const Schedule = () => {
         }))
       : [];
 
-    console.log(formattedTeamsData);
     setTeamData(formattedTeamsData);
 
     return formattedTeamsData;
@@ -54,7 +54,11 @@ const Schedule = () => {
   return (
     <>
       <S.Wrapper>
-        <ScheduleSideBar isSixWeek={isSixWeek} teamData={teamData} />
+        <ScheduleSideBar
+          isSixWeek={isSixWeek}
+          teamData={teamData}
+          setCurrentSchedule={setCurrentSchedule}
+        />
         <div>
           <ScheduleHeader
             currentMonth={currentMonth}
@@ -63,6 +67,7 @@ const Schedule = () => {
             setIsAddScheduleModalOpen={setIsAddScheduleModalOpen}
           />
           <ScheduleMain
+            currentSchedule={currentSchedule}
             currentMonth={currentMonth}
             currentYear={currentYear}
             setIsSixWeek={setIsSixWeek}
