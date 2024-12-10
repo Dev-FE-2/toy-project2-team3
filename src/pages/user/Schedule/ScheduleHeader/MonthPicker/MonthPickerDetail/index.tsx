@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { colors, border } from '../../../../../styles';
-import { MONTHS } from '../../constants';
+import { colors, border } from '../../../../../../styles';
+import { MONTHS } from '../../../constants';
 
 interface MonthPickerDetailProps {
   currentMonth: number;

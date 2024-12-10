@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { useState } from 'react';
-import MonthPickerDetail from './MonthPickerDetail';
 import { border } from '../../../../styles';
 import { MONTHS } from '../constants';
 
@@ -63,26 +62,23 @@ const ScheduleHeader = ({
           {/* 👆 추후 데이터 바인딩, 전역 상태 관리로 변경할 때 옳게 표시할 예정입니다 */}
           <div></div>
         </>
-      ) : isMonthPickerDetailOpen ? (
-        <MonthPicker
-          content={currentYear}
-          setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
-          onClickLeft={handlePrevYear}
-          onClickRight={handleNextYear}
-        />
       ) : (
         <MonthPicker
-          content={`${currentYear} ${MONTHS[currentMonth]}`}
-          setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
-          onClickLeft={handlePrevMonth}
-          onClickRight={handleNextMonth}
-        />
-      )}
-
-      {isMonthPickerDetailOpen && (
-        <MonthPickerDetail
+          content={
+            isMonthPickerDetailOpen
+              ? currentYear
+              : `${currentYear} ${MONTHS[currentMonth]}`
+          }
           currentMonth={currentMonth}
+          isMonthPickerDetailOpen={isMonthPickerDetailOpen}
           handleMonthClick={handleMonthClick}
+          setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
+          onClickLeft={
+            isMonthPickerDetailOpen ? handlePrevYear : handlePrevMonth
+          }
+          onClickRight={
+            isMonthPickerDetailOpen ? handleNextYear : handleNextMonth
+          }
         />
       )}
     </S.Header>
