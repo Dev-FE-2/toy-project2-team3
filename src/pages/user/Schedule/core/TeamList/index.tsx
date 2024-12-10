@@ -2,7 +2,12 @@ import styled from 'styled-components';
 
 interface Team {
   name: string;
-  members: string[];
+  members: TeamMembersData[];
+}
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
 }
 
 const TeamList = ({ name, members }: Team) => {
@@ -10,7 +15,7 @@ const TeamList = ({ name, members }: Team) => {
     <S.Ul>
       {name}
       {members.map((member) => (
-        <li key={member}>{member}</li>
+        <li key={member.userId}>{member.name}</li>
       ))}
     </S.Ul>
   );
