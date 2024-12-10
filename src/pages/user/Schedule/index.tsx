@@ -5,6 +5,16 @@ import ScheduleSideBar from './ScheduleSideBar';
 import { useEffect, useState } from 'react';
 import AddScheduleModal from './core/AddScheduleModal';
 import { fetchDataFromDB } from '../../../firebase/fetchDataFromDB';
+interface TeamData {
+  id: string;
+  name: string;
+  members: TeamMembersData[];
+}
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
 
 const Schedule = () => {
   const CURRENT_MONTH = new Date().getMonth() + 1;
@@ -15,17 +25,7 @@ const Schedule = () => {
   const [isAddScheduleModalOpen, setIsAddScheduleModalOpen] = useState(false);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
   const [currentSchedule, setCurrentSchedule] = useState({ type: '', id: '' });
-
-  interface TeamData {
-    id: string;
-    name: string;
-    members: TeamMembersData[];
-  }
-
-  interface TeamMembersData {
-    name: string;
-    userId: string;
-  }
+  const [isDayClick, setIsDayClick] = useState(false);
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -56,6 +56,7 @@ const Schedule = () => {
       <S.Wrapper>
         <ScheduleSideBar
           isSixWeek={isSixWeek}
+          isDayClick={isDayClick}
           teamData={teamData}
           setCurrentSchedule={setCurrentSchedule}
         />
@@ -63,14 +64,18 @@ const Schedule = () => {
           <ScheduleHeader
             currentMonth={currentMonth}
             currentYear={currentYear}
+            isDayClick={isDayClick}
             handleYearMonthChange={handleYearMonthChange}
             setIsAddScheduleModalOpen={setIsAddScheduleModalOpen}
+            setIsDayClick={setIsDayClick}
           />
           <ScheduleMain
             currentSchedule={currentSchedule}
             currentMonth={currentMonth}
             currentYear={currentYear}
+            isDayClick={isDayClick}
             setIsSixWeek={setIsSixWeek}
+            setIsDayClick={setIsDayClick}
           />
         </div>
         {isAddScheduleModalOpen && (

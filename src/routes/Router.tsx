@@ -43,7 +43,7 @@ function Router() {
         </Route>
         {/* common */}
         <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
-        <Route path="/signUp" element={<SignUp />} /> {/* 회원가입 페이지 */}
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );

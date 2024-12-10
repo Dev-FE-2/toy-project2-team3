@@ -1,15 +1,22 @@
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles/token/colors';
-import { border } from '../../../../../../styles';
+import { colors, border } from '../../../../../../../styles';
 
 interface MainCalendarDaysProps {
   day: number;
   isCurrentMonth: boolean;
+  onClick: () => void;
 }
 
-const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
+const MainCalendarDays = ({
+  day,
+  isCurrentMonth,
+  onClick,
+}: MainCalendarDaysProps) => {
   return (
-    <S.MainCalendarDaysWrapper isCurrentMonth={isCurrentMonth}>
+    <S.MainCalendarDaysWrapper
+      onClick={onClick}
+      isCurrentMonth={isCurrentMonth}
+    >
       <S.MainCalendarDaysNumber>{day}</S.MainCalendarDaysNumber>
       <S.MainCalendarDaysContentsWrapper>
         <S.MainCalendarDaysContents>
