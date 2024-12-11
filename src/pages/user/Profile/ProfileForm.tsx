@@ -7,10 +7,11 @@ interface FormData {
   email: string;
 }
 
-const SignUpForm = () => {
+const ProfileForm = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
   const { saveData, isSaving, error } = useSaveData<FormData>({
     table: collection.users,
+    requireAuth: true, // 인증 여부 필요
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,4 +60,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default ProfileForm;
