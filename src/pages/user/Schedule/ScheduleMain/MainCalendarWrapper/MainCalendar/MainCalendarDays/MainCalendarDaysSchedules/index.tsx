@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { border } from '../../../../../../../../styles';
+import { border, padding } from '../../../../../../../../styles';
 import { fetchDataFromDB } from '../../../../../../../../firebase/fetchDataFromDB';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -165,12 +165,13 @@ const MainCalendarDaysSchedules = ({
 
 const S = {
   MainCalendarDaysContents: styled.div`
-    width: calc(100% - 0.5rem - 2px);
-    min-height: 1rem;
-    font-size: 0.875rem;
+    width: 95%;
+    height: auto;
+    min-height: 21px;
+    font-size: 12px;
     border: ${border.default};
     border-radius: ${border.radius.xs};
-    padding: 0.125rem 0.25rem;
+    padding: 0 ${padding.xs};
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

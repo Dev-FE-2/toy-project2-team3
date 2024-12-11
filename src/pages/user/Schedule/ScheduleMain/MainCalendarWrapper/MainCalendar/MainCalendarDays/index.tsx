@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, border } from '../../../../../../../styles';
+import { colors, border, padding } from '../../../../../../../styles';
 import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
 
 interface TeamMembersData {
@@ -53,14 +53,15 @@ const S = {
     color: ${({ isCurrentMonth }) =>
       isCurrentMonth ? colors.semantic.dark : colors.semantic.disabled};
     border: ${border.default};
-    padding-bottom: 0.5rem;
+    padding-bottom: ${padding.sm};
     position: relative;
     overflow: hidden;
-    cursor: ${({ isCurrentMonth }) =>
-      isCurrentMonth ? 'pointer' : 'not-allowed'};
+    cursor: pointer;
     &:hover {
       background-color: ${({ isCurrentMonth }) =>
-        isCurrentMonth ? colors.semantic.hover.primary : colors.semantic.light};
+        isCurrentMonth
+          ? colors.semantic.hover.primary
+          : colors.scale.neutral.s95};
     }
   `,
   MainCalendarDaysNumber: styled.div`
@@ -70,10 +71,11 @@ const S = {
   `,
   MainCalendarDaysContentsWrapper: styled.div`
     width: 80%;
-    max-height: calc(1.375rem * 4 + 0.25rem * 3);
+    max-height: calc(21px * 4 + 3px);
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 1px;
     overflow: hidden;
   `,
 };

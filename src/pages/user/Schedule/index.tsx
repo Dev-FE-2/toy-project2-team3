@@ -103,7 +103,7 @@ const S = {
   Wrapper: styled.div`
     display: flex;
     width: 1440px;
-    height: 100dvh;
+    height: 900px;
   `,
 };
 
