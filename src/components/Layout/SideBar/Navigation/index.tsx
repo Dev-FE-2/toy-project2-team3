@@ -19,63 +19,41 @@ type BaseContainerProps = {
 };
 
 const items = [
-  { id: 0, src: home, alt: 'home', text: 'Pokemon ERP', link: '/userHome' },
-  {
-    id: 1,
-    src: account_circle,
-    alt: 'account_circle',
-    text: '나의 정보',
-    link: '/editProfile',
-  },
-  {
-    id: 2,
-    src: calendar_month,
-    alt: 'calendar_month',
-    text: '나의 업무',
-    link: '/schedule',
-  },
-  {
-    id: 3,
-    src: schedule,
-    alt: 'schedule',
-    text: '나의 근태',
-    link: '/attendance',
-  },
-  { id: 4, src: paid, alt: 'paid', text: '나의 급여', hasSubItems: true },
+  { id: 0, icon: 'home', text: 'Pokemon ERP', link: '/userHome' },
+  { id: 1, icon: 'account_circle', text: '나의 정보', link: '/editProfile' },
+  { id: 2, icon: 'calendar_month', text: '나의 업무', link: '/schedule' },
+  { id: 3, icon: 'schedule', text: '나의 근태', link: '/attendance' },
+  { id: 4, icon: 'paid', text: '나의 급여', hasSubItems: true },
 ];
 
 // Navigation 컴포넌트
 const Navigation = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null); // 활성화 항목
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // hovered 항목
-  const [expandedSalary, setExpandedSalary] = useState(false); // 세부사항
-  const [userInfo, setUserInfo] = useState<User | null>(null); // fetch한 user 정보
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [expandedSalary, setExpandedSalary] = useState(false);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
   const location = useLocation();
 
-  // 유저 정보 가져오기
   useEffect(() => {
     const unsubscribe = fetchUserInfo((info) => {
-      setUserInfo(info); // 사용자 정보 설정
+      setUserInfo(info);
     });
-    return () => unsubscribe(); // 컴포넌트 언마운트 시 리스너 정리
+    return () => unsubscribe();
   }, []);
 
-  // 활성화 추적
   useEffect(() => {
     const storedIndex = localStorage.getItem('activeIndex');
     const storedExpandedSalary =
       localStorage.getItem('expandedSalary') === 'true';
     setActiveIndex(Number(storedIndex));
 
-    // 현재 경로에 따라 activeIndex 설정
     if (location.pathname === '/editProfile') {
-      setActiveIndex(1); // "나의 정보" 항목 활성화
+      setActiveIndex(1);
     }
 
-    setExpandedSalary(storedExpandedSalary); // 저장된 서브 항목 상태 설정
+    setExpandedSalary(storedExpandedSalary);
   }, [location.pathname]);
 
-  // 세부항목에 대한 활성화 추적
   useEffect(() => {
     if (activeIndex !== null) {
       localStorage.setItem('activeIndex', String(activeIndex));
@@ -102,7 +80,7 @@ const Navigation = () => {
       {items.map((item) => (
         <React.Fragment key={item.id}>
           <StyledLink
-            to={item.id === 4 ? item.link : item.link}
+            to={item.link}
             onClick={
               item.id === 4 ? handleSalaryClick : () => handleItemClick(item.id)
             }
@@ -116,14 +94,15 @@ const Navigation = () => {
               onMouseEnter={() => setHoveredIndex(item.id)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {item.src && <img src={item.src} alt={item.alt} />}
+              <div className="material-symbols-outlined">{item.icon}</div>
               {item.text}
               {item.id === 4 && expandedSalary && (
-                <img src={arrow_drop_down} alt="arrow" className="arrow" />
+                <div className="material-symbols-outlined arrow">
+                  arrow_drop_down
+                </div>
               )}
             </StyledMainContainer>
           </StyledLink>
-          {/* "나의 급여" 항목 */}
           {item.id === 4 && expandedSalary && (
             <StyledRowContainer>
               <StyledLink
@@ -157,7 +136,6 @@ const Navigation = () => {
         </React.Fragment>
       ))}
 
-      {/* isAdmin이 true일 경우 추가 항목 렌더링 */}
       {userInfo?.isAdmin && (
         <>
           <StyledLink to="/employeeList" onClick={() => handleItemClick(5)}>
@@ -167,7 +145,9 @@ const Navigation = () => {
               onMouseEnter={() => setHoveredIndex(5)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <img src={supervisor_account} alt="supervisor_account" />
+              <div className="material-symbols-outlined">
+                supervisor_account
+              </div>
               직원 관리
             </StyledMainContainer>
           </StyledLink>
@@ -178,7 +158,7 @@ const Navigation = () => {
               onMouseEnter={() => setHoveredIndex(6)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <img src={check_box} alt="check_box" />
+              <div className="material-symbols-outlined">check_box</div>
               급여 정정 신청 관리
             </StyledMainContainer>
           </StyledLink>
@@ -199,8 +179,6 @@ const baseContainerStyles = css<BaseContainerProps>`
   cursor: pointer;
   transition: background-color 0.3s;
   border-radius: 8px;
-
-  /* 클릭 또는 호버에 대한 설정 */
   color: ${(props) => (props.isActive ? '#fff' : '#4A493F')};
   background-color: ${(props) =>
     props.isActive ? '#63A002' : props.isHovered ? '#E5F4DD' : '#fff'};
@@ -210,23 +188,15 @@ const StyledMainContainer = styled.div<BaseContainerProps>`
   ${baseContainerStyles}
   font-size: 20px;
 
-  img {
-    width: 24px;
-    height: auto;
+  .material-symbols-outlined {
     margin-right: 1vh;
-    padding-left: 0.5vw;
-    filter: ${(props) =>
-      props.isActive
-        ? 'brightness(0) invert(1)'
-        : 'none'}; // 활성화 상태일 때 흰색으로 변경
+    font-size: 24px; /* 아이콘 크기 조절 */
+    filter: ${(props) => (props.isActive ? 'brightness(0) invert(1)' : 'none')};
   }
 
   .arrow {
     margin-left: auto;
-    width: 1vw;
-    height: auto;
-    display: ${(props) =>
-      props.isActive ? 'block' : 'none'}; // 활성화 상태일 때만 표시
+    display: ${(props) => (props.isActive ? 'block' : 'none')};
   }
 `;
 
@@ -243,12 +213,12 @@ const StyledRowContainer = styled.div`
   border-left: 1.5px solid #63a002;
   margin-left: 1vh;
   padding-left: 0.5vw;
-  display: flex; // 가로로 정렬
-  flex-direction: column; // 세로로 쌓이게 설정
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledLink = styled(Link)`
-  text-decoration: none; // 링크의 기본 밑줄 제거
+  text-decoration: none;
 `;
 
 export default Navigation;
