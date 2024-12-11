@@ -1,9 +1,10 @@
-import { useFetchSWR } from './useFetchSWR';
-import type { User } from '../types/interface';
+import { useFetchSWR } from '../useFetchSWR';
+import type { User } from '../../types/interface';
+import { collection } from '../../constant';
 
 const useFetchUsers = () => {
   const { data, error, isLoading, mutate } = useFetchSWR<User>({
-    table: 'Users',
+    table: collection.users,
   });
 
   return {
