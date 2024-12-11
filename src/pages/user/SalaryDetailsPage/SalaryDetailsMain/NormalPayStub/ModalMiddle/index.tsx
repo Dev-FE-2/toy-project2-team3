@@ -116,7 +116,7 @@ const ModalMiddle = () => {
       </S.ModalMiddleRow>
 
       <S.ModalMiddleRow>
-        <S.ModalMiddleTemp />
+        <S.ModalMiddleWrapper />
         <div className="title__value">실 수령액 (원)</div>
         <div className="title__value">
           <div className="value">3,472,161</div>
@@ -134,33 +134,27 @@ const S = {
     .detail__value {
         height: 4vh;
     }
-
     .detail__key{
         height:4vh;
         border: none;
         
     }
-
     .title__key {
         width: 25%;
         text-align: center;
     }
-.title__value {
+    .title__value {
     width: 25%;
     border: 1px solid ${colors.semantic.border};
     text-align:center; 
     .value{
     color: #4B89DC;
-    
     }
-
-}
-
+    }
     .detail__key {
         width: 40%;
          border-top: none;
          text-align:center;
-        
     }
     .detail__value {
         min-width: 62%;
@@ -197,7 +191,7 @@ const S = {
     display: flex;
     flex-direction: column;
   `,
-  ModalMiddleTemp: styled.div`
+  ModalMiddleWrapper: styled.div`
     min-width: 50%;
     min-height: 10%;
     background-color: ${colors.semantic.background.dark};
