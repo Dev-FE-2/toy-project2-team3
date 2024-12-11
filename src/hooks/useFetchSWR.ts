@@ -6,11 +6,10 @@ export type FetchParams = {
 };
 
 const useFetchSWR = <T>({ table, key }: FetchParams) => {
-  const path = key ? `${table}/${key}` : table;
-  const { data, error, isLoading, mutate } = useSWR<T | null>(path);
+  const { data, error, isLoading, mutate } = useSWR<T | null>({ table, key });
 
   return {
-    data,
+    data: data ? (!key ? Object.values(data) : data) : null,
     error,
     isLoading,
     mutate, // 데이터 리패칭이나 업데이트 시 사용 가능

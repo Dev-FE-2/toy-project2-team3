@@ -1,7 +1,11 @@
 import { fetchDataFromDB } from '../firebase';
 
-const swrFetcher = async (path: string) => {
-  const [table, key] = path.split('/');
+export type FetchParams = {
+  table: string;
+  key?: string;
+};
+
+const swrFetcher = async ({ table, key }: FetchParams) => {
   const result = await fetchDataFromDB({ table, key });
 
   return result;
