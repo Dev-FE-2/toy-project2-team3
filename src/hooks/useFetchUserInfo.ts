@@ -4,15 +4,15 @@ import type { User } from '../types/interface';
 
 const useFetchUserInfo = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<{ message: string } | null>(null);
 
   useEffect(() => {
     const unsubscribe = fetchUserInfo((data) => {
       if (data) {
         setUserInfo(data);
       } else {
-        setError('유저 데이터가 없습니다.');
+        setError({ message: '유저 데이터가 없습니다.' });
       }
       setLoading(false);
     });
@@ -22,7 +22,7 @@ const useFetchUserInfo = () => {
     };
   }, []);
 
-  return { userInfo, loading, error };
+  return { userInfo, isLoading, error };
 };
 
 export { useFetchUserInfo };

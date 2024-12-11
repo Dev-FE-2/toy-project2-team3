@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { mutate } from 'swr';
 import { saveDataToDB } from '../firebase';
 
-interface UseSaveDataParams<T> {
+interface UseSaveDataParams {
   table: string;
   key?: string;
-  data: T;
   requireAuth?: boolean;
 }
 
@@ -19,7 +18,7 @@ function useSaveData<T>({
   table,
   key,
   requireAuth = false,
-}: UseSaveDataParams<T>): UseSaveDataReturn<T> {
+}: UseSaveDataParams): UseSaveDataReturn<T> {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
