@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import fetchUserInfo from '../../../../firebase/user/fetchUserInfo';
+import fetchUserInfo from '../../../../firebase/fetchUserInfo';
 import type { user } from '../../../../types/interface';
 
 // 타입 정의

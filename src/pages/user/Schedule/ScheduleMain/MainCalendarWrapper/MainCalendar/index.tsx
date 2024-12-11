@@ -1,16 +1,31 @@
 import styled from 'styled-components';
 import MainCalendarDays from './MainCalendarDays';
 
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
 interface MainCalendarProps {
+  currentSchedule: CurrentSchedule;
   currentYear: number;
   currentMonth: number;
   setIsSixWeek: (prop: boolean) => void;
+  setIsDayClick: (prop: boolean) => void;
 }
 
 const MainCalendar = ({
+  currentSchedule,
   currentYear,
   currentMonth,
   setIsSixWeek,
+  setIsDayClick,
 }: MainCalendarProps) => {
   const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
   const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
@@ -55,8 +70,12 @@ const MainCalendar = ({
     <S.MainCalendarWrapper daysCount={allDays.length}>
       {allDays.map((day, index) => (
         <MainCalendarDays
+          currentSchedule={currentSchedule}
           key={index}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
           day={day}
+          setIsDayClick={setIsDayClick}
           isCurrentMonth={
             index >= prevMonthDays.length &&
             index < prevMonthDays.length + currentMonthDays.length
