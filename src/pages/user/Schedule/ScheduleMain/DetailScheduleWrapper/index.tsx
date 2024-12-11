@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { border, colors } from '../../../../../styles';
 import { TEAMS } from '../../constants';
+import DetailSchedule from './DetailSchedule';
 
 interface TeamMembersData {
   name: string;
@@ -16,10 +17,12 @@ interface CurrentSchedule {
 
 interface DetailScheduleWrapperProps {
   currentSchedule: CurrentSchedule;
+  clickedDate: number[];
 }
 
 const DetailScheduleWrapper = ({
   currentSchedule,
+  clickedDate,
 }: DetailScheduleWrapperProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const TEMP_TEAM_MEMBERS = TEAMS[0].members;
@@ -28,8 +31,6 @@ const DetailScheduleWrapper = ({
   const MINUTES = currentTime.getMinutes();
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
   const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 80 + 40;
-
-  console.log(currentSchedule); // 삭제 필요
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {
@@ -65,6 +66,10 @@ const DetailScheduleWrapper = ({
             ))}
           </S.CellsContainer>
         ))}
+        <DetailSchedule
+          currentSchedule={currentSchedule}
+          clickedDate={clickedDate}
+        />
         <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
       </S.ScheduleContainer>
     </>
@@ -74,7 +79,7 @@ const DetailScheduleWrapper = ({
 const S = {
   ScheduleContainer: styled.div<{ teamMembersLength: number }>`
     width: 1250px;
-    max-height: calc(80dvh - 3rem);
+    max-height: calc(80% - 3rem);
     display: grid;
     grid-template-columns: auto repeat(
         ${(props) => props.teamMembersLength},
@@ -108,7 +113,7 @@ const S = {
       props.type === 'time' &&
       `
         height: 80px;
-        width: 3rem;
+        width: 40px;
         font-weight: bold;
         background-color: ${colors.semantic.background.light};
         `}

@@ -47,7 +47,6 @@ const MainCalendarDaysSchedules = ({
   currentMonth,
   day,
 }: MainCalendarDaysSchedulesProps) => {
-  // const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [userScheduleData, setUserScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);

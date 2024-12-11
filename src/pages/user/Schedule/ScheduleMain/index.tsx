@@ -1,5 +1,6 @@
 import MainCalendarWrapper from './MainCalendarWrapper';
 import DetailScheduleWrapper from './DetailScheduleWrapper';
+import { useState } from 'react';
 
 interface TeamMembersData {
   name: string;
@@ -29,6 +30,8 @@ const ScheduleMain = ({
   setIsSixWeek,
   setIsDayClick,
 }: ScheduleMainProps) => {
+  const [clickedDate, setClickedDate] = useState<number[]>([]);
+
   return (
     <>
       {!isDayClick ? (
@@ -38,9 +41,13 @@ const ScheduleMain = ({
           currentYear={currentYear}
           setIsSixWeek={setIsSixWeek}
           setIsDayClick={setIsDayClick}
+          setClickedDate={setClickedDate}
         />
       ) : (
-        <DetailScheduleWrapper currentSchedule={currentSchedule} />
+        <DetailScheduleWrapper
+          currentSchedule={currentSchedule}
+          clickedDate={clickedDate}
+        />
       )}
     </>
   );

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { colors, border, padding } from '../../../../../../../styles';
 import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
+import { SetStateAction } from 'react';
 
 interface TeamMembersData {
   name: string;
@@ -20,6 +21,7 @@ interface MainCalendarDaysProps {
   day: number;
   isCurrentMonth: boolean;
   setIsDayClick: (prop: boolean) => void;
+  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
 }
 
 const MainCalendarDays = ({
@@ -29,8 +31,28 @@ const MainCalendarDays = ({
   day,
   isCurrentMonth,
   setIsDayClick,
+  setClickedDate,
 }: MainCalendarDaysProps) => {
   const handleDayClick = () => {
+    let adjustedYear = currentYear;
+    let adjustedMonth = currentMonth;
+    const adjustedDay = day;
+
+    if (!isCurrentMonth && day > 20) {
+      adjustedMonth -= 1;
+      if (adjustedMonth < 1) {
+        adjustedMonth = 12;
+        adjustedYear -= 1;
+      }
+    } else if (!isCurrentMonth && day <= 20) {
+      adjustedMonth += 1;
+      if (adjustedMonth > 12) {
+        adjustedMonth = 1;
+        adjustedYear += 1;
+      }
+    }
+
+    setClickedDate([adjustedYear, adjustedMonth, adjustedDay]);
     setIsDayClick(true);
   };
 
