@@ -29,10 +29,10 @@ const S = {
     display: flex;
   `,
   Title: styled.div`
-    margin-left: 3vw;
-    margin-top: 10vh;
+    margin-left: 7vw;
     font-size: 32px;
     margin-right: auto;
+    font-weight: bold;
   `,
 };
 

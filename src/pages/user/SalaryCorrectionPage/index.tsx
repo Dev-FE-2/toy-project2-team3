@@ -17,7 +17,9 @@ const SalaryCorrection = () => {
           isVisible={isVisible}
           onToggleVisibility={handleVisibilityChange}
         />
-        <SalaryCorrectionMiddle isVisible={isVisible} />
+        <S.MainContainer>
+          <SalaryCorrectionMiddle isVisible={isVisible} />
+        </S.MainContainer>
       </S.SalaryContainer>
     </>
   );
@@ -27,6 +29,15 @@ const S = {
   SalaryContainer: styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  `,
+  MainContainer: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   `,
 };
 

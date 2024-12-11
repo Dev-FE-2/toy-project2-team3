@@ -176,7 +176,7 @@ const S = {
 
   Content: styled.div`
     width: 100%;
-    min-height: 7.8%;
+    min-height: 7.5%;
     display: flex;
 
     .data-item {

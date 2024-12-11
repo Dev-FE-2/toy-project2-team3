@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { colors, font } from '../../../../../styles';
+import { colors } from '../../../../../styles';
 import PagiNation from '../../../../../components/Pagination';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../../state/store';
@@ -163,18 +163,20 @@ const SalaryCorrectionList = () => {
 
 const S = {
   SalaryContainer: styled.div`
-    width: 71.35vw;
-    height: 74vh;
+    width: 70vw;
+    height: 70vh;
+    margin-left: 7vw;
     margin-top: 2vh;
-    margin-left: 5.5vw;
-    border: solid 1px black;
+    border: 1px solid ${colors.semantic.text.gray};
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 24px;
     .item-ceil {
       width: 24vw;
       height: 3.7vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .align-center {
       width: 17.71vw;
@@ -185,22 +187,28 @@ const S = {
     }
   `,
   SalaryLabelContainer: styled.div`
-    width: 83%;
+    width: 100%;
+    min-height: 9%;
     display: flex;
     flex-direction: row;
-    margin: 2vh 3vw;
+    align-items: center;
+    background-color: ${colors.semantic.background.light};
+    font-weight: 700;
+    margin-bottom: 2vh;
   `,
   SalaryMainContainer: styled.div`
-    width: 83%;
+    width: 100%;
+    min-height: 7.8%;
     margin-left: 6vw;
-    border-top: 3px solid ${colors.semantic.border};
     margin-right: 6vw;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
 
     .salary__item-container {
       display: flex;
       flex-direction: row;
-      margin-top: 2vh;
+      margin-bottom: 2vh;
       &:hover {
         background-color: ${colors.semantic.hover.primary};
       }
@@ -210,10 +218,10 @@ const S = {
     }
     .status {
       color: ${colors.semantic.text.light};
-      width: 5vw;
-      height: 4vh;
+      width: 3vw;
+      height: 3vh;
       border-radius: 16px;
-      font-size: ${font.size.paragraph};
+      font-size: 12px;
       font-weight: normal;
       display: flex;
       justify-content: center;

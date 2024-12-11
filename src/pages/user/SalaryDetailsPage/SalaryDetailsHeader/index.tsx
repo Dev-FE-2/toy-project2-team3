@@ -11,10 +11,11 @@ const SalaryDetailsHeader = () => {
 const S = {
   SalaryHeader: styled.div`
     width: 100%;
+    display: flex;
   `,
 
   Title: styled.div`
-    margin-left: 3vw;
+    margin-left: 7vw;
     font-size: 32px;
     margin-right: auto;
     font-weight: bold;
