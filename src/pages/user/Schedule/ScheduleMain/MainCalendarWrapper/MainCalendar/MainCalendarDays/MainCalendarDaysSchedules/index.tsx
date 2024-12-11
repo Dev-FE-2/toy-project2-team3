@@ -34,6 +34,7 @@ interface ScheduleData {
 
 interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
+  name: string;
 }
 
 const MainCalendarDaysSchedules = ({
@@ -137,12 +138,28 @@ const MainCalendarDaysSchedules = ({
 
   useEffect(() => {
     fetchSchedules();
+    console.log(teamScheduleData);
+    console.log(userScheduleData);
   }, [fetchSchedules]);
 
   return (
-    <S.MainCalendarDaysContents>
-      <div>가나다라마바사아자차카파</div>
-    </S.MainCalendarDaysContents>
+    <>
+      {currentSchedule.type === 'team'
+        ? teamScheduleData.map((scheduleData) =>
+            scheduleData.scheduleList.map((data) => (
+              <S.MainCalendarDaysContents>
+                {`${scheduleData.name}: ${data.title}`}
+              </S.MainCalendarDaysContents>
+            ))
+          )
+        : userScheduleData.map((scheduleData) =>
+            scheduleData.scheduleList.map((data) => (
+              <S.MainCalendarDaysContents>
+                {`${scheduleData.name}: ${data.title}`}
+              </S.MainCalendarDaysContents>
+            ))
+          )}
+    </>
   );
 };
 
