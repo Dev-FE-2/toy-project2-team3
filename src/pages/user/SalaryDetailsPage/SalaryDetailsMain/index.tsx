@@ -4,8 +4,9 @@ import { colors } from '../../../../styles';
 import PagiNation from '../../../../components/Pagination';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../state/store';
+import NormalPayStub from './NormalPayStub';
 
-type Item = {
+export type Item = {
   id: number;
   date: string;
   totalTime: string;
@@ -108,6 +109,8 @@ const items: Item[] = [
 const SalaryDetailsMain = () => {
   const ITEMPERPAGE = 10;
   const [currentPageItems, setCurrentPageItems] = useState<Item[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
   const currentPage = useSelector(
     (state: RootState) => state.pagination.currentPage
@@ -120,6 +123,16 @@ const SalaryDetailsMain = () => {
     setCurrentPageItems(currentItemsSlice);
   }, [currentPage]);
 
+  const handleItemClick = (item: Item) => {
+    setSelectedItem(item); // 선택한 아이템을 상태에 저장
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
+
   return (
     <S.MainContainer>
       <S.Title>
@@ -131,7 +144,7 @@ const SalaryDetailsMain = () => {
       </S.Title>
 
       {currentPageItems.map((item) => (
-        <S.Content key={item.id}>
+        <S.Content key={item.id} onClick={() => handleItemClick(item)}>
           <div className="data-item">{item.date}</div>
           <div className="data-item">{item.totalTime}시간</div>
           <div className="data-item">{item.basicSalary}원</div>
@@ -143,6 +156,10 @@ const SalaryDetailsMain = () => {
       <S.PaginationContainer>
         <PagiNation maxPage={2} />
       </S.PaginationContainer>
+
+      {isModalOpen && (
+        <NormalPayStub item={selectedItem} onClose={closeModal} />
+      )}
     </S.MainContainer>
   );
 };
