@@ -50,7 +50,8 @@ const StyledModalDivision = styled.div`
   display: flex;
   align-items: center; /* 수평 가운데 정렬 */
   justify-content: center; /* 수직 가운데 정렬 */
-  border-bottom: 1px solid ${colors.semantic.text.dark};
+  border-bottom: 2px solid ${colors.semantic.text.dark};
+  z-index: 1;
 `;
 
 //const NormalPayStub: React.FC<NormalPayStubProps> = ({ item, onClose }) => {
