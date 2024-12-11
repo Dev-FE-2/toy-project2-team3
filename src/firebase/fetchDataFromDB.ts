@@ -20,7 +20,10 @@ const fetchDataFromDB = async <T>({
     const snapshot = await get(dbRef);
 
     if (snapshot.exists()) {
-      return snapshot.val();
+      const data = snapshot.val();
+      const result = data ? (!key ? Object.values(data) : data) : null;
+
+      return result;
     } else {
       console.warn('데이터가 존재하지 않습니다.');
 
