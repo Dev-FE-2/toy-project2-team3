@@ -9,6 +9,16 @@ const Loading = () => {
   );
 };
 
+const spin = keyframes`
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+`;
+
 const S = {
   SpinnerContainer: styled.div`
     width: 100%;
@@ -24,18 +34,9 @@ const S = {
       border-radius: 50%;
       border: 5px solid ${colors.semantic.border};
       border-top: 5px solid ${colors.semantic.tertiary};
-      animation: spin 1s linear infinite;
+      animation: ${spin} 1s linear infinite;
     }
   `,
-  spin: keyframes`
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    `,
 };
 
 export default Loading;
