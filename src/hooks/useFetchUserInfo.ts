@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchUserInfo } from '../../firebase/fetchUserInfo';
-import type { User } from '../../types/interface';
+import { fetchUserInfo } from '../firebase/fetchUserInfo';
+import type { User } from '../types/interface';
 
 const useFetchUserInfo = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);

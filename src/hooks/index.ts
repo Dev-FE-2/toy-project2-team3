@@ -8,4 +8,4 @@ export { useFetchSalaryRequests } from './fetchCollection/useFetchSalaryRequests
 export { useFetchSalarys } from './fetchCollection/useFetchSalarys';
 export { useFetchAttendances } from './fetchCollection/useFetchAttendances';
 
-export { useFetchUserInfo } from './fetchDetails/useFetchUserInfo';
+export { useFetchUserInfo } from './useFetchUserInfo';

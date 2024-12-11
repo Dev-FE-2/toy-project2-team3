@@ -13,8 +13,8 @@ const Login = () => {
       <h1>로그인</h1>
       <LoginForm />
       <ul>
-        {data.length > 0 ? (
-          data.map((user) => <li key={user.userId}>{user.name}</li>)
+        {data?.length > 0 ? (
+          data?.map((user) => <li key={user.userId}>{user.name}</li>)
         ) : (
           <li>데이터가 없습니다.</li>
         )}
