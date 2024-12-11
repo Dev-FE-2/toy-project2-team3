@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import account_circle from '../../../../assets/icons/account_circle.png';
-import arrow_drop_down from '../../../../assets/icons/arrow_drop_down.png';
-import calendar_month from '../../../../assets/icons/calendar_month.png';
-import check_box from '../../../../assets/icons/check_box.png';
-import home from '../../../../assets/icons/home.png';
-import paid from '../../../../assets/icons/paid.png';
-import schedule from '../../../../assets/icons/schedule.png';
-import supervisor_account from '../../../../assets/icons/supervisor_account.png';
 import { fetchUserInfo } from '../../../../firebase';
 import type { User } from '../../../../types/interface';
 
