@@ -72,6 +72,8 @@ const MainCalendar = ({
         <MainCalendarDays
           currentSchedule={currentSchedule}
           key={index}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
           day={day}
           setIsDayClick={setIsDayClick}
           isCurrentMonth={

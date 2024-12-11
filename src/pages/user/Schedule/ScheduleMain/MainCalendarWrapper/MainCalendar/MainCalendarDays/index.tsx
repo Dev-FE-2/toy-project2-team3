@@ -15,6 +15,8 @@ interface CurrentSchedule {
 
 interface MainCalendarDaysProps {
   currentSchedule: CurrentSchedule;
+  currentYear: number;
+  currentMonth: number;
   day: number;
   isCurrentMonth: boolean;
   setIsDayClick: (prop: boolean) => void;
@@ -22,6 +24,8 @@ interface MainCalendarDaysProps {
 
 const MainCalendarDays = ({
   currentSchedule,
+  currentYear,
+  currentMonth,
   day,
   isCurrentMonth,
   setIsDayClick,
@@ -37,7 +41,12 @@ const MainCalendarDays = ({
     >
       <S.MainCalendarDaysNumber>{day}</S.MainCalendarDaysNumber>
       <S.MainCalendarDaysContentsWrapper>
-        <MainCalendarDaysSchedules currentSchedule={currentSchedule} />
+        <MainCalendarDaysSchedules
+          currentSchedule={currentSchedule}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
+          day={day}
+        />
       </S.MainCalendarDaysContentsWrapper>
     </S.MainCalendarDaysWrapper>
   );

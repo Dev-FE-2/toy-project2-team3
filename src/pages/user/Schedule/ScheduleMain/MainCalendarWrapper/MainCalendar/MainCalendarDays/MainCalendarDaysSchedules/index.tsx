@@ -16,12 +16,16 @@ interface CurrentSchedule {
 
 interface MainCalendarDaysSchedulesProps {
   currentSchedule: CurrentSchedule;
+  currentYear: number;
+  currentMonth: number;
+  day: number;
 }
 
 interface ScheduleList {
   createdAt: string;
   detail: string;
   endedAt: string;
+  startedAt: string;
   title: string;
   updatedAt: string;
 }
@@ -39,18 +43,17 @@ interface FormattedUserOrTeamScheduleData extends ScheduleData {
 
 const MainCalendarDaysSchedules = ({
   currentSchedule,
+  currentYear,
+  currentMonth,
+  day,
 }: MainCalendarDaysSchedulesProps) => {
-  const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
+  // const [scheduleData, setScheduleData] = useState<ScheduleData[]>([]);
   const [userScheduleData, setUserScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
   const [teamScheduleData, setTeamScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
-
-  console.log(scheduleData); // 삭제 예정
-  console.log(userScheduleData); // 삭제 예정
-  console.log(teamScheduleData); // 삭제 예정
 
   const getScheduleData = async () => {
     const scheduleData = await fetchDataFromDB('Schedule');
@@ -119,7 +122,7 @@ const MainCalendarDaysSchedules = ({
 
   const fetchSchedules = useCallback(async () => {
     const fetchedScheduleData = await getScheduleData();
-    setScheduleData(fetchedScheduleData);
+    // setScheduleData(fetchedScheduleData);
 
     if (currentSchedule.type === 'user') {
       const userScheduleData = formatUserSchedule(
@@ -138,26 +141,42 @@ const MainCalendarDaysSchedules = ({
 
   useEffect(() => {
     fetchSchedules();
-    console.log(teamScheduleData);
-    console.log(userScheduleData);
   }, [fetchSchedules]);
+
+  const isDateInRange = (currentDate: Date, startedAt: Date, endedAt: Date) => {
+    return (
+      currentDate.toDateString() === startedAt.toDateString() ||
+      currentDate.toDateString() === endedAt.toDateString() ||
+      (currentDate > startedAt && currentDate < endedAt)
+    );
+  };
+
+  const renderScheduleData = (
+    scheduleData: FormattedUserOrTeamScheduleData
+  ) => {
+    return scheduleData.scheduleList
+      .filter((data) => {
+        const startDate = new Date(data.startedAt);
+        const endDate = new Date(data.endedAt);
+        const currentDate = new Date(currentYear, currentMonth - 1, day);
+
+        return isDateInRange(currentDate, startDate, endDate);
+      })
+      .map((data) => (
+        <S.MainCalendarDaysContents key={data.title}>
+          {`${scheduleData.name}: ${data.title}`}
+        </S.MainCalendarDaysContents>
+      ));
+  };
 
   return (
     <>
       {currentSchedule.type === 'team'
-        ? teamScheduleData.map((scheduleData) =>
-            scheduleData.scheduleList.map((data) => (
-              <S.MainCalendarDaysContents>
-                {`${scheduleData.name}: ${data.title}`}
-              </S.MainCalendarDaysContents>
-            ))
+        ? teamScheduleData.flatMap((scheduleData) =>
+            renderScheduleData(scheduleData)
           )
-        : userScheduleData.map((scheduleData) =>
-            scheduleData.scheduleList.map((data) => (
-              <S.MainCalendarDaysContents>
-                {`${scheduleData.name}: ${data.title}`}
-              </S.MainCalendarDaysContents>
-            ))
+        : userScheduleData.flatMap((scheduleData) =>
+            renderScheduleData(scheduleData)
           )}
     </>
   );
