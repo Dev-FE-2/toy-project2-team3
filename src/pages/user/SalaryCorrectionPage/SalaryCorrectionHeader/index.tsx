@@ -13,7 +13,11 @@ const SalaryCorrectionHeader: React.FC<SalaryCorrectionHeaderProps> = ({
 }) => {
   return (
     <S.SalaryHeader>
-      <S.Title>급여 정정 내역</S.Title>
+      {isVisible ? (
+        <S.Title>급여 정정 신청</S.Title>
+      ) : (
+        <S.Title>급여 정정 내역</S.Title>
+      )}
       {!isVisible && (
         <StyleCorrectiondButton onClick={onToggleVisibility}>
           정정 신청
