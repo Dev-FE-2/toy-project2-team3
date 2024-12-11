@@ -42,12 +42,28 @@ const DetailSchedule = ({
   currentSchedule,
   clickedDate,
 }: DetailSchedulProps) => {
-  const [teamScheduleData, setTeamScheduleData] = useState<
-    FormattedUserOrTeamScheduleData[]
-  >([]);
+  const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
+    useState<FormattedUserOrTeamScheduleData[]>([]);
 
-  console.log(clickedDate); // 삭제 예정
-  console.log(teamScheduleData); // 삭제 예정
+  const filterClickedDateTeamSchedule = (
+    startedAt: string,
+    endedAt: string
+  ) => {
+    const cuttedStartedAt = startedAt.slice(0, 10);
+    const cuttedEndedAt = endedAt.slice(0, 10);
+
+    const [year, month, day] = clickedDate;
+    const formattedMonth = String(month).padStart(2, '0');
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
+
+    return (
+      formattedClickedDate === cuttedStartedAt ||
+      formattedClickedDate === cuttedEndedAt
+    );
+  };
+
+  console.log(filterClickedDateTeamSchedule('2024-12-10', '2024-12-11'));
 
   const getScheduleData = async () => {
     const scheduleData = await fetchDataFromDB('Schedule');
@@ -94,17 +110,40 @@ const DetailSchedule = ({
       currentSchedule,
       fetchedScheduleData
     );
-    setTeamScheduleData(teamScheduleData);
-  }, [currentSchedule]);
+
+    const filteredScheduleData = teamScheduleData.filter((schedule) =>
+      schedule.scheduleList.some((item) =>
+        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
+      )
+    );
+
+    setClickedDateTeamScheduleData(filteredScheduleData);
+  }, []);
 
   useEffect(() => {
     fetchSchedules();
   }, [fetchSchedules]);
-  return <S.Box>DetailSchedule</S.Box>;
+  return (
+    <>
+      {clickedDateTeamScheduleData.map((schedule) =>
+        schedule.scheduleList.map((item) => (
+          <S.TempBox key={schedule.id}>
+            <div key={item.title}>
+              <p>{item.title}</p>
+              <p>{item.detail}</p>
+            </div>
+          </S.TempBox>
+        ))
+      )}
+    </>
+  );
 };
 
 const S = {
-  Box: styled.div`
+  // 시작 위치 잡기
+  // height = 2px : 1분
+
+  TempBox: styled.div`
     background-color: rgba(125, 111, 444, 0.5);
     border-radius: 16px;
     width: calc((1250px - 40px) / 6);
