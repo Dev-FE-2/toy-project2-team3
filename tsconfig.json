@@ -15,6 +15,12 @@
       "@store/*": ["src/state/store/*"],
       "@styles/*": ["src/styles/*"],
       "@types/*": ["src/types/*"]
-    }
+    },
+    "module": "ESNext", // 최신 모듈 시스템 사용
+    "moduleResolution": "node", // JSON 파일 및 Node.js 모듈 호환
+    "resolveJsonModule": true, // JSON 파일 import 허용
+    "esModuleInterop": true, // CommonJS 모듈 호환
+    "target": "ESNext", // 최신 JavaScript를 타겟으로 설정
+    "strict": true // 엄격한 타입 검사
   }
 }
