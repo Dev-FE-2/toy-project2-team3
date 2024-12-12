@@ -37,6 +37,7 @@ const Schedule = () => {
     userId: '',
   });
   const [isDayClick, setIsDayClick] = useState(false);
+  const [clickedDate, setClickedDate] = useState<number[]>([]);
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -69,6 +70,8 @@ const Schedule = () => {
             currentMonth={currentMonth}
             currentYear={currentYear}
             isDayClick={isDayClick}
+            clickedDate={clickedDate}
+            teamData={teamData}
             handleYearMonthChange={handleYearMonthChange}
             setIsAddScheduleModalOpen={setIsAddScheduleModalOpen}
             setIsDayClick={setIsDayClick}
@@ -78,8 +81,10 @@ const Schedule = () => {
             currentMonth={currentMonth}
             currentYear={currentYear}
             isDayClick={isDayClick}
+            clickedDate={clickedDate}
             setIsSixWeek={setIsSixWeek}
             setIsDayClick={setIsDayClick}
+            setClickedDate={setClickedDate}
           />
         </div>
         {isAddScheduleModalOpen && (

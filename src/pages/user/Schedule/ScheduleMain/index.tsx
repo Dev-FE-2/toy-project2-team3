@@ -1,6 +1,6 @@
 import MainCalendarWrapper from './MainCalendarWrapper';
 import DetailScheduleWrapper from './DetailScheduleWrapper';
-import { useState } from 'react';
+import { SetStateAction } from 'react';
 
 interface TeamMembersData {
   name: string;
@@ -18,8 +18,10 @@ interface ScheduleMainProps {
   currentMonth: number;
   currentYear: number;
   isDayClick: boolean;
+  clickedDate: number[];
   setIsSixWeek: (prop: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
+  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
 }
 
 const ScheduleMain = ({
@@ -27,11 +29,11 @@ const ScheduleMain = ({
   currentMonth,
   currentYear,
   isDayClick,
+  clickedDate,
   setIsSixWeek,
   setIsDayClick,
+  setClickedDate,
 }: ScheduleMainProps) => {
-  const [clickedDate, setClickedDate] = useState<number[]>([]);
-
   return (
     <>
       {!isDayClick ? (

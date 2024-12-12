@@ -5,10 +5,23 @@ import { border } from '../../../../styles';
 import { StyledCheckButton } from '../../../../components/Button';
 import { MONTHS } from '../constants';
 
+interface TeamData {
+  id: string;
+  name: string;
+  members: TeamMembersData[];
+}
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
 interface ScheduleHeaderProps {
   currentMonth: number;
   currentYear: number;
   isDayClick: boolean;
+  clickedDate: number[];
+  teamData: TeamData[];
   handleYearMonthChange: (year: number, month: number) => void;
   setIsAddScheduleModalOpen: (isOpen: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
@@ -18,11 +31,18 @@ const ScheduleHeader = ({
   currentMonth,
   currentYear,
   isDayClick,
+  clickedDate,
+  teamData,
   handleYearMonthChange,
   setIsAddScheduleModalOpen,
   setIsDayClick,
 }: ScheduleHeaderProps) => {
   const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
+  const [year, month, day] = clickedDate;
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
+  const teamName = teamData.map((data) => data.name);
 
   const handleMonthClick = (clickedMonth: number) => {
     handleYearMonthChange(currentYear, clickedMonth + 1);
@@ -61,7 +81,9 @@ const ScheduleHeader = ({
           >
             arrow_back_ios
           </S.Icon>
-          <div>응급 1팀 | 2024-12-10</div>
+          <div>
+            {teamName} | {formattedClickedDate}
+          </div>
           {/* 👆 추후 데이터 바인딩, 전역 상태 관리로 변경할 때 옳게 표시할 예정입니다 */}
           <div></div>
         </>
