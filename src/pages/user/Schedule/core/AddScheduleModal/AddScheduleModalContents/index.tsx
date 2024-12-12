@@ -2,6 +2,21 @@ import { useState } from 'react';
 import { saveDataToDB } from '../../../../../../firebase/saveDataToDB';
 import { fetchDataFromDB } from '../../../../../../firebase/fetchDataFromDB';
 
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface ScheduleData {
+  id: string;
+  scheduleList: ScheduleList[];
+  userId: string;
+}
+
 const AddScheduleModalContents = () => {
   const [title, setTitle] = useState('');
   const [startedAt, setStartedAt] = useState('');
@@ -11,38 +26,48 @@ const AddScheduleModalContents = () => {
   const createTempSchedule = async () => {
     try {
       const userId = '36mBmF0i6jhfXKzJr9Aq2NgOuju2'; // 실제 사용자 ID로 대체할 예정
-      const SCHEDULE_DATA = await fetchDataFromDB('Schedule', null);
-      const userSchedules = SCHEDULE_DATA ? Object.entries(SCHEDULE_DATA) : [];
+      const SCHEDULE_DATA = (await fetchDataFromDB({
+        table: 'Schedule',
+      })) as ScheduleData[];
+
+      console.log(SCHEDULE_DATA);
+
       const newScheduleEntry = {
         title,
         startedAt,
         endedAt,
-        // assignee: [assigneeUserIds], // 회원가입 기능 완료 후 추가할 예정
-        // documentUrl, // 유틸함수 머지 후 추가할 예정
         detail,
         createdAt: new Date().toISOString(),
         updatedAt: '',
       };
 
-      const existingUser = userSchedules.find(
-        ([, schedule]) => schedule.userId === userId
+      const existingUserSchedule = SCHEDULE_DATA.find(
+        (data) => data.userId === userId
       );
 
-      if (existingUser) {
-        const [scheduleKey, scheduleData] = existingUser;
+      if (existingUserSchedule) {
+        // 기존 사용자가 있는 경우
         const updatedScheduleList = [
-          ...scheduleData.scheduleList,
+          ...existingUserSchedule.scheduleList,
           newScheduleEntry,
         ];
 
-        await saveDataToDB('Schedule', scheduleKey, {
-          ...scheduleData,
-          scheduleList: updatedScheduleList,
+        await saveDataToDB({
+          table: 'Schedule',
+          key: existingUserSchedule ? existingUserSchedule.id : '',
+          data: {
+            ...existingUserSchedule,
+            scheduleList: updatedScheduleList,
+          },
         });
       } else {
-        await saveDataToDB('Schedule', null, {
-          userId,
-          scheduleList: [newScheduleEntry],
+        // 기존 사용자가 없는 경우 새로 추가
+        await saveDataToDB({
+          table: 'Schedule',
+          data: {
+            userId,
+            scheduleList: [newScheduleEntry],
+          },
         });
       }
 
