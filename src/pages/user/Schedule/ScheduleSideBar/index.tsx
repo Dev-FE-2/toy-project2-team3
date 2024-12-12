@@ -1,21 +1,49 @@
 import styled from 'styled-components';
 import TeamList from '../core/TeamList';
 import { border } from '../../../../styles';
-import { TEAMS } from '../constants';
+
+interface TeamData {
+  id: string;
+  name: string;
+  members: TeamMembersData[];
+}
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
 
 interface ScheduleSideBarProps {
   isSixWeek: boolean;
   isDayClick: boolean;
+  teamData: TeamData[];
+  setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
 }
 
-const ScheduleSideBar = ({ isSixWeek, isDayClick }: ScheduleSideBarProps) => {
+const ScheduleSideBar = ({
+  isSixWeek,
+  isDayClick,
+  teamData,
+  setCurrentSchedule,
+}: ScheduleSideBarProps) => {
   const SIDEBAR_HEIGHT_STATUS = isSixWeek && !isDayClick;
 
   return (
     <S.Wrapper sideBarHeightStatus={SIDEBAR_HEIGHT_STATUS}>
       <S.Content>
-        {TEAMS.map((team) => (
-          <TeamList key={team.name} name={team.name} members={team.members} />
+        {teamData.map((team) => (
+          <TeamList
+            key={team.id}
+            name={team.name}
+            members={team.members}
+            setCurrentSchedule={setCurrentSchedule}
+          />
         ))}
       </S.Content>
     </S.Wrapper>

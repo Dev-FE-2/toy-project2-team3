@@ -3,6 +3,24 @@ import styled from 'styled-components';
 import { border, colors } from '../../../../../styles';
 import { TEAMS } from '../../constants';
 
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
+interface DetailScheduleWrapperProps {
+  currentSchedule: CurrentSchedule;
+}
+
+const DetailScheduleWrapper = ({
+  currentSchedule,
+}: DetailScheduleWrapperProps) => {
 const DetailScheduleWrapper: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const TEMP_TEAM_MEMBERS = TEAMS[0].members;
