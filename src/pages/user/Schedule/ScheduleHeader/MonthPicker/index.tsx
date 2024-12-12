@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 import { border } from '../../../../../styles';
+import MonthPickerDetail from './MonthPickerDetail';
+
 interface SetIsMonthPickerDetailOpen {
   content: string | number;
+  currentMonth: number;
+  isMonthPickerDetailOpen: boolean;
+  handleMonthClick: (clickedMonth: number) => void;
   setIsMonthPickerDetailOpen: (open: boolean) => void;
   onClickLeft: () => void;
   onClickRight: () => void;
@@ -9,24 +14,35 @@ interface SetIsMonthPickerDetailOpen {
 
 const MonthPicker = ({
   content,
+  currentMonth,
+  isMonthPickerDetailOpen,
+  handleMonthClick,
+  setIsMonthPickerDetailOpen,
   onClickLeft,
   onClickRight,
-  setIsMonthPickerDetailOpen,
 }: SetIsMonthPickerDetailOpen) => {
   const handleOnClickMonth = () => {
     setIsMonthPickerDetailOpen(true);
   };
 
   return (
-    <S.Wrapper>
-      <div className="material-symbols-outlined" onClick={onClickLeft}>
-        chevron_left
-      </div>
-      <div onClick={handleOnClickMonth}>{content}</div>
-      <div className="material-symbols-outlined" onClick={onClickRight}>
-        chevron_right
-      </div>
-    </S.Wrapper>
+    <>
+      <S.Wrapper>
+        <div className="material-symbols-outlined" onClick={onClickLeft}>
+          chevron_left
+        </div>
+        <div onClick={handleOnClickMonth}>{content}</div>
+        <div className="material-symbols-outlined" onClick={onClickRight}>
+          chevron_right
+        </div>
+      </S.Wrapper>
+      {isMonthPickerDetailOpen && (
+        <MonthPickerDetail
+          currentMonth={currentMonth}
+          handleMonthClick={handleMonthClick}
+        />
+      )}
+    </>
   );
 };
 

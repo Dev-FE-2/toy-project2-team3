@@ -10,6 +10,7 @@ const Schedule = () => {
   const [currentMonth, setCurrentMonth] = useState(CURRENT_MONTH);
   const [currentYear, setCurrentYear] = useState(CURRENT_YEAR);
   const [isSixWeek, setIsSixWeek] = useState(false);
+  const [isDayClick, setIsDayClick] = useState(false);
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -19,17 +20,21 @@ const Schedule = () => {
   return (
     <>
       <S.Wrapper>
-        <ScheduleSideBar isSixWeek={isSixWeek} />
+        <ScheduleSideBar isSixWeek={isSixWeek} isDayClick={isDayClick} />
         <div>
           <ScheduleHeader
             currentMonth={currentMonth}
             currentYear={currentYear}
+            isDayClick={isDayClick}
             handleYearMonthChange={handleYearMonthChange}
+            setIsDayClick={setIsDayClick}
           />
           <ScheduleMain
             currentMonth={currentMonth}
             currentYear={currentYear}
+            isDayClick={isDayClick}
             setIsSixWeek={setIsSixWeek}
+            setIsDayClick={setIsDayClick}
           />
         </div>
       </S.Wrapper>

@@ -1,49 +1,35 @@
-import styled from 'styled-components';
-import MainCalendar from './MainCalendar';
-import DaysOfWeek from './DaysOfWeek';
+import MainCalendarWrapper from './MainCalendarWrapper';
+import DetailScheduleWrapper from './DetailScheduleWrapper';
 
 interface ScheduleMainProps {
   currentMonth: number;
   currentYear: number;
+  isDayClick: boolean;
   setIsSixWeek: (prop: boolean) => void;
+  setIsDayClick: (prop: boolean) => void;
 }
 
 const ScheduleMain = ({
   currentMonth,
   currentYear,
+  isDayClick,
   setIsSixWeek,
+  setIsDayClick,
 }: ScheduleMainProps) => {
-  const DAYS_OF_WEEK_LIST = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
   return (
     <>
-      <S.DaysOfWeekWrapper>
-        {DAYS_OF_WEEK_LIST.map((day, index) => (
-          <DaysOfWeek key={index} day={day} />
-        ))}
-      </S.DaysOfWeekWrapper>
-      <S.CalendarWrapper>
-        <MainCalendar
-          currentYear={currentYear}
+      {!isDayClick ? (
+        <MainCalendarWrapper
           currentMonth={currentMonth}
+          currentYear={currentYear}
           setIsSixWeek={setIsSixWeek}
+          setIsDayClick={setIsDayClick}
         />
-      </S.CalendarWrapper>
+      ) : (
+        <DetailScheduleWrapper />
+      )}
     </>
   );
-};
-
-const S = {
-  CalendarWrapper: styled.div`
-    width: 1250px;
-    height: calc(80% - 5rem);
-  `,
-  DaysOfWeekWrapper: styled.div`
-    width: 1250px;
-    height: 2rem;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-  `,
 };
 
 export default ScheduleMain;
