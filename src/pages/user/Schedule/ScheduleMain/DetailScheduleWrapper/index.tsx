@@ -21,6 +21,7 @@ interface DetailScheduleWrapperProps {
 const DetailScheduleWrapper = ({
   currentSchedule,
 }: DetailScheduleWrapperProps) => {
+const DetailScheduleWrapper: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const TEMP_TEAM_MEMBERS = TEAMS[0].members;
   const TEAM_MEMBERS_LENGTH = TEMP_TEAM_MEMBERS.length;
@@ -28,8 +29,6 @@ const DetailScheduleWrapper = ({
   const MINUTES = currentTime.getMinutes();
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
   const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 80 + 40;
-
-  console.log(currentSchedule); // 삭제 필요
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {

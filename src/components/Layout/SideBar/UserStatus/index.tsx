@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import fetchUserInfo from '../../../../firebase/fetchUserInfo';
-import type { user } from '../../../../types/interface';
 import styled from 'styled-components';
+import { fetchUserInfo } from '../../../../firebase';
+import type { User } from '../../../../types/interface';
 
 const UserStatus = () => {
-  const [userInfo, setUserInfo] = useState<user | null>(null);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 

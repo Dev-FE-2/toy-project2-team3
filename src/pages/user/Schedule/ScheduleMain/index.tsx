@@ -41,6 +41,7 @@ const ScheduleMain = ({
         />
       ) : (
         <DetailScheduleWrapper currentSchedule={currentSchedule} />
+        <DetailScheduleWrapper />
       )}
     </>
   );
