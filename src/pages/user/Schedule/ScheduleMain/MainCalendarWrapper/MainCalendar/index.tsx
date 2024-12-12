@@ -5,12 +5,14 @@ interface MainCalendarProps {
   currentYear: number;
   currentMonth: number;
   setIsSixWeek: (prop: boolean) => void;
+  setIsDayClick: (prop: boolean) => void;
 }
 
 const MainCalendar = ({
   currentYear,
   currentMonth,
   setIsSixWeek,
+  setIsDayClick,
 }: MainCalendarProps) => {
   const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
   const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
@@ -51,12 +53,17 @@ const MainCalendar = ({
 
   const allDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
 
+  const handleDayClick = () => {
+    setIsDayClick(true);
+  };
+
   return (
     <S.MainCalendarWrapper daysCount={allDays.length}>
       {allDays.map((day, index) => (
         <MainCalendarDays
           key={index}
           day={day}
+          onClick={handleDayClick}
           isCurrentMonth={
             index >= prevMonthDays.length &&
             index < prevMonthDays.length + currentMonthDays.length
