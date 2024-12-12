@@ -54,20 +54,6 @@ const MainCalendarDaysSchedules = ({
     FormattedUserOrTeamScheduleData[]
   >([]);
 
-  const getScheduleData = async () => {
-    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
-
-    const formattedScheduleData: ScheduleData[] = scheduleData
-      ? Object.entries(scheduleData).map(([id, scheduleData]) => ({
-          id,
-          scheduleList: scheduleData.scheduleList,
-          userId: scheduleData.userId,
-        }))
-      : [];
-
-    return formattedScheduleData;
-  };
-
   const formatUserSchedule = (
     currentSchedule: CurrentSchedule,
     scheduleData: ScheduleData[]
@@ -120,19 +106,19 @@ const MainCalendarDaysSchedules = ({
   };
 
   const fetchSchedules = useCallback(async () => {
-    const fetchedScheduleData = await getScheduleData();
-    // setScheduleData(fetchedScheduleData);
-
+    const scheduleData = (await fetchDataFromDB({
+      table: 'Schedule',
+    })) as ScheduleData[];
     if (currentSchedule.type === 'user') {
       const userScheduleData = formatUserSchedule(
         currentSchedule,
-        fetchedScheduleData
+        scheduleData
       );
       setUserScheduleData(userScheduleData);
     } else {
       const teamScheduleData = formatTeamSchedule(
         currentSchedule,
-        fetchedScheduleData
+        scheduleData
       );
       setTeamScheduleData(teamScheduleData);
     }

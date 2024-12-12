@@ -73,20 +73,6 @@ const DetailScheduleWrapper = ({
     );
   };
 
-  const getScheduleData = async () => {
-    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
-
-    const formattedScheduleData: ScheduleData[] = scheduleData
-      ? Object.entries(scheduleData).map(([id, scheduleData]) => ({
-          id,
-          scheduleList: scheduleData.scheduleList,
-          userId: scheduleData.userId,
-        }))
-      : [];
-
-    return formattedScheduleData;
-  };
-
   const formatTeamSchedule = (
     currentSchedule: CurrentSchedule,
     scheduleData: ScheduleData[]
@@ -112,12 +98,11 @@ const DetailScheduleWrapper = ({
   };
 
   const fetchSchedules = useCallback(async () => {
-    const fetchedScheduleData = await getScheduleData();
+    const scheduleData = (await fetchDataFromDB({
+      table: 'Schedule',
+    })) as ScheduleData[];
 
-    const teamScheduleData = formatTeamSchedule(
-      currentSchedule,
-      fetchedScheduleData
-    );
+    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
 
     const filteredScheduleData = teamScheduleData.filter((schedule) =>
       schedule.scheduleList.some((item) =>

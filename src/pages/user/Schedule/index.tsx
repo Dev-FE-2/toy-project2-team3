@@ -44,18 +44,11 @@ const Schedule = () => {
   };
 
   const getTeamsData = async () => {
-    const teamsData = await fetchDataFromDB({ table: 'Teams' });
-    const formattedTeamsData: TeamData[] = teamsData
-      ? Object.entries(teamsData).map(([id, teamData]) => ({
-          id,
-          name: teamData.name,
-          members: teamData.members || [],
-        }))
-      : [];
+    const teamsData = (await fetchDataFromDB({ table: 'Teams' })) as TeamData[];
 
-    setTeamData(formattedTeamsData);
+    setTeamData(teamsData);
 
-    return formattedTeamsData;
+    return teamsData;
   };
 
   useEffect(() => {
