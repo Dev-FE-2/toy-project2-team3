@@ -1,5 +1,5 @@
 import MainCalendarWrapper from './MainCalendarWrapper';
-import DetailScheduleWrapper from './DetailScheduleWrapper';
+//import DetailScheduleWrapper from './DetailScheduleWrapper';
 
 interface TeamMembersData {
   name: string;
