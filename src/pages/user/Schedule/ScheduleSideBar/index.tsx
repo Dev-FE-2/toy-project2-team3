@@ -1,47 +1,20 @@
 import styled from 'styled-components';
 import TeamList from '../core/TeamList';
 import { border } from '../../../../styles';
-
-const teams = [
-  {
-    name: '응급 1팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 2팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 3팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 4팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 5팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 6팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-  {
-    name: '응급 7팀',
-    members: ['김하나', '김둘둘', '김셋셋', '김넷넷', '김다섯', '김여섯'],
-  },
-];
+import { TEAMS } from '../constants';
 
 interface ScheduleSideBarProps {
   isSixWeek: boolean;
+  isDayClick: boolean;
 }
 
-const ScheduleSideBar = ({ isSixWeek }: ScheduleSideBarProps) => {
+const ScheduleSideBar = ({ isSixWeek, isDayClick }: ScheduleSideBarProps) => {
+  const SIDEBAR_HEIGHT_STATUS = isSixWeek && !isDayClick;
+
   return (
-    <S.Wrapper isSixWeek={isSixWeek}>
+    <S.Wrapper sideBarHeightStatus={SIDEBAR_HEIGHT_STATUS}>
       <S.Content>
-        {teams.map((team) => (
+        {TEAMS.map((team) => (
           <TeamList key={team.name} name={team.name} members={team.members} />
         ))}
       </S.Content>
@@ -50,10 +23,10 @@ const ScheduleSideBar = ({ isSixWeek }: ScheduleSideBarProps) => {
 };
 
 const S = {
-  Wrapper: styled.div<{ isSixWeek: boolean }>`
+  Wrapper: styled.div<{ sideBarHeightStatus: boolean }>`
     border: ${border.default};
     width: 190px;
-    height: ${(prop) => (prop.isSixWeek ? '95%' : '80%')};
+    height: ${(prop) => (prop.sideBarHeightStatus ? '95%' : '80%')};
     padding: 1rem 0;
   `,
   Content: styled.div`
