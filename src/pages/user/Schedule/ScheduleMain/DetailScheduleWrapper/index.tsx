@@ -30,7 +30,7 @@ const DetailScheduleWrapper = ({
   const HOURS = currentTime.getHours();
   const MINUTES = currentTime.getMinutes();
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
-  const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 80 + 40;
+  const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 120 + 40;
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {
@@ -112,7 +112,7 @@ const S = {
     ${(props) =>
       props.type === 'time' &&
       `
-        height: 80px;
+        height: 120px;
         width: 40px;
         font-weight: bold;
         background-color: ${colors.semantic.background.light};
