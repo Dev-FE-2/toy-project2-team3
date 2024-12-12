@@ -13,6 +13,17 @@ interface CurrentSchedule {
   userId?: string;
 }
 
+interface TeamMembersData {
+  name: string;
+  userId: string;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
+
 interface MainCalendarProps {
   currentSchedule: CurrentSchedule;
   currentYear: number;

@@ -1,4 +1,6 @@
-export interface user {
+// Firebase collection 기준 타입 정의
+
+export interface User {
   userId: string;
   email: string;
   password: string;
@@ -66,10 +68,32 @@ export interface SalaryRequest {
 }
 
 export interface SalaryRequestItem {
-  requestId: number;
+  requestId: string;
   requestStartedAt: string; // ISO timestamp
   requestEndedAt: string; // ISO timestamp
   requestWorkingTime: number;
   requestDetail: string;
   requestDocumentUrl?: string; // 필수 삽입은 아니기에 옵셔널
+}
+
+export interface Teams {
+  teamId: string;
+  name: string;
+  member: TeamMember[];
+}
+
+export interface TeamMember {
+  userId: string;
+  name: string;
+}
+
+export interface Attendance {
+  attendanceId: string;
+  checkInTime: string;
+  checkOutTime: string;
+  nightWorkingTime: string;
+  overWorkingTime: string;
+  userId: string;
+  workStatus: boolean;
+  workingTime: string;
 }

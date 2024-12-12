@@ -1,12 +1,12 @@
-import { default as SignUpForm } from './SignUpForm';
+import SignUpForm from './SignUpForm';
 
-const SignUp = () => {
+const SignUpPage = () => {
   return (
     <div>
-      <h1>회원가입 페이지입니다.</h1>
+      <h1>회원가입</h1>
       <SignUpForm />
     </div>
   );
 };
 
-export default SignUp;
+export default SignUpPage;
