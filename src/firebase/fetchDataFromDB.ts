@@ -1,7 +1,7 @@
 import { ref, get, DatabaseReference } from 'firebase/database';
 import { database } from '../firebaseConfig';
 
-type FetchData<T> = Promise<T | Record<string, T> | null>;
+type FetchData<T> = Promise<T[] | null>;
 
 interface FetchDataParams {
   table: string;
@@ -21,17 +21,26 @@ const fetchDataFromDB = async <T>({
 
     if (snapshot.exists()) {
       const data = snapshot.val();
-      const result = data ? (!key ? Object.values(data) : data) : null;
+      const result = Object.entries(data).map(([key, value]) => {
+        if (typeof value === 'object' && value !== null) {
+          return {
+            id: key,
+            ...value,
+          } as T;
+        }
+        return {
+          id: key,
+          value,
+        } as T;
+      });
 
       return result;
     } else {
       console.warn('데이터가 존재하지 않습니다.');
-
       return null;
     }
   } catch (error) {
     console.error('데이터 가져오기 실패:', error);
-
     throw error;
   }
 };
