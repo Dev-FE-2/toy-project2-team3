@@ -1,4 +1,4 @@
-const collection = {
+export const COLLECTION_NAME = {
   users: 'Users',
   attendance: 'Attendance',
   salary: 'Salary',
@@ -6,5 +6,3 @@ const collection = {
   schedule: 'Schedule',
   teams: 'Teams',
 };
-
-export { collection };
