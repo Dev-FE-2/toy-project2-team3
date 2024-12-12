@@ -1,8 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { border, colors } from '../../../../../styles';
-import { TEAMS } from '../../constants';
 import DetailSchedule from './DetailSchedule';
+import { fetchDataFromDB } from '../../../../../firebase';
+
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface ScheduleData {
+  id: string;
+  scheduleList: ScheduleList[];
+  userId: string;
+}
+
+interface FormattedUserOrTeamScheduleData extends ScheduleData {
+  type: string;
+  name: string;
+}
 
 interface TeamMembersData {
   name: string;
@@ -25,12 +45,92 @@ const DetailScheduleWrapper = ({
   clickedDate,
 }: DetailScheduleWrapperProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const TEMP_TEAM_MEMBERS = TEAMS[0].members;
-  const TEAM_MEMBERS_LENGTH = TEMP_TEAM_MEMBERS.length;
+  const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
+    useState<FormattedUserOrTeamScheduleData[]>([]);
+
+  const TEAM_MEMBERS_INFO = currentSchedule.teamId;
+  const TEAM_MEMBERS_LENGTH = TEAM_MEMBERS_INFO.length;
   const HOURS = currentTime.getHours();
   const MINUTES = currentTime.getMinutes();
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
   const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 120 + 40;
+
+  const filterClickedDateTeamSchedule = (
+    startedAt: string,
+    endedAt: string
+  ) => {
+    const cuttedStartedAt = startedAt.slice(0, 10);
+    const cuttedEndedAt = endedAt.slice(0, 10);
+
+    const [year, month, day] = clickedDate;
+    const formattedMonth = String(month).padStart(2, '0');
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
+
+    return (
+      formattedClickedDate === cuttedStartedAt ||
+      formattedClickedDate === cuttedEndedAt
+    );
+  };
+
+  const getScheduleData = async () => {
+    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
+
+    const formattedScheduleData: ScheduleData[] = scheduleData
+      ? Object.entries(scheduleData).map(([id, scheduleData]) => ({
+          id,
+          scheduleList: scheduleData.scheduleList,
+          userId: scheduleData.userId,
+        }))
+      : [];
+
+    return formattedScheduleData;
+  };
+
+  const formatTeamSchedule = (
+    currentSchedule: CurrentSchedule,
+    scheduleData: ScheduleData[]
+  ) => {
+    const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
+    const teamScheduleData = scheduleData.filter((schedule) =>
+      teamMembersUserId.includes(schedule.userId)
+    );
+
+    const formattedTeamSchedule = teamScheduleData.map((schedule) => {
+      const teamMemberInfo = currentSchedule.teamId.find(
+        (info) => info.userId === schedule.userId
+      );
+
+      return {
+        ...schedule,
+        type: currentSchedule.type,
+        name: teamMemberInfo ? teamMemberInfo.name : '',
+      };
+    });
+
+    return formattedTeamSchedule;
+  };
+
+  const fetchSchedules = useCallback(async () => {
+    const fetchedScheduleData = await getScheduleData();
+
+    const teamScheduleData = formatTeamSchedule(
+      currentSchedule,
+      fetchedScheduleData
+    );
+
+    const filteredScheduleData = teamScheduleData.filter((schedule) =>
+      schedule.scheduleList.some((item) =>
+        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
+      )
+    );
+
+    setClickedDateTeamScheduleData(filteredScheduleData);
+  }, []);
+
+  useEffect(() => {
+    fetchSchedules();
+  }, [fetchSchedules]);
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {
@@ -40,7 +140,7 @@ const DetailScheduleWrapper = ({
     return () => clearInterval(getCurrentTime);
   }, []);
 
-  const generateCells = (teamMembers: string[]) => {
+  const generateCells = (teamMembers: TeamMembersData[]) => {
     return Array.from({ length: 24 }, (_, hour) => ({
       hour: hour.toString().padStart(2, '0'),
       cells: teamMembers.map((member) => ({ member, hour })),
@@ -53,12 +153,12 @@ const DetailScheduleWrapper = ({
         <S.Cell type={'header'}>
           <div className="material-symbols-outlined">schedule</div>
         </S.Cell>
-        {TEMP_TEAM_MEMBERS.map((member) => (
-          <S.Cell type={'header'} key={member}>
-            {member}
+        {TEAM_MEMBERS_INFO.map((member) => (
+          <S.Cell type={'header'} key={member.userId}>
+            {member.name}
           </S.Cell>
         ))}
-        {generateCells(TEMP_TEAM_MEMBERS).map(({ hour, cells }) => (
+        {generateCells(TEAM_MEMBERS_INFO).map(({ hour, cells }) => (
           <S.CellsContainer key={hour}>
             <S.Cell type={'time'}>{hour}</S.Cell>
             {cells.map(({ member }) => (
@@ -67,8 +167,7 @@ const DetailScheduleWrapper = ({
           </S.CellsContainer>
         ))}
         <DetailSchedule
-          currentSchedule={currentSchedule}
-          clickedDate={clickedDate}
+          clickedDateTeamScheduleData={clickedDateTeamScheduleData}
         />
         <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
       </S.ScheduleContainer>

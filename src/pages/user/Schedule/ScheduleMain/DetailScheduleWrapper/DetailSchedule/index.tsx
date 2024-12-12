@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { fetchDataFromDB } from '../../../../../../firebase/fetchDataFromDB';
-import { useCallback, useEffect, useState } from 'react';
 
 interface ScheduleList {
   createdAt: string;
@@ -11,118 +9,21 @@ interface ScheduleList {
   updatedAt: string;
 }
 
-interface ScheduleData {
+interface FormattedUserOrTeamScheduleData {
   id: string;
   scheduleList: ScheduleList[];
   userId: string;
-}
-
-interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
-}
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
 }
 
 interface DetailSchedulProps {
-  currentSchedule: CurrentSchedule;
-  clickedDate: number[];
+  clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
 }
 
 const DetailSchedule = ({
-  currentSchedule,
-  clickedDate,
+  clickedDateTeamScheduleData,
 }: DetailSchedulProps) => {
-  const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
-    useState<FormattedUserOrTeamScheduleData[]>([]);
-
-  const filterClickedDateTeamSchedule = (
-    startedAt: string,
-    endedAt: string
-  ) => {
-    const cuttedStartedAt = startedAt.slice(0, 10);
-    const cuttedEndedAt = endedAt.slice(0, 10);
-
-    const [year, month, day] = clickedDate;
-    const formattedMonth = String(month).padStart(2, '0');
-    const formattedDay = String(day).padStart(2, '0');
-    const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
-
-    return (
-      formattedClickedDate === cuttedStartedAt ||
-      formattedClickedDate === cuttedEndedAt
-    );
-  };
-
-  console.log(filterClickedDateTeamSchedule('2024-12-10', '2024-12-11'));
-
-  const getScheduleData = async () => {
-    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
-
-    const formattedScheduleData: ScheduleData[] = scheduleData
-      ? Object.entries(scheduleData).map(([id, scheduleData]) => ({
-          id,
-          scheduleList: scheduleData.scheduleList,
-          userId: scheduleData.userId,
-        }))
-      : [];
-
-    return formattedScheduleData;
-  };
-
-  const formatTeamSchedule = (
-    currentSchedule: CurrentSchedule,
-    scheduleData: ScheduleData[]
-  ) => {
-    const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
-    const teamScheduleData = scheduleData.filter((schedule) =>
-      teamMembersUserId.includes(schedule.userId)
-    );
-
-    const formattedTeamSchedule = teamScheduleData.map((schedule) => {
-      const teamMemberInfo = currentSchedule.teamId.find(
-        (info) => info.userId === schedule.userId
-      );
-
-      return {
-        ...schedule,
-        type: currentSchedule.type,
-        name: teamMemberInfo ? teamMemberInfo.name : '',
-      };
-    });
-
-    return formattedTeamSchedule;
-  };
-
-  const fetchSchedules = useCallback(async () => {
-    const fetchedScheduleData = await getScheduleData();
-
-    const teamScheduleData = formatTeamSchedule(
-      currentSchedule,
-      fetchedScheduleData
-    );
-
-    const filteredScheduleData = teamScheduleData.filter((schedule) =>
-      schedule.scheduleList.some((item) =>
-        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
-      )
-    );
-
-    setClickedDateTeamScheduleData(filteredScheduleData);
-  }, []);
-
-  useEffect(() => {
-    fetchSchedules();
-  }, [fetchSchedules]);
   return (
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
