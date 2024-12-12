@@ -22,11 +22,13 @@ interface ScheduleData {
 interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
+  number: number;
 }
 
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -47,6 +49,8 @@ const DetailScheduleWrapper = ({
   const [currentTime, setCurrentTime] = useState(new Date());
   const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
     useState<FormattedUserOrTeamScheduleData[]>([]);
+
+  console.log(currentSchedule);
 
   const TEAM_MEMBERS_INFO = currentSchedule.teamId;
   const TEAM_MEMBERS_LENGTH = TEAM_MEMBERS_INFO.length;
@@ -91,6 +95,7 @@ const DetailScheduleWrapper = ({
         ...schedule,
         type: currentSchedule.type,
         name: teamMemberInfo ? teamMemberInfo.name : '',
+        number: teamMemberInfo ? teamMemberInfo.number : 0,
       };
     });
 
@@ -104,11 +109,12 @@ const DetailScheduleWrapper = ({
 
     const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
 
-    const filteredScheduleData = teamScheduleData.filter((schedule) =>
-      schedule.scheduleList.some((item) =>
-        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
-      )
-    );
+    const filteredScheduleData: FormattedUserOrTeamScheduleData[] =
+      teamScheduleData.filter((schedule) =>
+        schedule.scheduleList.some((item) =>
+          filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
+        )
+      );
 
     setClickedDateTeamScheduleData(filteredScheduleData);
   }, []);
@@ -147,11 +153,12 @@ const DetailScheduleWrapper = ({
           <S.CellsContainer key={hour}>
             <S.Cell type={'time'}>{hour}</S.Cell>
             {cells.map(({ member }) => (
-              <S.Cell type={''} key={`${member}-${hour}`} />
+              <S.Cell type={''} key={`${member.userId}-${hour}`} />
             ))}
           </S.CellsContainer>
         ))}
         <DetailSchedule
+          TEAM_MEMBERS_LENGTH={TEAM_MEMBERS_LENGTH}
           clickedDateTeamScheduleData={clickedDateTeamScheduleData}
         />
         <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
