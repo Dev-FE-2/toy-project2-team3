@@ -19,25 +19,57 @@ interface FormattedUserOrTeamScheduleData {
 }
 
 interface DetailSchedulProps {
+  formattedClickedDate: string;
   TEAM_MEMBERS_LENGTH: number;
   clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
 }
 
 const DetailSchedule = ({
+  formattedClickedDate,
   TEAM_MEMBERS_LENGTH,
   clickedDateTeamScheduleData,
 }: DetailSchedulProps) => {
   const SCHEDULE_GRID_WIDTH = (1250 - 40) / TEAM_MEMBERS_LENGTH - 0.3;
 
   const calculatePosition = (startedAt: string, endedAt: string) => {
+    const cuttedStartedAt = startedAt.slice(0, 10);
+    const cuttedEndedAt = endedAt.slice(0, 10);
+
     const startDate = new Date(startedAt);
     const endDate = new Date(endedAt);
 
-    const startMinutes = startDate.getHours() * 60 + startDate.getMinutes();
-    const endMinutes = endDate.getHours() * 60 + endDate.getMinutes();
+    let top = 0;
+    let height = 0;
 
-    const top = startMinutes * 2;
-    const height = (endMinutes - startMinutes) * 2;
+    // startedAt === formattedClickedDate === endedAt
+    if (
+      cuttedStartedAt === formattedClickedDate &&
+      cuttedEndedAt === formattedClickedDate
+    ) {
+      const startMinutes = startDate.getHours() * 60 + startDate.getMinutes();
+      const endMinutes = endDate.getHours() * 60 + endDate.getMinutes();
+
+      top = startMinutes * 2;
+      height = (endMinutes - startMinutes) * 2;
+    }
+    // startedAt === formattedClickedDate !== endedAt
+    else if (
+      cuttedStartedAt === formattedClickedDate &&
+      cuttedEndedAt !== formattedClickedDate
+    ) {
+      const startMinutes = startDate.getHours() * 60 + startDate.getMinutes();
+      top = startMinutes * 2;
+      height = (24 * 60 - startMinutes) * 2;
+    }
+    // startedAt !== formattedClickedDate === endedAt
+    else if (
+      cuttedStartedAt !== formattedClickedDate &&
+      cuttedEndedAt === formattedClickedDate
+    ) {
+      const endMinutes = endDate.getHours() * 60 + endDate.getMinutes();
+      top = 0;
+      height = endMinutes * 2;
+    }
 
     return { top, height };
   };
@@ -46,75 +78,26 @@ const DetailSchedule = ({
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
         schedule.scheduleList.map((item) => {
-          const startDate = new Date(item.startedAt);
-          const endDate = new Date(item.endedAt);
-          const startDay = startDate.toISOString().slice(0, 10);
-          const endDay = endDate.toISOString().slice(0, 10);
-
-          if (startDay === endDay) {
-            // 같은 날인 경우
-            const { top, height } = calculatePosition(
-              item.startedAt,
-              item.endedAt
-            );
-            return (
-              <S.TempBox
-                scheduleGridWidth={SCHEDULE_GRID_WIDTH}
-                memberNumber={schedule.number}
-                top={top}
-                height={height}
-                key={schedule.id}
-              >
-                <div key={item.title}>
-                  <p>{item.title}</p>
-                  <p>{item.detail}</p>
-                </div>
-              </S.TempBox>
-            );
-          } else {
-            // 첫 번째 TempBox: 시작일의 남은 시간
-            const endOfDay = new Date(startDate);
-            endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999로 설정
-            const { top: top1, height: height1 } = calculatePosition(
-              item.startedAt,
-              endOfDay.toISOString()
-            );
-
-            // 두 번째 TempBox: 다음 날의 시작 시간
-            const { top: top2, height: height2 } = calculatePosition(
-              startDay + 'T00:00:00Z',
-              item.endedAt
-            );
-
-            return (
-              <>
-                <S.TempBox
-                  scheduleGridWidth={SCHEDULE_GRID_WIDTH}
-                  memberNumber={schedule.number}
-                  top={top1}
-                  height={height1}
-                  key={`${schedule.id}-1`}
-                >
-                  <div key={item.title}>
-                    <p>{item.title}</p>
-                    <p>{item.detail}</p>
-                  </div>
-                </S.TempBox>
-                <S.TempBox
-                  scheduleGridWidth={SCHEDULE_GRID_WIDTH}
-                  memberNumber={schedule.number}
-                  top={top2}
-                  height={height2}
-                  key={`${schedule.id}-2`}
-                >
-                  <div key={item.title}>
-                    <p>{item.title}</p>
-                    <p>{item.detail}</p>
-                  </div>
-                </S.TempBox>
-              </>
-            );
-          }
+          const { top, height } = calculatePosition(
+            item.startedAt,
+            item.endedAt
+          );
+          return (
+            <S.ScheduleBox
+              scheduleGridWidth={SCHEDULE_GRID_WIDTH}
+              memberNumber={schedule.number}
+              top={top}
+              height={height}
+              key={schedule.id}
+            >
+              <div key={item.createdAt}>
+                <p>{item.title}</p>
+                <p>{item.detail}</p>
+                <p>{item.startedAt}</p>
+                <p>{item.endedAt}</p>
+              </div>
+            </S.ScheduleBox>
+          );
         })
       )}
     </>
@@ -122,7 +105,7 @@ const DetailSchedule = ({
 };
 
 const S = {
-  TempBox: styled.div<{
+  ScheduleBox: styled.div<{
     scheduleGridWidth: number;
     memberNumber: number;
     top: number;

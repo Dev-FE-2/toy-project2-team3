@@ -50,8 +50,6 @@ const DetailScheduleWrapper = ({
   const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
     useState<FormattedUserOrTeamScheduleData[]>([]);
 
-  console.log(currentSchedule);
-
   const TEAM_MEMBERS_INFO = currentSchedule.teamId;
   const TEAM_MEMBERS_LENGTH = TEAM_MEMBERS_INFO.length;
   const HOURS = currentTime.getHours();
@@ -59,17 +57,18 @@ const DetailScheduleWrapper = ({
   const TOTAL_MINUTES = HOURS * 60 + MINUTES;
   const TIME_LINE_POSITION = (TOTAL_MINUTES / 60) * 120 + 40;
 
+  const [year, month, day] = clickedDate;
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
+
   const filterClickedDateTeamSchedule = (
     startedAt: string,
     endedAt: string
   ) => {
+    console.log(startedAt);
     const cuttedStartedAt = startedAt.slice(0, 10);
     const cuttedEndedAt = endedAt.slice(0, 10);
-
-    const [year, month, day] = clickedDate;
-    const formattedMonth = String(month).padStart(2, '0');
-    const formattedDay = String(day).padStart(2, '0');
-    const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
 
     return (
       formattedClickedDate === cuttedStartedAt ||
@@ -91,15 +90,22 @@ const DetailScheduleWrapper = ({
         (info) => info.userId === schedule.userId
       );
 
+      const filteredScheduleList = schedule.scheduleList.filter((item) =>
+        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
+      );
+
       return {
         ...schedule,
         type: currentSchedule.type,
         name: teamMemberInfo ? teamMemberInfo.name : '',
         number: teamMemberInfo ? teamMemberInfo.number : 0,
+        scheduleList: filteredScheduleList,
       };
     });
 
-    return formattedTeamSchedule;
+    return formattedTeamSchedule.filter(
+      (schedule) => schedule.scheduleList.length > 0
+    );
   };
 
   const fetchSchedules = useCallback(async () => {
@@ -108,7 +114,6 @@ const DetailScheduleWrapper = ({
     })) as ScheduleData[];
 
     const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
-
     const filteredScheduleData: FormattedUserOrTeamScheduleData[] =
       teamScheduleData.filter((schedule) =>
         schedule.scheduleList.some((item) =>
@@ -158,6 +163,7 @@ const DetailScheduleWrapper = ({
           </S.CellsContainer>
         ))}
         <DetailSchedule
+          formattedClickedDate={formattedClickedDate}
           TEAM_MEMBERS_LENGTH={TEAM_MEMBERS_LENGTH}
           clickedDateTeamScheduleData={clickedDateTeamScheduleData}
         />
