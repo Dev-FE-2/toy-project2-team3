@@ -55,7 +55,7 @@ const MainCalendarDaysSchedules = ({
   >([]);
 
   const getScheduleData = async () => {
-    const scheduleData = await fetchDataFromDB('Schedule');
+    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
 
     const formattedScheduleData: ScheduleData[] = scheduleData
       ? Object.entries(scheduleData).map(([id, scheduleData]) => ({

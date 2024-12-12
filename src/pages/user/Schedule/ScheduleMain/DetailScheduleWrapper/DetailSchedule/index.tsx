@@ -66,7 +66,7 @@ const DetailSchedule = ({
   console.log(filterClickedDateTeamSchedule('2024-12-10', '2024-12-11'));
 
   const getScheduleData = async () => {
-    const scheduleData = await fetchDataFromDB('Schedule');
+    const scheduleData = await fetchDataFromDB({ table: 'Schedule' });
 
     const formattedScheduleData: ScheduleData[] = scheduleData
       ? Object.entries(scheduleData).map(([id, scheduleData]) => ({

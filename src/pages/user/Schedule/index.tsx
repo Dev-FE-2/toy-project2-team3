@@ -44,7 +44,7 @@ const Schedule = () => {
   };
 
   const getTeamsData = async () => {
-    const teamsData = await fetchDataFromDB('Teams');
+    const teamsData = await fetchDataFromDB({ table: 'Teams' });
     const formattedTeamsData: TeamData[] = teamsData
       ? Object.entries(teamsData).map(([id, teamData]) => ({
           id,
