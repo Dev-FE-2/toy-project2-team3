@@ -35,13 +35,13 @@ const MonthPicker = ({
         <div className="material-symbols-outlined" onClick={onClickRight}>
           chevron_right
         </div>
+        {isMonthPickerDetailOpen && (
+          <MonthPickerDetail
+            currentMonth={currentMonth}
+            handleMonthClick={handleMonthClick}
+          />
+        )}
       </S.Wrapper>
-      {isMonthPickerDetailOpen && (
-        <MonthPickerDetail
-          currentMonth={currentMonth}
-          handleMonthClick={handleMonthClick}
-        />
-      )}
     </>
   );
 };
@@ -55,6 +55,8 @@ const S = {
     align-items: center;
     border: ${border.default};
     border-radius: ${border.radius.xs};
+    margin-left: 150px;
+    position: relative;
 
     div {
       display: flex;
