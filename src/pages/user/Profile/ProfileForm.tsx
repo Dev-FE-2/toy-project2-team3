@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSaveData } from '../../../hooks';
-import { collection } from '../../../constant';
+import { COLLECTION_NAME } from '../../../constant';
 
 interface FormData {
   name: string;
@@ -10,7 +10,7 @@ interface FormData {
 const ProfileForm = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
   const { saveData, isSaving, error } = useSaveData<FormData>({
-    table: collection.users,
+    table: COLLECTION_NAME.users,
     requireAuth: true, // 인증 여부 필요
   });
 
