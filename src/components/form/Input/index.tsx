@@ -77,7 +77,6 @@ const S = {
       padding: 0 ${padding.md};
       border: ${border.default};
       border-radius: ${border.radius.xs};
-      text-align: center;
 
       &:valid {
         border-color: ${colors.semantic.primary};

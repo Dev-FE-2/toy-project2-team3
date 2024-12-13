@@ -2,7 +2,7 @@ import { useState, ChangeEvent, MouseEvent } from 'react';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
-import { Input, ErrorMessage } from '../../../components/form';
+import { Form, Input, ErrorMessage } from '../../../components';
 
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
@@ -37,7 +37,7 @@ const LoginForm = () => {
   };
 
   return (
-    <article>
+    <Form>
       <Input
         type="email"
         label="이메일"
@@ -54,11 +54,11 @@ const LoginForm = () => {
         placeholder="비밀번호를 입력해주세요"
         onChange={onChangePassword}
       />
-      <button type="submit" onClick={handleSubmit}>
+      <button className="button primary" type="submit" onClick={handleSubmit}>
         로그인
       </button>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </article>
+    </Form>
   );
 };
 
