@@ -18,7 +18,10 @@ const SalaryCorrection = () => {
           onToggleVisibility={handleVisibilityChange}
         />
         <S.MainContainer>
-          <SalaryCorrectionMiddle isVisible={isVisible} />
+          <SalaryCorrectionMiddle
+            isVisible={isVisible}
+            setIsVisible={setIsVisible}
+          />
         </S.MainContainer>
       </S.SalaryContainer>
     </>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import { border } from '../../../../styles';
-import { StyledCheckButton } from '../../../../components/Button';
+//import { StyledCheckButton } from '../../../../components/Button';
 import { MONTHS } from '../constants';
 
 interface ScheduleHeaderProps {
@@ -19,7 +19,7 @@ const ScheduleHeader = ({
   currentYear,
   isDayClick,
   handleYearMonthChange,
-  setIsAddScheduleModalOpen,
+  //setIsAddScheduleModalOpen,
   setIsDayClick,
 }: ScheduleHeaderProps) => {
   const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
@@ -84,9 +84,9 @@ const ScheduleHeader = ({
           }
         />
       )}
-      <StyledCheckButton onClick={() => setIsAddScheduleModalOpen(true)}>
+      {/* <StyledCheckButton onClick={() => setIsAddScheduleModalOpen(true)}>
         등록
-      </StyledCheckButton>{' '}
+      </StyledCheckButton>{' '} */}
       {/* 임시 */}
     </S.Header>
   );

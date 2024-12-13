@@ -2,12 +2,20 @@ import React from 'react';
 import SalaryCorrectionList from './SalaryCorrectionList';
 import SalaryCorrectionApply from './SalaryCorrectionApply';
 
-type Props = {
+type MiddleProps = {
   isVisible: boolean;
+  setIsVisible: (visible: boolean) => void;
 };
 
-const SalaryCorrectionMiddle: React.FC<Props> = ({ isVisible }) => {
-  return isVisible ? <SalaryCorrectionApply /> : <SalaryCorrectionList />;
+const SalaryCorrectionMiddle: React.FC<MiddleProps> = ({
+  isVisible,
+  setIsVisible,
+}) => {
+  return isVisible ? (
+    <SalaryCorrectionApply isVisible={isVisible} setIsVisible={setIsVisible} />
+  ) : (
+    <SalaryCorrectionList />
+  );
 };
 
 export default SalaryCorrectionMiddle;
