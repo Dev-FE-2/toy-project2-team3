@@ -24,7 +24,6 @@ export const formatOvertimeTotal = (totalHours: number) => {
   return `${hours}시간 ${minutes}분`;
 };
 
-// 날짜 포맷팅 함수
 const formatDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -55,6 +54,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
   const [overtimeRecords, setLocalOvertimeRecords] = useState<OvertimeRecord[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const userId = 'gRvGt6IuotQ2d3FzXXFoCbepLAg1';
@@ -71,18 +71,16 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
 
       const filePaths: string[] = [];
       const uploadPromises = uploadedFiles.map(async (file) => {
-        const url = await uploadFile(
-          file,
-          `SalaryCorrection/${userId}`,
-          setIsLoading
-        );
+        return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
+      });
+
+      // 모든 파일 업로드 완료 대기
+      const urls = await Promise.all(uploadPromises);
+      urls.forEach((url) => {
         if (url) {
           filePaths.push(url);
         }
       });
-
-      // 모든 파일 업로드 완료 대기
-      await Promise.all(uploadPromises);
 
       const newRecord: OvertimeRecord = {
         start: overtimeStart,
@@ -213,8 +211,8 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
             style={{ display: 'none' }}
             onChange={handleFileChange}
           />
-          <button className="button" onClick={handleAdd}>
-            추가
+          <button className="button" onClick={handleAdd} disabled={isLoading}>
+            {isLoading ? '저장 중...' : '추가'}
           </button>
         </S.ApplyMiddleRow>
         <S.RecordList>

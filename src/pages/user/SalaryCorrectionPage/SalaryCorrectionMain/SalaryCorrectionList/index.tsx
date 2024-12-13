@@ -37,7 +37,14 @@ const SalaryCorrectionList = () => {
           key: userInfo?.userId,
         });
         if (data) {
-          setItems(data);
+          // 데이터 정렬: 내림차순으로 정렬 (최신순)
+          const sortedData = Object.values(data).sort((a, b) => {
+            return (
+              new Date(b.requestedAt).getTime() -
+              new Date(a.requestedAt).getTime()
+            );
+          });
+          setItems(sortedData);
         } else {
           console.log(error);
         }
@@ -55,7 +62,6 @@ const SalaryCorrectionList = () => {
 
   // 로딩 및 에러 처리
   if (loading) return <Loading />;
-
   if (error) return <div>오류 발생: {error.message}</div>;
 
   // 현재 페이지의 항목 계산

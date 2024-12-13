@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSaveData } from '../../../../../../hooks/';
+import { useFetchUserInfo } from '../../../../../../hooks/';
+import { saveDataToDB } from '../../../../../../firebase'; // saveDataToDB 임포트
 import type { OvertimeRecord } from '../ApplyMiddle';
 import type { SalaryRequest } from '../../../../../../types/interface';
 import { colors } from '../../../../../../styles';
+import Loading from '../../../../../../components/Loading';
+import { fetchDataFromDB } from '../../../../../../firebase'; // fetchDataFromDB 임포트
 
 type ApplyBottomProps = {
   overtimeTotal: number;
@@ -11,50 +14,91 @@ type ApplyBottomProps = {
   setIsVisible: (visible: boolean) => void;
 };
 
+// 총 시간을 시간과 분으로 변환
+const formatOvertimeTotal = (totalHours: number) => {
+  const hours = Math.floor(totalHours);
+  const minutes = Math.round((totalHours - hours) * 60);
+  return `${hours}시간 ${minutes}분`;
+};
+
 const ApplyBottom: React.FC<ApplyBottomProps> = ({
   overtimeRecords,
   overtimeTotal,
   setIsVisible,
 }) => {
-  const { saveData, isSaving, error } = useSaveData<SalaryRequest>({
-    table: 'SalaryRequest',
-  });
+  const { userInfo, isLoading, error } = useFetchUserInfo();
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleRegister = async () => {
+    const createdAt = new Date().toISOString();
+    const requestedMonth = new Date(createdAt).toLocaleString('ko-KR', {
+      month: 'long',
+    });
+
+    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`; // 고유한 SalaryRequestId 생성
+    const newSalaryId = `salaryId-${new Date().getTime()}`; // 고유한 salaryId 생성
+
+    // 로딩 상태 처리
+    if (isLoading) return <Loading />;
+    if (error) return <div>오류 발생: {error.message}</div>;
+
     const newSalaryRequest: SalaryRequest = {
-      salaryRequestId: '',
-      requestedUserId: 'gRvGt6IuotQ2d3FzXXFoCbepLAg1',
-      salaryId: '',
-      requestList: overtimeRecords.map((record, index) => ({
-        requestId: `fixedRequestItemId${index}`,
-        requestStartedAt: record.start,
-        requestEndedAt: record.end,
-        requestWorkingTime: record.hours,
-        requestDetail: record.description,
-        requestDocumentUrl: record.filePath,
-      })),
-      requestedAt: new Date().toISOString(),
-      handledUserId: '',
-      handleStatus: '처리 전',
       handleDetail: '',
+      handleStatus: '처리 전',
       handledAt: '',
+      handledUserId: '',
+      rejectReason: '',
+      requestList: [
+        {
+          requestId: `requestId-${new Date().getTime()}`, // 고유한 requestId
+          requestStartedAt: overtimeRecords[0].start,
+          requestEndedAt: overtimeRecords[0].end,
+          requestWorkingTime: overtimeRecords[0].hours,
+          requestDetail: overtimeRecords[0].description,
+          requestDocumentUrl: overtimeRecords[0].filePath,
+        },
+      ],
+      requestedAt: createdAt,
+      requestedTitle: `${requestedMonth} 급여 정산 오류`,
+      requestedUserId: userInfo?.userId as string,
+      salaryId: newSalaryId,
     };
 
+    setIsSaving(true); // 저장 중 상태로 변경
     try {
-      // 데이터 저장
-      const savedKey = await saveData(newSalaryRequest);
-      console.log('요청이 성공적으로 저장되었습니다. 키:', savedKey);
+      // 기존 요청 데이터 가져오기
+      const existingData = await fetchDataFromDB<SalaryRequest>({
+        table: 'SalaryRequest',
+        key: userInfo?.userId, // 사용자 ID를 키로 사용
+      });
+
+      // 기존 데이터가 없을 경우 새 객체 생성
+      const updatedData = existingData
+        ? {
+            ...existingData.reduce((acc, curr) => {
+              acc[curr.id] = curr; // 기존 요청 데이터를 키로 재구성
+              return acc;
+            }, {}),
+            [newSalaryRequestId]: newSalaryRequest, // 새로운 요청 추가
+          }
+        : {
+            [newSalaryRequestId]: newSalaryRequest, // 새로운 요청 데이터만 포함
+          };
+
+      // saveDataToDB를 사용하여 데이터 저장
+      await saveDataToDB({
+        table: 'SalaryRequest',
+        key: userInfo?.userId, // 사용자 ID를 key로 사용
+        data: updatedData, // 업데이트된 데이터 저장
+      });
+
+      console.log('요청이 성공적으로 저장되었습니다.');
       setIsVisible(false);
     } catch (err) {
       console.error('저장 중 오류 발생:', err);
+    } finally {
+      setIsSaving(false); // 저장 완료 상태로 변경
     }
-  };
-
-  // 총 시간을 시간과 분으로 변환
-  const formatOvertimeTotal = (totalHours: number) => {
-    const hours = Math.floor(totalHours);
-    const minutes = Math.round((totalHours - hours) * 60);
-    return `${hours}시간 ${minutes}분`;
   };
 
   return (
@@ -74,12 +118,12 @@ const S = {
     height: 17vh;
     padding: 20px;
     display: flex;
-    flex-direction: column; // 세로 방향으로 정렬
-    align-items: center; // 가운데 정렬
+    flex-direction: column;
+    align-items: center;
     p {
-      text-align: left; // 왼쪽 정렬
+      text-align: left;
       margin-bottom: 0.7vh;
-      width: 100%; // 전체 너비를 차지하도록
+      width: 100%;
     }
     .reg-btn {
       background-color: ${colors.semantic.primary};

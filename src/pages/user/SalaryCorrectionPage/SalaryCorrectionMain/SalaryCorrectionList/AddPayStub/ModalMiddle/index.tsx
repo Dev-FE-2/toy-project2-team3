@@ -31,7 +31,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
     item.requestList || []
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const { userInfo, error } = useFetchUserInfo();
+  const { userInfo } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryCorrecteData = async () => {
@@ -99,7 +99,14 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
             </S.ScrollableValue>
           </S.ModalMiddleRow>
           <div className="description">
-            {error ? error.message : '설명이 작성되지 않았습니다.'}
+            {attachments.length > 0 &&
+              attachments.map((att) => (
+                <div key={att.requestId}>
+                  {att.requestDetail
+                    ? att.requestDetail
+                    : '설명이 작성되지 않았습니다.'}
+                </div>
+              ))}
           </div>
           <div className="reject">
             거절 사유: {item.rejectReason || '입력되지 않았습니다.'}
