@@ -38,6 +38,8 @@ interface TargetSchedule extends ScheduleList {
   index: number;
   name: string;
   userId: string;
+  documentName: string;
+  documentUrl: string;
 }
 
 type ModalType = 'C' | 'R' | 'U' | 'D';
@@ -59,6 +61,8 @@ const Schedule = () => {
     updatedAt: '',
     name: '',
     userId: '',
+    documentName: '',
+    documentUrl: '',
   });
   const [modalType, setModalType] = useState<ModalType>('C');
   const [isModalOpen, setIsModalOpen] = useState(false);

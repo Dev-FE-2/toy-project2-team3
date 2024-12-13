@@ -28,6 +28,8 @@ interface TargetSchedule extends ScheduleList {
   index: number;
   name: string;
   userId: string;
+  documentName: string;
+  documentUrl: string;
 }
 
 interface ScheduleMainProps {

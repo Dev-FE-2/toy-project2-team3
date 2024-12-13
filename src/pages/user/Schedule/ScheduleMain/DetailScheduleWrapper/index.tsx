@@ -9,6 +9,8 @@ interface ScheduleList {
   detail: string;
   endedAt: string;
   startedAt: string;
+  documentName: string;
+  documentUrl: string;
   title: string;
   updatedAt: string;
 }
@@ -23,7 +25,6 @@ interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
   number: number;
-  userId: string;
 }
 
 interface TeamMembersData {
@@ -57,6 +58,9 @@ interface TargetSchedule extends ScheduleList {
   id: string;
   index: number;
   name: string;
+  userId: string;
+  documentName: string;
+  documentUrl: string;
 }
 
 const DetailScheduleWrapper = ({

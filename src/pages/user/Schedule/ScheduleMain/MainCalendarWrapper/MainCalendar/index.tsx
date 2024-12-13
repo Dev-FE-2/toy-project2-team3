@@ -5,6 +5,7 @@ import { SetStateAction } from 'react';
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {

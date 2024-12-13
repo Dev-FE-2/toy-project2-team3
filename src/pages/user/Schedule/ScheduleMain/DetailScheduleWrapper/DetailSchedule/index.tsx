@@ -10,10 +10,13 @@ interface ScheduleList {
   updatedAt: string;
 }
 
-interface FormattedUserOrTeamScheduleData {
+interface ScheduleData {
   id: string;
   scheduleList: ScheduleList[];
   userId: string;
+}
+
+interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
   number: number;
@@ -35,6 +38,8 @@ interface TargetSchedule extends ScheduleList {
   index: number;
   name: string;
   userId: string;
+  documentName: string;
+  documentUrl: string;
 }
 
 interface DetailSchedulProps {
