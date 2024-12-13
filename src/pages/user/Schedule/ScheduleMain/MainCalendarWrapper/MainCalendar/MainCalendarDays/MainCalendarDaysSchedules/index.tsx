@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { border, padding } from '../../../../../../../../styles';
+import { border, colors, padding } from '../../../../../../../../styles';
 import { fetchDataFromDB } from '../../../../../../../../firebase/fetchDataFromDB';
 import { useCallback, useEffect, useState } from 'react';
 
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -39,6 +40,7 @@ interface ScheduleData {
 interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
+  number: number;
 }
 
 const MainCalendarDaysSchedules = ({
@@ -66,13 +68,12 @@ const MainCalendarDaysSchedules = ({
       userScheduleData ? id.userId === userScheduleData.userId : ''
     );
 
-    const userName = userInfo ? userInfo.name : '';
-
     const formattedUserSchedule = userScheduleData
       ? [
           {
             type: currentSchedule.type,
-            name: userName,
+            name: userInfo ? userInfo.name : '',
+            number: userInfo ? userInfo.number : 0,
             ...userScheduleData,
           },
         ]
@@ -99,6 +100,7 @@ const MainCalendarDaysSchedules = ({
         ...schedule,
         type: currentSchedule.type,
         name: teamMemberInfo ? teamMemberInfo.name : '',
+        number: teamMemberInfo ? teamMemberInfo.number : 0,
       };
     });
 
@@ -136,9 +138,30 @@ const MainCalendarDaysSchedules = ({
     );
   };
 
+  const assignColor = (number: number, type: string) => {
+    const colorSaturation = type === 'background' ? 's95' : 's60';
+    const color = [
+      colors.scale.secondary[colorSaturation],
+      colors.scale.tertiary[colorSaturation],
+      colors.scale.neutral[colorSaturation],
+      colors.scale.primary[colorSaturation],
+      colors.scale.danger[colorSaturation],
+    ];
+
+    const assingedColor = color[number % 5];
+
+    return assingedColor;
+  };
+
   const renderScheduleData = (
     scheduleData: FormattedUserOrTeamScheduleData
   ) => {
+    const assignedBackgroundColor = assignColor(
+      scheduleData.number,
+      'background'
+    );
+    const assignedBorderColor = assignColor(scheduleData.number, 'border');
+
     return scheduleData.scheduleList
       .filter((data) => {
         const startDate = new Date(data.startedAt);
@@ -148,11 +171,17 @@ const MainCalendarDaysSchedules = ({
         return isDateInRange(currentDate, startDate, endDate);
       })
       .map((data) => (
-        <S.MainCalendarDaysContents key={data.title}>
+        <S.MainCalendarDaysContents
+          assignedBackgroundColor={assignedBackgroundColor}
+          assignedBorderColor={assignedBorderColor}
+          key={data.title}
+        >
           {`${scheduleData.name}: ${data.title}`}
         </S.MainCalendarDaysContents>
       ));
   };
+
+  console.log(teamScheduleData);
 
   return (
     <>
@@ -168,12 +197,17 @@ const MainCalendarDaysSchedules = ({
 };
 
 const S = {
-  MainCalendarDaysContents: styled.div`
+  MainCalendarDaysContents: styled.div<{
+    assignedBackgroundColor: string;
+    assignedBorderColor: string;
+  }>`
     width: 95%;
     height: auto;
     min-height: 21px;
     font-size: 12px;
-    border: ${border.default};
+    font-weight: 500;
+    background-color: ${(props) => props.assignedBackgroundColor};
+    border: 1px solid ${(props) => props.assignedBorderColor};
     border-radius: ${border.radius.xs};
     padding: 0 ${padding.xs};
     overflow: hidden;

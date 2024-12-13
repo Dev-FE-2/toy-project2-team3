@@ -15,6 +15,7 @@ interface TeamData {
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -36,6 +37,7 @@ const Schedule = () => {
     teamId: [],
     userId: '',
   });
+  console.log(currentSchedule);
   const [isDayClick, setIsDayClick] = useState(false);
   const [clickedDate, setClickedDate] = useState<number[]>([]);
 

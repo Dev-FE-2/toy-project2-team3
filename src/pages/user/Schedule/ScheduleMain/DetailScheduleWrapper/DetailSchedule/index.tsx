@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { colors, padding } from '../../../../../../styles';
 
 interface ScheduleList {
   createdAt: string;
@@ -74,6 +75,21 @@ const DetailSchedule = ({
     return { top, height };
   };
 
+  const assignColor = (number: number, type: string) => {
+    const colorSaturation = type === 'background' ? 's95' : 's60';
+    const color = [
+      colors.scale.secondary[colorSaturation],
+      colors.scale.tertiary[colorSaturation],
+      colors.scale.neutral[colorSaturation],
+      colors.scale.primary[colorSaturation],
+      colors.scale.danger[colorSaturation],
+    ];
+
+    const assingedColor = color[number % 5];
+
+    return assingedColor;
+  };
+
   return (
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
@@ -82,19 +98,27 @@ const DetailSchedule = ({
             item.startedAt,
             item.endedAt
           );
+
+          const assignedBackgroundColor = assignColor(
+            schedule.number,
+            'background'
+          );
+          const assignedBorderColor = assignColor(schedule.number, 'border');
           return (
             <S.ScheduleBox
               scheduleGridWidth={SCHEDULE_GRID_WIDTH}
               memberNumber={schedule.number}
               top={top}
               height={height}
+              assignedBackgroundColor={assignedBackgroundColor}
+              assignedBorderColor={assignedBorderColor}
               key={schedule.id}
             >
               <div key={item.createdAt}>
-                <p>{item.title}</p>
-                <p>{item.detail}</p>
-                <p>{item.startedAt}</p>
-                <p>{item.endedAt}</p>
+                <div className="title">{item.title}</div>
+                <div className="detail">{item.detail}</div>
+                <div className="document-url">📁 회의자료.xsl</div>
+                {/* <div className='documentUrl'>{item.documentUrl}</div> */}
               </div>
             </S.ScheduleBox>
           );
@@ -110,9 +134,13 @@ const S = {
     memberNumber: number;
     top: number;
     height: number;
+    assignedBackgroundColor: string;
+    assignedBorderColor: string;
   }>`
-    background-color: rgba(125, 111, 444, 0.5);
-    border: 1px solid rgb(125, 111, 444);
+    color: ${colors.semantic.text.dark};
+    padding: ${padding.md};
+    background-color: ${(props) => props.assignedBackgroundColor};
+    border: 1px solid ${(props) => props.assignedBorderColor};
     border-radius: 16px;
     width: ${(props) => `${props.scheduleGridWidth}px`};
     height: ${(props) => `${props.height}px`};
@@ -121,6 +149,36 @@ const S = {
     left: ${({ scheduleGridWidth, memberNumber }) =>
       `${40 + scheduleGridWidth * memberNumber}px`};
     z-index: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    & div.detail {
+      margin: 8px 0;
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: ${(props) => (props.height <= 120 ? '1' : '4')};
+      -webkit-box-orient: vertical;
+    }
+
+    & .title {
+      font-size: 18px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: ${(props) => (props.height <= 120 ? '1' : '3')};
+      -webkit-box-orient: vertical;
+    }
+
+    & .document-url {
+      margin: 8px 0;
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   `,
 };
 
