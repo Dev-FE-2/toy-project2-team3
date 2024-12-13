@@ -1,6 +1,6 @@
-import { default as LoginForm } from './LogInForm';
+import LoginForm from './LogInForm';
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <section>
       <h1>로그인</h1>
@@ -9,4 +9,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

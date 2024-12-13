@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import fetchUserInfo from '../../../../firebase/user/fetchUserInfo';
-import type { user } from '../../../../types/interface';
+import { fetchUserInfo } from '../../../../firebase';
+import type { User } from '../../../../types/interface';
 
 // 타입 정의
 type BaseContainerProps = {
@@ -23,7 +23,7 @@ const Navigation = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [expandedSalary, setExpandedSalary] = useState(false);
-  const [userInfo, setUserInfo] = useState<user | null>(null);
+  const [userInfo, setUserInfo] = useState<User | null>(null);
   const location = useLocation();
 
   useEffect(() => {

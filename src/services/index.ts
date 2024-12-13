@@ -1,0 +1,1 @@
+export { swrFetcher } from './swrFetcher';
