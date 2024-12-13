@@ -1,31 +1,36 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ApplyHeader from './ApplyHeader';
+import type { OvertimeRecord } from './ApplyMiddle';
 import ApplyMiddle from './ApplyMiddle';
 import ApplyBottom from './ApplyBottom';
 
-const SalaryCorrectionApply = () => {
+type ApplyProps = {
+  isVisible: boolean;
+  setIsVisible: (visible: boolean) => void;
+};
+
+const SalaryCorrectionApply: React.FC<ApplyProps> = ({ setIsVisible }) => {
   const [overtimeTotal, setOvertimeTotal] = useState(0);
-  //const [nighttimeTotal, setNighttimeTotal] = useState(0);
+  const [overtimeRecords, setOvertimeRecords] = useState<OvertimeRecord[]>([]);
 
   const handleOvertimeUpdate = (newTotal: number) => {
     setOvertimeTotal(newTotal);
   };
-
-  // const handleNighttimeUpdate = (newTotal) => {
-  //   setNighttimeTotal(newTotal);
-  // };
 
   return (
     <S.ApplyContainer>
       <ApplyHeader />
       <ApplyMiddle
         onOvertimeUpdate={handleOvertimeUpdate}
-        //onNighttimeUpdate={handleNighttimeUpdate}
+        setOvertimeRecords={setOvertimeRecords}
+        overtimeTotal={overtimeTotal}
+        setOvertimeTotal={setOvertimeTotal}
       />
       <ApplyBottom
         overtimeTotal={overtimeTotal}
-        //nighttimeTotal={nighttimeTotal}
+        overtimeRecords={overtimeRecords}
+        setIsVisible={setIsVisible}
       />
     </S.ApplyContainer>
   );

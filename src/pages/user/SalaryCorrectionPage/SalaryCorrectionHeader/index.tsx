@@ -7,6 +7,24 @@ type SalaryCorrectionHeaderProps = {
   onToggleVisibility: () => void;
 };
 
+export const StyleCorrectiondButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6.25vw;
+  height: 4.63vh;
+  background-color: ${colors.semantic.primary};
+  color: ${colors.semantic.text.light};
+  font-size: inherit;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  &:hover {
+    background-color: ${colors.semantic.hover.primary};
+    color: ${colors.semantic.primary};
+  }
+`;
+
 const SalaryCorrectionHeader: React.FC<SalaryCorrectionHeaderProps> = ({
   isVisible,
   onToggleVisibility,
