@@ -44,21 +44,6 @@
   gap: var(--padding-sm);
 }
 
-.form legend {
-  position: absolute;
-  opacity: 0;
-}
-
-.form-item {
-  width: 100%;
-  height: calc((40 / var(--root-font-size)) * 1rem);
-  line-height: 1;
-  padding: 0 var(--padding-md);
-  border: var(--border);
-  border-radius: var(--border-radius-xs);
-  text-align: center;
-}
-
 .form-file-preview {
   display: block;
   width: 122px;
@@ -77,10 +62,6 @@ label + input[type='file'] {
   height: 0;
   border: 0;
   visibility: hidden;
-}
-
-.error-message {
-  color: var(--color-danger);
 }
 
 .btn-wrap {

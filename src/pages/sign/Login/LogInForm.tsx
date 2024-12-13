@@ -57,7 +57,7 @@ const LoginForm = () => {
       <button type="submit" onClick={handleSubmit}>
         로그인
       </button>
-      {errorMessage && <ErrorMessage value={errorMessage}></ErrorMessage>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </article>
   );
 };
