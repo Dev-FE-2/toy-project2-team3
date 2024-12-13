@@ -4,8 +4,9 @@ import { Provider } from 'react-redux';
 import { SWRConfig } from 'swr';
 import store from './state/store';
 import { swrFetcher } from './services';
+
 import App from './App.tsx';
-import './index.css';
+import './styles/index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

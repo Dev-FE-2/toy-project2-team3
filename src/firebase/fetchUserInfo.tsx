@@ -2,10 +2,10 @@ import { getDatabase, ref, get } from 'firebase/database';
 import { auth } from '../firebaseConfig'; // Firebase 설정 파일에서 auth 가져오기
 import type { User } from '../types/interface';
 
-const fetchUserInfo = (callback: (userInfo: User | null) => void) => {
+export const fetchUserInfo = (callback: (userInfo: User | null) => void) => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     if (!user) {
-      console.log('사용자가 로그인되지 않았습니다.');
+      console.log('사용자가 로그인되지 않았습니다.'); // 오류 로그
       callback(null);
 
       return;
@@ -31,4 +31,4 @@ const fetchUserInfo = (callback: (userInfo: User | null) => void) => {
   return () => unsubscribe();
 };
 
-export { fetchUserInfo };
+export default fetchUserInfo;

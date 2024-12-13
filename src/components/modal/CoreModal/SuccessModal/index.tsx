@@ -1,6 +1,6 @@
 import React from 'react';
 import check_circle from '../../../../assets/icons/check_circle.svg';
-import { StyledCheckButton } from '../../../Button';
+import { StyledCheckButton } from '../../../form/Button';
 import type { ModalProps } from '../../CoreModal';
 
 const SuccessModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
