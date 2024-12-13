@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../styles';
+import { StyleCorrectiondButton } from '../../../../components';
+
 type SalaryCorrectionHeaderProps = {
   isVisible: boolean;
   onToggleVisibility: () => void;
