@@ -48,12 +48,13 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
   `,
   ModalWrapper: styled.div`
     position: relative;
     background-color: ${colors.semantic.light};
     width: 333px;
-    height: 888px;
+    /* height: 555px; */
     border-radius: ${border.radius.xs};
     padding: ${padding.md};
     display: flex;
