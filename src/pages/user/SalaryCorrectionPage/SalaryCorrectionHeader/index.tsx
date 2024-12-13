@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { StyleCorrectiondButton } from '../../../../components/Button';
+import { StyleCorrectiondButton } from '../../../../components';
 
 type SalaryCorrectionHeaderProps = {
   isVisible: boolean;
