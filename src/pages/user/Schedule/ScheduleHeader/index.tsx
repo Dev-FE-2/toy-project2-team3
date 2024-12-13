@@ -23,7 +23,7 @@ interface ScheduleHeaderProps {
   clickedDate: number[];
   teamData: TeamData[];
   handleYearMonthChange: (year: number, month: number) => void;
-  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
+  handleCModalOpen: () => void;
   setIsDayClick: (prop: boolean) => void;
 }
 
@@ -34,7 +34,7 @@ const ScheduleHeader = ({
   clickedDate,
   teamData,
   handleYearMonthChange,
-  setIsAddScheduleModalOpen,
+  handleCModalOpen,
   setIsDayClick,
 }: ScheduleHeaderProps) => {
   const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
@@ -71,10 +71,6 @@ const ScheduleHeader = ({
     handleYearMonthChange(newYear, currentMonth);
   };
 
-  const handleOpenModal = () => {
-    setIsAddScheduleModalOpen(true);
-  };
-
   return (
     <S.Header isDayClick={isDayClick}>
       {isDayClick ? (
@@ -87,6 +83,15 @@ const ScheduleHeader = ({
           </S.Icon>
           <div style={{ marginLeft: '110px' }}>
             {teamName} | {formattedClickedDate}
+          </div>
+          <div style={{ marginRight: '16px' }}>
+            <Button
+              color="primary"
+              text="일정 등록"
+              onClick={handleCModalOpen}
+              padding="7px 28px"
+              maxHeight="40px"
+            />
           </div>
         </>
       ) : (
@@ -109,17 +114,17 @@ const ScheduleHeader = ({
               isMonthPickerDetailOpen ? handleNextYear : handleNextMonth
             }
           />
+          <div style={{ marginRight: '16px' }}>
+            <Button
+              color="primary"
+              text="일정 등록"
+              onClick={handleCModalOpen}
+              padding="7px 28px"
+              maxHeight="40px"
+            />
+          </div>
         </>
       )}
-      <div style={{ marginRight: '16px' }}>
-        <Button
-          color="primary"
-          text="스케줄 등록"
-          onClick={handleOpenModal}
-          padding="7px 28px"
-          maxHeight="40px"
-        />
-      </div>
     </S.Header>
   );
 };

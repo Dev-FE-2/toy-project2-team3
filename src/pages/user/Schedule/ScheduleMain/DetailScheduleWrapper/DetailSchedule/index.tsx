@@ -19,16 +19,36 @@ interface FormattedUserOrTeamScheduleData {
   number: number;
 }
 
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  documentName: string;
+  documentUrl: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+}
+
 interface DetailSchedulProps {
   formattedClickedDate: string;
   TEAM_MEMBERS_LENGTH: number;
   clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
+  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
 }
 
 const DetailSchedule = ({
   formattedClickedDate,
   TEAM_MEMBERS_LENGTH,
   clickedDateTeamScheduleData,
+  handleRModalOpen,
 }: DetailSchedulProps) => {
   const SCHEDULE_GRID_WIDTH = (1250 - 40) / TEAM_MEMBERS_LENGTH - 0.3;
 
@@ -90,10 +110,30 @@ const DetailSchedule = ({
     return assingedColor;
   };
 
+  const getTargetSchedule = (
+    id: string,
+    index: number,
+    name: string,
+    userId: string,
+    scheduleData: ScheduleList
+  ) => {
+    const targetSchedule = {
+      id,
+      index,
+      name,
+      userId,
+      ...scheduleData,
+    };
+
+    handleRModalOpen(targetSchedule);
+
+    console.log(targetSchedule);
+  };
+
   return (
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
-        schedule.scheduleList.map((item) => {
+        schedule.scheduleList.map((item, index) => {
           const { top, height } = calculatePosition(
             item.startedAt,
             item.endedAt
@@ -112,12 +152,21 @@ const DetailSchedule = ({
               height={height}
               assignedBackgroundColor={assignedBackgroundColor}
               assignedBorderColor={assignedBorderColor}
-              key={schedule.id}
+              key={`${schedule.id}-${index}`}
+              onClick={() =>
+                getTargetSchedule(
+                  schedule.id,
+                  index,
+                  schedule.name,
+                  schedule.userId,
+                  item
+                )
+              }
             >
               <div key={item.createdAt}>
                 <div className="title">{item.title}</div>
                 <div className="detail">{item.detail}</div>
-                <div className="document-url">📁 회의자료.xsl</div>
+                <div className="document-url">{item.documentName}</div>
                 {/* <div className='documentUrl'>{item.documentUrl}</div> */}
               </div>
             </S.ScheduleBox>

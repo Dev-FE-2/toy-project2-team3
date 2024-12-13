@@ -14,6 +14,22 @@ interface CurrentSchedule {
   userId?: string;
 }
 
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+}
+
 interface ScheduleMainProps {
   currentSchedule: CurrentSchedule;
   currentMonth: number;
@@ -23,6 +39,7 @@ interface ScheduleMainProps {
   setIsSixWeek: (prop: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
   setClickedDate: React.Dispatch<SetStateAction<number[]>>;
+  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
 }
 
 const ScheduleMain = ({
@@ -34,6 +51,7 @@ const ScheduleMain = ({
   setIsSixWeek,
   setIsDayClick,
   setClickedDate,
+  handleRModalOpen,
 }: ScheduleMainProps) => {
   return (
     <>
@@ -50,6 +68,7 @@ const ScheduleMain = ({
         <DetailScheduleWrapper
           currentSchedule={currentSchedule}
           clickedDate={clickedDate}
+          handleRModalOpen={handleRModalOpen}
         />
       )}
     </>

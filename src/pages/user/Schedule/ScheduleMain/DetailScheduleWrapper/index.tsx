@@ -23,6 +23,7 @@ interface FormattedUserOrTeamScheduleData extends ScheduleData {
   type: string;
   name: string;
   number: number;
+  userId: string;
 }
 
 interface TeamMembersData {
@@ -40,11 +41,28 @@ interface CurrentSchedule {
 interface DetailScheduleWrapperProps {
   currentSchedule: CurrentSchedule;
   clickedDate: number[];
+  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
+}
+
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
 }
 
 const DetailScheduleWrapper = ({
   currentSchedule,
   clickedDate,
+  handleRModalOpen,
 }: DetailScheduleWrapperProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
@@ -66,7 +84,6 @@ const DetailScheduleWrapper = ({
     startedAt: string,
     endedAt: string
   ) => {
-    console.log(startedAt);
     const cuttedStartedAt = startedAt.slice(0, 10);
     const cuttedEndedAt = endedAt.slice(0, 10);
 
@@ -166,6 +183,7 @@ const DetailScheduleWrapper = ({
           formattedClickedDate={formattedClickedDate}
           TEAM_MEMBERS_LENGTH={TEAM_MEMBERS_LENGTH}
           clickedDateTeamScheduleData={clickedDateTeamScheduleData}
+          handleRModalOpen={handleRModalOpen}
         />
         <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
       </S.ScheduleContainer>

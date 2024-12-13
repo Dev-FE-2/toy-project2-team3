@@ -1,17 +1,43 @@
 import styled from 'styled-components';
 import { border, colors, padding } from '../../../../../styles';
-import AddScheduleModalContents from './AddScheduleModalContents';
 import { MouseEvent } from 'react';
+import ScheduleModalContents from './ScheduleModalContents';
 
-type AddScheduleModalProps = {
-  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
-};
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
 
-const AddScheduleModal = ({
-  setIsAddScheduleModalOpen,
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+  documentName: string;
+  documentUrl: string;
+}
+
+type ModalType = 'C' | 'R' | 'U' | 'D';
+
+interface AddScheduleModalProps {
+  targetSchedule: TargetSchedule;
+  modalType: ModalType;
+  setModalType: (type: ModalType) => void;
+  setIsModalOpen: (isOpen: boolean) => void;
+}
+
+const ScheduleModal = ({
+  targetSchedule,
+  modalType,
+  setModalType,
+  setIsModalOpen,
 }: AddScheduleModalProps) => {
   const handleOnCloseModal = () => {
-    setIsAddScheduleModalOpen(false);
+    setIsModalOpen(false);
   };
 
   const handleBackgroundClick = () => {
@@ -31,7 +57,11 @@ const AddScheduleModal = ({
         >
           close
         </S.CloseIcon>
-        <AddScheduleModalContents />
+        <ScheduleModalContents
+          targetSchedule={targetSchedule}
+          modalType={modalType}
+          setModalType={setModalType}
+        />
       </S.ModalWrapper>
     </S.ModalBackground>
   );
@@ -69,4 +99,4 @@ const S = {
   `,
 };
 
-export default AddScheduleModal;
+export default ScheduleModal;

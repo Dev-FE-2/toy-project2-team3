@@ -181,8 +181,6 @@ const MainCalendarDaysSchedules = ({
       ));
   };
 
-  console.log(teamScheduleData);
-
   return (
     <>
       {currentSchedule.type === 'team'
