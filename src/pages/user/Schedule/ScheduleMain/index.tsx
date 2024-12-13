@@ -1,5 +1,5 @@
 import MainCalendarWrapper from './MainCalendarWrapper';
-import DetailScheduleWrapper from './DetailScheduleWrapper';
+//import DetailScheduleWrapper from './DetailScheduleWrapper';
 
 interface TeamMembersData {
   name: string;
@@ -41,7 +41,7 @@ const ScheduleMain = ({
         />
       ) : (
         <DetailScheduleWrapper currentSchedule={currentSchedule} />
-        <DetailScheduleWrapper />
+        // <DetailScheduleWrapper />
       )}
     </>
   );
