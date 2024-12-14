@@ -1,12 +1,14 @@
 import LoginForm from './LogInForm';
-import { PageContainer, PageTitle } from '../../../components';
+import { PageContainer, PageTitle, IntroLayout } from '../../../components';
 
 const LoginPage = () => {
   return (
-    <PageContainer>
-      <PageTitle>로그인</PageTitle>
-      <LoginForm />
-    </PageContainer>
+    <IntroLayout>
+      <PageContainer>
+        <PageTitle>로그인</PageTitle>
+        <LoginForm />
+      </PageContainer>
+    </IntroLayout>
   );
 };
 

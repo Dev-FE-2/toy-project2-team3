@@ -13,6 +13,15 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
 const S = {
   Section: styled.section`
     padding: ${padding.xl} ${padding.md};
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      justify-content: flex-start;
+    }
   `,
 };
 

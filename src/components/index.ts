@@ -6,3 +6,4 @@ export { default as Loading } from './Loading';
 export { default as Pagination } from './Pagination';
 export { default as PageTitle } from './PageTitle';
 export { default as PageContainer } from './PageContainer';
+export { default as IntroLayout } from './IntroLayout';
