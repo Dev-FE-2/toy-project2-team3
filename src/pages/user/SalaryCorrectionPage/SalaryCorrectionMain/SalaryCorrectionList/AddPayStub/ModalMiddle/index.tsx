@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { colors } from '../../../../../../../styles';
 import { useFetchUserInfo } from '../../../../../../../hooks';
 import { fetchDataFromDB } from '../../../../../../../firebase';
+import { getFilteredFileNames } from '../../../SalaryCorrectionApply/ApplyMiddle';
 import type {
   SalaryRequest,
   SalaryRequestItem,
@@ -21,6 +22,21 @@ const formatDate = (dateString: string) => {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+
+// 총 근무 시간 계산 함수 (시간과 분으로 반환)
+const calculateTotalWorkTime = (attachments: SalaryRequestItem[]) => {
+  const totalMinutes = attachments.reduce((total, att) => {
+    const start = new Date(att.requestStartedAt);
+    const end = new Date(att.requestEndedAt);
+    const workMinutes = (end.getTime() - start.getTime()) / (1000 * 60); // 분 단위로 변환
+    return total + workMinutes;
+  }, 0);
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return { hours, minutes };
 };
 
 const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
@@ -48,16 +64,20 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
         console.log(err);
       } finally {
         setLoading(false);
+        console.log(salaryCorrectData);
+        console.log(setAttachments);
       }
     };
     fetchSalaryCorrecteData();
-    console.log(salaryCorrectData);
-    console.log(setAttachments);
   }, [item.salaryId]);
+
+  // 총 근무 시간 계산
+  const { hours: totalHours, minutes: totalMinutes } =
+    calculateTotalWorkTime(attachments);
 
   return (
     <S.ModalMiddle>
-      {!loading && ( // 로딩 중이 아닐 때만 내용 표시
+      {!loading && (
         <>
           <S.ModalMiddleRow>
             <div className="key">제목</div>
@@ -75,7 +95,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                             window.open(att.requestDocumentUrl, '_blank')
                           }
                         >
-                          {att.requestDetail || '첨부 파일 보기'}
+                          {getFilteredFileNames([att.requestDocumentUrl])}{' '}
                         </button>
                       ) : (
                         '첨부 파일 없음'
@@ -86,7 +106,14 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
             </S.ScrollableValue>
           </S.ModalMiddleRow>
           <S.ModalMiddleRow>
-            <div className="key">정정 요청 시간</div>
+            <div className="key">
+              <S.ModalMiddleColumn>
+                정정 요청 시간
+                <span>
+                  (총 근무 시간: {totalHours}시간 {totalMinutes}분)
+                </span>
+              </S.ModalMiddleColumn>
+            </div>
             <S.ScrollableValue>
               {attachments.length > 0
                 ? attachments.map((att) => (
@@ -98,15 +125,20 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                 : '정정 요청 기록이 없습니다.'}
             </S.ScrollableValue>
           </S.ModalMiddleRow>
+
           <div className="description">
-            {attachments.length > 0 &&
+            {attachments.length > 0 ? (
               attachments.map((att) => (
                 <div key={att.requestId}>
-                  {att.requestDetail
-                    ? att.requestDetail
-                    : '설명이 작성되지 않았습니다.'}
+                  {att.requestDetail ? att.requestDetail : null}
                 </div>
-              ))}
+              ))
+            ) : (
+              <p>설명이 작성되지 않았습니다.</p>
+            )}
+            {attachments.every((att) => !att.requestDetail) && (
+              <p>설명이 작성되지 않았습니다.</p>
+            )}
           </div>
           <div className="reject">
             거절 사유: {item.rejectReason || '입력되지 않았습니다.'}
@@ -178,6 +210,14 @@ const S = {
   ModalMiddleRow: styled.div`
     display: flex;
     flex-direction: row;
+    span {
+      font-size: 12px;
+    }
+  `,
+
+  ModalMiddleColumn: styled.div`
+    display: flex;
+    flex-direction: column;
   `,
 
   ScrollableValue: styled.div`

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
 import { uploadFile, deleteFile } from '../../../../../../utils';
-
+import { useFetchUserInfo } from '../../../../../../hooks';
 export type OvertimeRecord = {
   start: string;
   end: string;
@@ -18,12 +18,26 @@ type MiddleProps = {
   setOvertimeTotal: React.Dispatch<React.SetStateAction<number>>;
 };
 
+// 초과 근무 시간 포맷
 export const formatOvertimeTotal = (totalHours: number) => {
   const hours = Math.floor(totalHours);
   const minutes = Math.round((totalHours - hours) * 60);
   return `${hours}시간 ${minutes}분`;
 };
 
+// URL에서 이름 추출
+export const getFilteredFileNames = (filePaths: string[]) => {
+  return filePaths
+    .map((path) => {
+      const decodedPath = decodeURIComponent(path);
+      const fileNameWithQuery = decodedPath.split('/').pop();
+      const fileName = fileNameWithQuery?.split('?')[0];
+      return fileName?.replace(/^\d+_?/, '');
+    })
+    .join(', ');
+};
+
+// 날짜 포맷
 const formatDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -57,7 +71,10 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const userId = 'gRvGt6IuotQ2d3FzXXFoCbepLAg1';
+  const { userInfo, error } = useFetchUserInfo();
+
+  if (error) return <div>오류 발생: {error.message}</div>;
+  const userId = userInfo?.userId;
 
   const handleAdd = async () => {
     if (overtimeStart && overtimeEnd) {
@@ -246,12 +263,13 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
                 type="text"
                 value={
                   record.filePath && record.filePath.split(', ').length > 0
-                    ? '파일 추가됨'
+                    ? getFilteredFileNames(record.filePath.split(', '))
                     : '파일 없음'
                 }
                 readOnly
                 className="input"
               />
+
               <button className="button" onClick={() => handleDelete(index)}>
                 삭제
               </button>
