@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { colors } from '../../../../../../../styles';
 import { useFetchUserInfo } from '../../../../../../../hooks';
 import { fetchDataFromDB } from '../../../../../../../firebase';
+import { getFilteredFileNames } from '../../../SalaryCorrectionApply/ApplyMiddle';
 import type {
   SalaryRequest,
   SalaryRequestItem,
@@ -31,7 +32,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
     item.requestList || []
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const { userInfo, error } = useFetchUserInfo();
+  const { userInfo } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryCorrecteData = async () => {
@@ -57,7 +58,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
 
   return (
     <S.ModalMiddle>
-      {!loading && ( // 로딩 중이 아닐 때만 내용 표시
+      {!loading && (
         <>
           <S.ModalMiddleRow>
             <div className="key">제목</div>
@@ -75,7 +76,8 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                             window.open(att.requestDocumentUrl, '_blank')
                           }
                         >
-                          {att.requestDetail || '첨부 파일 보기'}
+                          {getFilteredFileNames([att.requestDocumentUrl])}{' '}
+                          {/* 실제 파일명 출력 */}
                         </button>
                       ) : (
                         '첨부 파일 없음'
@@ -98,8 +100,20 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                 : '정정 요청 기록이 없습니다.'}
             </S.ScrollableValue>
           </S.ModalMiddleRow>
+
           <div className="description">
-            {error ? error.message : '설명이 작성되지 않았습니다.'}
+            {attachments.length > 0 ? (
+              attachments.map((att) => (
+                <div key={att.requestId}>
+                  {att.requestDetail ? att.requestDetail : null}
+                </div>
+              ))
+            ) : (
+              <p>설명이 작성되지 않았습니다.</p>
+            )}
+            {attachments.every((att) => !att.requestDetail) && (
+              <p>설명이 작성되지 않았습니다.</p>
+            )}
           </div>
           <div className="reject">
             거절 사유: {item.rejectReason || '입력되지 않았습니다.'}

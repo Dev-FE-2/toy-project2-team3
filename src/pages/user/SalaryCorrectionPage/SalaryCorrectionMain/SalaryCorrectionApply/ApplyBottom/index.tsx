@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSaveData } from '../../../../../../hooks/';
+import { useFetchUserInfo } from '../../../../../../hooks/';
+import { saveDataToDB } from '../../../../../../firebase';
 import type { OvertimeRecord } from '../ApplyMiddle';
 import type { SalaryRequest } from '../../../../../../types/interface';
 import { colors } from '../../../../../../styles';
+import Loading from '../../../../../../components/Loading';
+import { fetchDataFromDB } from '../../../../../../firebase';
 
 type ApplyBottomProps = {
   overtimeTotal: number;
@@ -16,39 +19,84 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
   overtimeTotal,
   setIsVisible,
 }) => {
-  const { saveData, isSaving, error } = useSaveData<SalaryRequest>({
-    table: 'SalaryRequest',
-  });
+  const { userInfo, isLoading, error } = useFetchUserInfo();
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleRegister = async () => {
-    const newSalaryRequest: SalaryRequest = {
-      salaryRequestId: '',
-      requestedUserId: 'gRvGt6IuotQ2d3FzXXFoCbepLAg1',
-      salaryId: '',
-      requestList: overtimeRecords.map((record, index) => ({
-        requestId: `fixedRequestItemId${index}`,
-        requestStartedAt: record.start,
-        requestEndedAt: record.end,
-        requestWorkingTime: record.hours,
-        requestDetail: record.description,
-        requestDocumentUrl: record.filePath,
-      })),
-      requestedAt: new Date().toISOString(),
-      handledUserId: '',
-      handleStatus: '처리 전',
-      handleDetail: '',
-      handledAt: '',
+    const createdAt = new Date().toISOString();
+    const requestedMonth = new Date(createdAt).toLocaleString('ko-KR', {
+      month: 'long',
+    });
+
+    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`;
+    const newSalaryId = `salaryId-${new Date().getTime()}`; // 고유한 salaryId 생성
+
+    const newRequestItem = {
+      requestId: `requestId-${new Date().getTime()}`,
+      requestStartedAt: overtimeRecords[0].start,
+      requestEndedAt: overtimeRecords[0].end,
+      requestWorkingTime: overtimeRecords[0].hours,
+      requestDetail: overtimeRecords[0].description,
+      requestDocumentUrl: overtimeRecords[0].filePath,
     };
 
+    const newSalaryRequest: SalaryRequest = {
+      handleDetail: '',
+      handleStatus: '처리 전',
+      handledAt: '',
+      handledUserId: '',
+      rejectReason: '',
+      requestList: [newRequestItem],
+      requestedAt: createdAt,
+      requestedTitle: `${requestedMonth} 급여 정산 오류`,
+      requestedUserId: userInfo?.userId as string,
+      salaryId: newSalaryId,
+    };
+
+    setIsSaving(true);
     try {
-      // 데이터 저장
-      const savedKey = await saveData(newSalaryRequest);
-      console.log('요청이 성공적으로 저장되었습니다. 키:', savedKey);
+      const existingData = await fetchDataFromDB<SalaryRequest>({
+        table: 'SalaryRequest',
+        key: userInfo?.userId,
+      });
+
+      // 기존 요청 데이터가 있을 경우
+      const updatedData = existingData
+        ? {
+            ...existingData.reduce((acc, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            }, {}),
+            [newSalaryRequestId]: {
+              ...newSalaryRequest,
+              requestList: existingData[0]?.requestList
+                ? [...existingData[0].requestList, newRequestItem]
+                : [newRequestItem],
+            },
+          }
+        : {
+            [newSalaryRequestId]: newSalaryRequest,
+          };
+
+      // saveDataToDB를 사용하여 데이터 저장
+      await saveDataToDB({
+        table: 'SalaryRequest',
+        key: userInfo?.userId,
+        data: updatedData,
+      });
+
+      console.log('요청이 성공적으로 저장되었습니다.');
       setIsVisible(false);
     } catch (err) {
       console.error('저장 중 오류 발생:', err);
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  // 로딩 상태 처리
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류 발생: {error.message}</div>;
 
   // 총 시간을 시간과 분으로 변환
   const formatOvertimeTotal = (totalHours: number) => {
@@ -74,12 +122,12 @@ const S = {
     height: 17vh;
     padding: 20px;
     display: flex;
-    flex-direction: column; // 세로 방향으로 정렬
-    align-items: center; // 가운데 정렬
+    flex-direction: column;
+    align-items: center;
     p {
-      text-align: left; // 왼쪽 정렬
+      text-align: left;
       margin-bottom: 0.7vh;
-      width: 100%; // 전체 너비를 차지하도록
+      width: 100%;
     }
     .reg-btn {
       background-color: ${colors.semantic.primary};
