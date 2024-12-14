@@ -10,6 +10,10 @@ import { User } from '../../../types/interface';
 import { COLLECTION_NAME } from '../../../constant';
 import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
+type UserState = Pick<
+  User,
+  'userId' | 'email' | 'name' | 'profileImgUrl' | 'team' | 'position'
+>;
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
@@ -39,13 +43,16 @@ const LoginForm = () => {
         `${COLLECTION_NAME.users}/${uid}`
       );
       const snapshot = await get(dbRef);
-      const userInfo: Pick<User, 'userId' | 'email' | 'name'> = snapshot.val();
+      const userInfo: UserState = snapshot.val();
 
       dispatch(
         login({
           userId: userInfo.userId,
           email: userInfo.email,
           name: userInfo.name,
+          profileImgUrl: userInfo.profileImgUrl,
+          team: userInfo.team,
+          position: userInfo.position,
         })
       );
 

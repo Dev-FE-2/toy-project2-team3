@@ -7,6 +7,9 @@ interface UserState {
     userId: string | null;
     name: string | null;
     email: string | null;
+    profileImgUrl: string | null;
+    team: string | null;
+    position: string | null;
   };
 }
 
@@ -17,6 +20,9 @@ const initialState: UserState = {
     userId: null,
     name: null,
     email: null,
+    profileImgUrl: null,
+    team: null,
+    position: null,
   },
 };
 
@@ -25,16 +31,20 @@ const userSlice = createSlice({
   name: 'user', // Slice 이름
   initialState,
   reducers: {
-    login: (
-      state,
-      action: PayloadAction<{ userId: string; name: string; email: string }>
-    ) => {
+    login: (state, action: PayloadAction<UserState['userInfo']>) => {
       state.isLoggedIn = true;
       state.userInfo = action.payload; // 전달받은 사용자 정보 저장
     },
     logout: (state) => {
       state.isLoggedIn = false;
-      state.userInfo = { userId: null, name: null, email: null };
+      state.userInfo = {
+        userId: null,
+        name: null,
+        email: null,
+        profileImgUrl: null,
+        team: null,
+        position: null,
+      };
     },
   },
 });
