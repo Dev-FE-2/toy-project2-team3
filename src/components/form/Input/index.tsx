@@ -52,9 +52,9 @@ const Input = ({
         name={name}
         id={name}
         value={value}
-        pattern={regExp.pattern}
         onChange={handleInputChange}
         {...(required ? { required } : {})}
+        {...(regExp ? { pattern: regExp.pattern } : {})}
       />
       <ErrorMessage>{message}</ErrorMessage>
     </S.Fieldset>
