@@ -11,6 +11,11 @@ export const REG_EXP: {
     pattern: '^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{7,}$',
     message: '7자 이상의 영문과 숫자를 함께 사용해주세요.',
   },
+  rePassword: {
+    regExp: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{7,}$/,
+    pattern: '^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{7,}$',
+    message: '7자 이상의 영문과 숫자를 함께 사용해주세요.',
+  },
   name: {
     regExp: /^[가-힣a-zA-Z]+(?:[\\s-][가-힣a-zA-Z]+)*$/,
     pattern: '^[가-힣a-zA-Z]+(?:[\\s-][가-힣a-zA-Z]+)*$',
