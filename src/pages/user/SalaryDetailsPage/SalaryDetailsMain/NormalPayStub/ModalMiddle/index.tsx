@@ -41,7 +41,7 @@ const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">{item.baseSalary.toLocaleString()}원</div>
+          <div className="value">{item.baseSalary.toLocaleString()}</div>
         </div>
         <div className="title__value">{item.baseWorkingHours}시간</div>
         <div className="title__value" />
@@ -54,7 +54,7 @@ const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">{item.overtime.toLocaleString()}원</div>
+          <div className="value">{item.overtime.toLocaleString()}</div>
         </div>
         <div className="title__value">{item.overtimeHours}시간</div>
         <div className="title__value" />
@@ -67,7 +67,7 @@ const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">{item.nightPay.toLocaleString()}원</div>
+          <div className="value">{item.nightPay.toLocaleString()}</div>
         </div>
         <div className="title__value">{item.nightWorkingHours}시간</div>
         <div className="title__value" />
@@ -120,7 +120,7 @@ const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
       <S.ModalMiddleRow>
         <div className="title__key">지급액 계</div>
         <div className="title__value">
-          <div className="value">{totalPayment.toLocaleString()}원</div>
+          <div className="value">{totalPayment.toLocaleString()}</div>
         </div>{' '}
         <div className="title__value">총 근무 시간</div>{' '}
         <div className="title__value">
@@ -133,9 +133,7 @@ const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
         <S.ModalMiddleWrapper />
         <div className="title__value">실 수령액 (원)</div>
         <div className="title__value">
-          <div className="value">
-            {Math.floor(netPayment).toLocaleString()}원
-          </div>
+          <div className="value">{Math.floor(netPayment).toLocaleString()}</div>
         </div>
       </S.ModalMiddleRow>
     </S.ModalMiddle>

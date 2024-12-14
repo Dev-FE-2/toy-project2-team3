@@ -22,7 +22,7 @@ const ModalBottom: React.FC<BottomProps> = ({ item }) => {
         <S.ItemCeilDouble>
           연장근로시간 수
           <div className="value">
-            ({item.overtimeHours}시간) x {wage.toLocaleString()}원 x 1.5
+            ({item.overtimeHours}시간) x {wage.toLocaleString()}(원) x 1.5
           </div>
         </S.ItemCeilDouble>
         <S.ItemCeil>
@@ -36,7 +36,7 @@ const ModalBottom: React.FC<BottomProps> = ({ item }) => {
         <S.ItemCeilDouble>
           야간근로시간 수
           <div className="value">
-            ({item.nightWorkingHours}시간) x {wage.toLocaleString()}원 x 0.5
+            ({item.nightWorkingHours}시간) x {wage.toLocaleString()}(원) x 0.5
           </div>
         </S.ItemCeilDouble>
         <S.ItemCeil>
