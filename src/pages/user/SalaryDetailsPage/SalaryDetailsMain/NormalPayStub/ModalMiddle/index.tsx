@@ -1,8 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
+import { Item } from '../../../SalaryDetailsMain/';
 
-const ModalMiddle = () => {
+type MiddleProps = {
+  item: Item;
+};
+
+const ModalMiddle: React.FC<MiddleProps> = ({ item }) => {
+  // 총 지급액 계산
+  const totalPayment = item.baseSalary + item.overtime + item.nightPay;
+
+  // 실 수령액 계산
+  const netPayment = totalPayment * 0.9;
+
   return (
     <S.ModalMiddle>
       <S.ModalMiddleRow>
@@ -30,9 +41,9 @@ const ModalMiddle = () => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">3,200,000</div>
+          <div className="value">{item.baseSalary.toLocaleString()}원</div>
         </div>
-        <div className="title__value">40시간</div>
+        <div className="title__value">{item.baseWorkingHours}시간</div>
         <div className="title__value" />
       </S.ModalMiddleRow>
       <S.ModalMiddleRow>
@@ -43,9 +54,9 @@ const ModalMiddle = () => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">379,728</div>
+          <div className="value">{item.overtime.toLocaleString()}원</div>
         </div>
-        <div className="title__value">10시간</div>
+        <div className="title__value">{item.overtimeHours}시간</div>
         <div className="title__value" />
       </S.ModalMiddleRow>
       <S.ModalMiddleRow>
@@ -56,9 +67,9 @@ const ModalMiddle = () => {
           </S.ModalMiddleRow>
         </div>
         <div className="title__value">
-          <div className="value">15,822</div>
+          <div className="value">{item.nightPay.toLocaleString()}원</div>
         </div>
-        <div className="title__value">5시간</div>
+        <div className="title__value">{item.nightWorkingHours}시간</div>
         <div className="title__value" />
       </S.ModalMiddleRow>
       <S.ModalMiddleRow>
@@ -109,17 +120,22 @@ const ModalMiddle = () => {
       <S.ModalMiddleRow>
         <div className="title__key">지급액 계</div>
         <div className="title__value">
-          <div className="value">3,940,482</div>
+          <div className="value">{totalPayment.toLocaleString()}원</div>
         </div>{' '}
         <div className="title__value">총 근무 시간</div>{' '}
-        <div className="title__value">55시간</div>
+        <div className="title__value">
+          {item.baseWorkingHours + item.overtimeHours + item.nightWorkingHours}
+          시간
+        </div>
       </S.ModalMiddleRow>
 
       <S.ModalMiddleRow>
         <S.ModalMiddleWrapper />
         <div className="title__value">실 수령액 (원)</div>
         <div className="title__value">
-          <div className="value">3,472,161</div>
+          <div className="value">
+            {Math.floor(netPayment).toLocaleString()}원
+          </div>
         </div>
       </S.ModalMiddleRow>
     </S.ModalMiddle>
