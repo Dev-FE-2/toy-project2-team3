@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useFetchUserInfo } from '../../../../../../hooks/';
-import { saveDataToDB } from '../../../../../../firebase';
+import { saveDataToDB } from '../../../../../../firebase'; // saveDataToDB 임포트
 import type { OvertimeRecord } from '../ApplyMiddle';
 import type { SalaryRequest } from '../../../../../../types/interface';
 import { colors } from '../../../../../../styles';
 import Loading from '../../../../../../components/Loading';
-import { fetchDataFromDB } from '../../../../../../firebase';
+import { fetchDataFromDB } from '../../../../../../firebase'; // fetchDataFromDB 임포트
 
 type ApplyBottomProps = {
   overtimeTotal: number;
@@ -28,11 +28,11 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       month: 'long',
     });
 
-    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`;
+    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`; // 고유한 SalaryRequestId 생성
     const newSalaryId = `salaryId-${new Date().getTime()}`; // 고유한 salaryId 생성
 
     const newRequestItem = {
-      requestId: `requestId-${new Date().getTime()}`,
+      requestId: `requestId-${new Date().getTime()}`, // 고유한 requestId
       requestStartedAt: overtimeRecords[0].start,
       requestEndedAt: overtimeRecords[0].end,
       requestWorkingTime: overtimeRecords[0].hours,
@@ -46,43 +46,44 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       handledAt: '',
       handledUserId: '',
       rejectReason: '',
-      requestList: [newRequestItem],
+      requestList: [newRequestItem], // 새로운 요청 항목 생성
       requestedAt: createdAt,
       requestedTitle: `${requestedMonth} 급여 정산 오류`,
       requestedUserId: userInfo?.userId as string,
       salaryId: newSalaryId,
     };
 
-    setIsSaving(true);
+    setIsSaving(true); // 저장 중 상태로 변경
     try {
+      // 기존 요청 데이터 가져오기
       const existingData = await fetchDataFromDB<SalaryRequest>({
         table: 'SalaryRequest',
-        key: userInfo?.userId,
+        key: userInfo?.userId, // 사용자 ID를 키로 사용
       });
 
       // 기존 요청 데이터가 있을 경우
       const updatedData = existingData
         ? {
             ...existingData.reduce((acc, curr) => {
-              acc[curr.id] = curr;
+              acc[curr.id] = curr; // 기존 요청 데이터를 키로 재구성
               return acc;
             }, {}),
             [newSalaryRequestId]: {
               ...newSalaryRequest,
               requestList: existingData[0]?.requestList
                 ? [...existingData[0].requestList, newRequestItem]
-                : [newRequestItem],
+                : [newRequestItem], // 기존 요청이 있을 경우 그 리스트에 추가
             },
           }
         : {
-            [newSalaryRequestId]: newSalaryRequest,
+            [newSalaryRequestId]: newSalaryRequest, // 새로운 요청 데이터만 포함
           };
 
       // saveDataToDB를 사용하여 데이터 저장
       await saveDataToDB({
         table: 'SalaryRequest',
-        key: userInfo?.userId,
-        data: updatedData,
+        key: userInfo?.userId, // 사용자 ID를 key로 사용
+        data: updatedData, // 업데이트된 데이터 저장
       });
 
       console.log('요청이 성공적으로 저장되었습니다.');
@@ -90,7 +91,7 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
     } catch (err) {
       console.error('저장 중 오류 발생:', err);
     } finally {
-      setIsSaving(false);
+      setIsSaving(false); // 저장 완료 상태로 변경
     }
   };
 
