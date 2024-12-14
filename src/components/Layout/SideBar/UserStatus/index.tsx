@@ -83,13 +83,19 @@ const StyledBottomContainer = styled.div`
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
-  color: #4a493f;
   margin-bottom: 0.5vw;
 
   .material-symbols-outlined {
     font-size: 42px; // 아이콘 크기 조정
-    margin-left: 10px; // 왼쪽 여백 추가
+    margin-right: 0.5vw;
     cursor: pointer; // 커서 변경
+  }
+
+  img {
+    width: 20%;
+    height: 80%;
+    cursor: pointer;
+    border-radius: 8px;
   }
 `;
 
@@ -97,19 +103,23 @@ const StyledUserInfo = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  margin-right: 25%;
+  margin-right: 20%;
   box-sizing: border-box;
 `;
 
 const StyledName = styled.span`
   font-weight: 700;
   font-size: 1.5em;
+  min-width: 4vw;
+  max-width: 4vw;
 `;
 
 const StyledSchedule = styled.span`
   font-weight: 700;
   font-size: 0.8em;
   color: #91918b;
+  min-width: 5vw;
+  max-width: 5vw;
 `;
 
 export default UserStatus;

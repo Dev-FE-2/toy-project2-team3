@@ -15,6 +15,7 @@ export interface User {
   department: string;
   isAdmin: boolean;
   isActivated: boolean;
+  schedule: string;
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp
 }
