@@ -2,7 +2,7 @@ import { useState, ChangeEvent, MouseEvent } from 'react';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
-import { Form, Input, ErrorMessage } from '../../../components';
+import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
@@ -38,6 +38,9 @@ const LoginForm = () => {
 
   return (
     <Form>
+      <LinkText linkTo="/signup">
+        아직 회원가입하지 않으셨나요? <strong>회원가입하기</strong>
+      </LinkText>
       <Input
         type="email"
         label="이메일"
@@ -45,6 +48,7 @@ const LoginForm = () => {
         value={email}
         placeholder="이메일을 입력해주세요"
         onChange={onChangeEmail}
+        required={true}
       />
       <Input
         type="password"
@@ -53,11 +57,15 @@ const LoginForm = () => {
         value={password}
         placeholder="비밀번호를 입력해주세요"
         onChange={onChangePassword}
+        required={true}
       />
       <button className="button primary" type="submit" onClick={handleSubmit}>
         로그인
       </button>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      <ErrorMessage>{errorMessage}</ErrorMessage>
+      <LinkText linkTo="/signup">
+        비밀번호를 잊으셨나요? <strong>비밀번호 재설정</strong>
+      </LinkText>
     </Form>
   );
 };
