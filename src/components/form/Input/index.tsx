@@ -8,7 +8,7 @@ interface InputProps {
   label: string;
   type: string;
   placeholder: string;
-  name: string;
+  name: keyof typeof REG_EXP & string; // & 교차 타입의 결과는 두 타입의 공통집합으로 계산
   value: string;
   required?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -28,8 +28,6 @@ const Input = ({
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-
-    console.log(regExp);
 
     if (regExp) {
       const { pattern, message } = regExp;
@@ -78,8 +76,16 @@ const S = {
       border: ${border.default};
       border-radius: ${border.radius.xs};
 
+      &:focus-visible {
+        outline-color: ${colors.semantic.hover.primary};
+      }
+
       &:valid {
-        border-color: ${colors.semantic.primary};
+        border-color: ${colors.semantic.border};
+      }
+
+      &:invalid:placeholder-shown {
+        border-color: ${colors.semantic.border};
       }
 
       &:invalid {
