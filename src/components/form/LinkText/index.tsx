@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { colors } from '../../../styles';
 
@@ -10,7 +11,7 @@ type LinkTextProps = {
 const LinkText: FC<LinkTextProps> = ({ children, linkTo }) => {
   return (
     <S.LinkText>
-      <a href={linkTo}>{children}</a>
+      <Link to={linkTo}>{children}</Link>
     </S.LinkText>
   );
 };
