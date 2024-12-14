@@ -5,7 +5,7 @@ import { ref, set } from 'firebase/database';
 import { auth, database } from '../../../firebaseConfig';
 import { generateEmployeeId } from '../../../utils';
 import { COLLECTION_NAME } from '../../../constant';
-import { Form, Input, ErrorMessage } from '../../../components';
+import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
@@ -91,6 +91,9 @@ const SignUpForm = () => {
 
   return (
     <Form>
+      <LinkText linkTo="/login">
+        이미 회원가입하셨나요? <strong>로그인하기</strong>
+      </LinkText>
       <Input
         type="email"
         label="이메일"

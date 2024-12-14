@@ -1,8 +1,8 @@
 export * from './form';
-export * from './FileUploading';
-export * from './Layout';
-export * from './Loading';
-export * from './Notice';
-export * from './Pagination';
-export * from './Title';
 export * from './modal';
+export { default as FileUploading } from './FileUploading';
+export { default as Layout } from './Layout';
+export { default as Loading } from './Loading';
+export { default as Pagination } from './Pagination';
+export { default as PageTitle } from './PageTitle';
+export { default as PageContainer } from './PageContainer';

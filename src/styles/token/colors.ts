@@ -112,8 +112,9 @@ const semantic = {
     light: scale.neutral.s100,
     gray: scale.neutral.s60,
   },
-  border: scale.neutral.s60,
+  border: scale.neutral.s80,
   disabled: scale.neutralVariant.s60,
+  info: scale.neutral.s80,
 };
 
 export const colors = { scale, semantic };
