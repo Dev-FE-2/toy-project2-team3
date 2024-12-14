@@ -1,4 +1,5 @@
 import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
@@ -8,6 +9,7 @@ type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,7 +26,7 @@ const LoginForm = () => {
         password
       );
 
-      alert('성공적으로 로그인 했습니다!');
+      navigate('/userHome');
 
       console.log('로그인 성공 후 반환되는 데이터', userCredential);
     } catch (error) {
@@ -63,9 +65,9 @@ const LoginForm = () => {
         로그인
       </button>
       <ErrorMessage>{errorMessage}</ErrorMessage>
-      <LinkText linkTo="/signup">
+      {/* <LinkText linkTo="/signup">
         비밀번호를 잊으셨나요? <strong>비밀번호 재설정</strong>
-      </LinkText>
+      </LinkText> */}
     </Form>
   );
 };
