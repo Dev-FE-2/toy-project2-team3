@@ -1,13 +1,7 @@
 import Router from './routes/Router';
-import Counter from './components/Counter';
 
 function App() {
-  return (
-    <>
-      <Router />
-      <Counter />
-    </>
-  );
+  return <Router />;
 }
 
 export default App;
