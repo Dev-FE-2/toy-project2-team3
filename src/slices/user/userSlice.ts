@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface UserState {
   isLoggedIn: boolean;
   userInfo: {
-    id: string | null;
+    userId: string | null;
     name: string | null;
     email: string | null;
   };
@@ -14,7 +14,7 @@ interface UserState {
 const initialState: UserState = {
   isLoggedIn: false,
   userInfo: {
-    id: null,
+    userId: null,
     name: null,
     email: null,
   },
@@ -27,14 +27,14 @@ const userSlice = createSlice({
   reducers: {
     login: (
       state,
-      action: PayloadAction<{ id: string; name: string; email: string }>
+      action: PayloadAction<{ userId: string; name: string; email: string }>
     ) => {
       state.isLoggedIn = true;
       state.userInfo = action.payload; // 전달받은 사용자 정보 저장
     },
     logout: (state) => {
       state.isLoggedIn = false;
-      state.userInfo = { id: null, name: null, email: null };
+      state.userInfo = { userId: null, name: null, email: null };
     },
   },
 });

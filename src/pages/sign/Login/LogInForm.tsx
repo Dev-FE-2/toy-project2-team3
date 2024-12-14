@@ -1,8 +1,13 @@
 import { useState, ChangeEvent, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../firebaseConfig';
+import { ref, get, DatabaseReference } from 'firebase/database';
+import { auth, database } from '../../../firebaseConfig';
+import { login } from '../../../slices/user/actions';
+import { User } from '../../../types/interface';
+import { COLLECTION_NAME } from '../../../constant';
 import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
@@ -10,6 +15,8 @@ type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,9 +33,23 @@ const LoginForm = () => {
         password
       );
 
-      navigate('/userHome');
+      const { uid } = userCredential.user;
+      const dbRef: DatabaseReference = ref(
+        database,
+        `${COLLECTION_NAME.users}/${uid}`
+      );
+      const snapshot = await get(dbRef);
+      const userInfo: Pick<User, 'userId' | 'email' | 'name'> = snapshot.val();
 
-      console.log('로그인 성공 후 반환되는 데이터', userCredential);
+      dispatch(
+        login({
+          userId: userInfo.userId,
+          email: userInfo.email,
+          name: userInfo.name,
+        })
+      );
+
+      navigate('/userHome');
     } catch (error) {
       if (error instanceof FirebaseError) {
         setErrorMessage(error.message);
