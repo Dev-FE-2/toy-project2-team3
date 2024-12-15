@@ -1,11 +1,16 @@
-import React from 'react';
+import { styled } from 'styled-components';
+import { colors } from '../../../styles';
 
 const SalaryRequest = () => {
-  return (
-    <div>
-      <h1>SalaryRequest페이지입니다.</h1>
-    </div>
-  );
+  return <S.Content>메인페이지 내용입니다.</S.Content>;
+};
+
+const S = {
+  Content: styled.div`
+    height: 100vh;
+    width: 100%;
+    background-color: ${colors.semantic.background.light};
+  `,
 };
 
 export default SalaryRequest;
