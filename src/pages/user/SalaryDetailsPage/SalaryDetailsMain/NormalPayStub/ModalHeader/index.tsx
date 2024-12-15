@@ -1,20 +1,26 @@
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
+import { useFetchUserInfo } from '../../../../../../hooks';
 
 const ModalHeader = () => {
+  const { userInfo, isLoading, error } = useFetchUserInfo();
+
+  if (isLoading) return <div>로딩중 입니다.. </div>;
+  if (error) return <div>에러 : {error.message}</div>;
+
   return (
     <S.ModalHeader>
       <S.ModalHeaderRow>
         <div className="key">성명</div>
-        <div className="value">홍길동</div>
+        <div className="value">{userInfo?.name}</div>
         <div className="key">사번</div>
-        <div className="value">073542</div>
+        <div className="value">{userInfo?.employeeNumber}</div>
       </S.ModalHeaderRow>
       <S.ModalHeaderRow>
         <div className="key">부서</div>
-        <div className="value">개발지원팀</div>
+        <div className="value">{userInfo?.department}</div>
         <div className="key">직급</div>
-        <div className="value">팀장</div>
+        <div className="value">{userInfo?.position}</div>
       </S.ModalHeaderRow>
     </S.ModalHeader>
   );

@@ -32,8 +32,8 @@ const StyledModalContainer = styled.div`
   height: 90vh;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 수평 가운데 정렬 */
-  justify-content: center; /* 수직 가운데 정렬 */
+  align-items: center;
+  justify-content: center;
 `;
 const StyledModalContent = styled.div`
   width: 90%;
@@ -54,8 +54,7 @@ const StyledModalDivision = styled.div`
   z-index: 1;
 `;
 
-//const NormalPayStub: React.FC<NormalPayStubProps> = ({ item, onClose }) => {
-const NormalPayStub: React.FC<NormalPayStubProps> = ({ onClose }) => {
+const NormalPayStub: React.FC<NormalPayStubProps> = ({ item, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -87,9 +86,9 @@ const NormalPayStub: React.FC<NormalPayStubProps> = ({ onClose }) => {
         <StyledModalContent>
           <ModalHeader />
           <StyledModalDivision>세부 내역</StyledModalDivision>
-          <ModalMiddle />
+          <ModalMiddle item={item} />
           <StyledModalDivision>계산 방법</StyledModalDivision>
-          <ModalBottom></ModalBottom>
+          <ModalBottom item={item}></ModalBottom>
         </StyledModalContent>
       </StyledModalContainer>
     </StyledModalOverlay>
