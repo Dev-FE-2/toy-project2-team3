@@ -2,53 +2,22 @@ import styled from 'styled-components';
 import { border, colors, padding } from '../../../../../../../../styles';
 import { fetchDataFromDB } from '../../../../../../../../firebase/fetchDataFromDB';
 import { useCallback, useEffect, useState } from 'react';
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../../../state/store';
+import {
+  CurrentSchedule,
+  FormattedUserOrTeamScheduleData,
+  ScheduleData,
+} from '../../../../../core/schedule';
 
 interface MainCalendarDaysSchedulesProps {
-  currentSchedule: CurrentSchedule;
-  currentYear: number;
-  currentMonth: number;
   day: number;
 }
 
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface FormattedUserOrTeamScheduleData extends ScheduleData {
-  type: string;
-  name: string;
-  number: number;
-}
-
-const MainCalendarDaysSchedules = ({
-  currentSchedule,
-  currentYear,
-  currentMonth,
-  day,
-}: MainCalendarDaysSchedulesProps) => {
+const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
+  const { currentMonth, currentYear, currentSchedule } = useSelector(
+    (state: RootState) => state.schedule
+  );
   const [userScheduleData, setUserScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
