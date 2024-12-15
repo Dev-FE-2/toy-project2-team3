@@ -2,15 +2,29 @@ import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import { border } from '../../../../styles';
-import { StyledCheckButton } from '../../../../components';
+import Button from '../../../../components/form/Button';
 import { MONTHS } from '../constants';
+
+interface TeamData {
+  id: string;
+  name: string;
+  members: TeamMembersData[];
+}
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+  number: number;
+}
 
 interface ScheduleHeaderProps {
   currentMonth: number;
   currentYear: number;
   isDayClick: boolean;
+  clickedDate: number[];
+  teamData: TeamData[];
   handleYearMonthChange: (year: number, month: number) => void;
-  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
+  handleCModalOpen: () => void;
   setIsDayClick: (prop: boolean) => void;
 }
 
@@ -18,11 +32,18 @@ const ScheduleHeader = ({
   currentMonth,
   currentYear,
   isDayClick,
+  clickedDate,
+  teamData,
   handleYearMonthChange,
-  //setIsAddScheduleModalOpen,
+  handleCModalOpen,
   setIsDayClick,
 }: ScheduleHeaderProps) => {
   const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
+  const [year, month, day] = clickedDate;
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
+  const teamName = teamData.map((data) => data.name);
 
   const handleMonthClick = (clickedMonth: number) => {
     handleYearMonthChange(currentYear, clickedMonth + 1);
@@ -61,33 +82,50 @@ const ScheduleHeader = ({
           >
             arrow_back_ios
           </S.Icon>
-          <div>응급 1팀 | 2024-12-10</div>
-          {/* 👆 추후 데이터 바인딩, 전역 상태 관리로 변경할 때 옳게 표시할 예정입니다 */}
-          <div></div>
+          <div style={{ marginLeft: '110px' }}>
+            {teamName} | {formattedClickedDate}
+          </div>
+          <div style={{ marginRight: '16px' }}>
+            <Button
+              color="primary"
+              text="일정 등록"
+              onClick={handleCModalOpen}
+              padding="7px 28px"
+              maxHeight="40px"
+            />
+          </div>
         </>
       ) : (
-        <MonthPicker
-          content={
-            isMonthPickerDetailOpen
-              ? currentYear
-              : `${currentYear} ${MONTHS[currentMonth]}`
-          }
-          currentMonth={currentMonth}
-          isMonthPickerDetailOpen={isMonthPickerDetailOpen}
-          handleMonthClick={handleMonthClick}
-          setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
-          onClickLeft={
-            isMonthPickerDetailOpen ? handlePrevYear : handlePrevMonth
-          }
-          onClickRight={
-            isMonthPickerDetailOpen ? handleNextYear : handleNextMonth
-          }
-        />
+        <>
+          <div></div>
+          <MonthPicker
+            content={
+              isMonthPickerDetailOpen
+                ? currentYear
+                : `${currentYear} ${MONTHS[currentMonth]}`
+            }
+            currentMonth={currentMonth}
+            isMonthPickerDetailOpen={isMonthPickerDetailOpen}
+            handleMonthClick={handleMonthClick}
+            setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
+            onClickLeft={
+              isMonthPickerDetailOpen ? handlePrevYear : handlePrevMonth
+            }
+            onClickRight={
+              isMonthPickerDetailOpen ? handleNextYear : handleNextMonth
+            }
+          />
+          <div style={{ marginRight: '16px' }}>
+            <Button
+              color="primary"
+              text="일정 등록"
+              onClick={handleCModalOpen}
+              padding="7px 28px"
+              maxHeight="40px"
+            />
+          </div>
+        </>
       )}
-      {/* <StyledCheckButton onClick={() => setIsAddScheduleModalOpen(true)}>
-        등록
-      </StyledCheckButton>{' '} */}
-      {/* 임시 */}
     </S.Header>
   );
 };
@@ -97,10 +135,10 @@ const S = {
     width: 1250px;
     height: 3rem;
     display: flex;
-    justify-content: ${(props) =>
-      props.isDayClick ? 'space-between' : 'center'};
+    justify-content: space-between;
     align-items: center;
     border: ${border.default};
+    position: relative;
   `,
   Icon: styled.div`
     margin-left: 0.5rem;

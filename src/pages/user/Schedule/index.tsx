@@ -3,8 +3,8 @@ import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
 import { useEffect, useState } from 'react';
-import AddScheduleModal from './core/AddScheduleModal';
 import { fetchDataFromDB } from '../../../firebase/fetchDataFromDB';
+import ScheduleModal from './core/ScheduleModal';
 
 interface TeamData {
   id: string;
@@ -15,6 +15,7 @@ interface TeamData {
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -23,13 +24,48 @@ interface CurrentSchedule {
   userId?: string;
 }
 
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+  documentName: string;
+  documentUrl: string;
+}
+
+type ModalType = 'C' | 'R' | 'U' | 'D';
+
 const Schedule = () => {
   const CURRENT_MONTH = new Date().getMonth() + 1;
   const CURRENT_YEAR = new Date().getFullYear();
   const [currentMonth, setCurrentMonth] = useState(CURRENT_MONTH);
   const [currentYear, setCurrentYear] = useState(CURRENT_YEAR);
   const [isSixWeek, setIsSixWeek] = useState(false);
-  const [isAddScheduleModalOpen, setIsAddScheduleModalOpen] = useState(false);
+  const [targetSchedule, setTargetSchedule] = useState<TargetSchedule>({
+    id: '',
+    index: 0,
+    createdAt: '',
+    detail: '',
+    endedAt: '',
+    startedAt: '',
+    title: '',
+    updatedAt: '',
+    name: '',
+    userId: '',
+    documentName: '',
+    documentUrl: '',
+  });
+  const [modalType, setModalType] = useState<ModalType>('C');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [teamData, setTeamData] = useState<TeamData[]>([]);
   const [currentSchedule, setCurrentSchedule] = useState<CurrentSchedule>({
     type: '',
@@ -37,6 +73,7 @@ const Schedule = () => {
     userId: '',
   });
   const [isDayClick, setIsDayClick] = useState(false);
+  const [clickedDate, setClickedDate] = useState<number[]>([]);
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -44,18 +81,22 @@ const Schedule = () => {
   };
 
   const getTeamsData = async () => {
-    const teamsData = await fetchDataFromDB('Teams');
-    const formattedTeamsData: TeamData[] = teamsData
-      ? Object.entries(teamsData).map(([id, teamData]) => ({
-          id,
-          name: teamData.name,
-          members: teamData.members || [],
-        }))
-      : [];
+    const teamsData = (await fetchDataFromDB({ table: 'Teams' })) as TeamData[];
 
-    setTeamData(formattedTeamsData);
+    setTeamData(teamsData);
 
-    return formattedTeamsData;
+    return teamsData;
+  };
+
+  const handleCModalOpen = () => {
+    setModalType('C');
+    setIsModalOpen(true);
+  };
+
+  const handleRModalOpen = (targetSchedule: TargetSchedule) => {
+    setModalType('R');
+    setTargetSchedule(targetSchedule);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -76,8 +117,10 @@ const Schedule = () => {
             currentMonth={currentMonth}
             currentYear={currentYear}
             isDayClick={isDayClick}
+            clickedDate={clickedDate}
+            teamData={teamData}
             handleYearMonthChange={handleYearMonthChange}
-            setIsAddScheduleModalOpen={setIsAddScheduleModalOpen}
+            handleCModalOpen={handleCModalOpen}
             setIsDayClick={setIsDayClick}
           />
           <ScheduleMain
@@ -85,13 +128,19 @@ const Schedule = () => {
             currentMonth={currentMonth}
             currentYear={currentYear}
             isDayClick={isDayClick}
+            clickedDate={clickedDate}
             setIsSixWeek={setIsSixWeek}
             setIsDayClick={setIsDayClick}
+            setClickedDate={setClickedDate}
+            handleRModalOpen={handleRModalOpen}
           />
         </div>
-        {isAddScheduleModalOpen && (
-          <AddScheduleModal
-            setIsAddScheduleModalOpen={setIsAddScheduleModalOpen}
+        {isModalOpen && (
+          <ScheduleModal
+            targetSchedule={targetSchedule}
+            modalType={modalType}
+            setModalType={setModalType}
+            setIsModalOpen={setIsModalOpen}
           />
         )}
       </S.Wrapper>

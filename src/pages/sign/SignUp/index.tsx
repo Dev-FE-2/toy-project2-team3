@@ -1,11 +1,14 @@
 import SignUpForm from './SignUpForm';
+import { PageContainer, PageTitle, IntroLayout } from '../../../components';
 
 const SignUpPage = () => {
   return (
-    <div>
-      <h1>회원가입</h1>
-      <SignUpForm />
-    </div>
+    <IntroLayout>
+      <PageContainer>
+        <PageTitle>회원가입</PageTitle>
+        <SignUpForm />
+      </PageContainer>
+    </IntroLayout>
   );
 };
 
