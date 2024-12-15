@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { saveDataToDB } from '../../../../../../firebase/saveDataToDB';
 import { fetchDataFromDB } from '../../../../../../firebase/fetchDataFromDB';
 import FileUploading from '../../../../../../components/FileUploading';
 import Button from '../../../../../../components/form/Button';
-import { colors } from '../../../../../../styles';
+import { border, colors, padding } from '../../../../../../styles';
 import { fetchUserInfo } from '../../../../../../firebase';
 import { User } from '../../../../../../types/interface';
+import styled from 'styled-components';
 
 interface ScheduleList {
   createdAt: string;
@@ -247,16 +248,31 @@ const ScheduleModalContents = ({
     setModalType('U');
   };
 
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDetail(e.target.value);
+
+    if (textareaRef && textareaRef.current) {
+      textareaRef.current.style.height = '0px';
+      const scrollHeight = textareaRef.current.scrollHeight;
+
+      console.log(scrollHeight);
+      textareaRef.current.style.height = scrollHeight + 'px';
+    }
+  };
+
   return (
     <>
       <div style={{ fontSize: '20px', fontWeight: '700' }}>
-        {modalType === 'R'
-          ? `${targetSchedule.name}님의 일정`
-          : '새로운 일정 등록'}
+        {modalType === 'R' && `${targetSchedule.name}님의 일정`}
+        {modalType === 'C' && `새로운 일정 등록`}
+        {modalType === 'U' && `${targetSchedule.name}님의 일정 수정`}
       </div>
 
       <div>제목</div>
-      <input
+      <S.Input
+        modalType={modalType}
         readOnly={modalType === 'R'}
         value={modalType === 'R' ? targetSchedule.title : title}
         onChange={(e) => setTitle(e.target.value)}
@@ -267,14 +283,16 @@ const ScheduleModalContents = ({
         {titleError}
       </div>
       <div>시작 시간</div>
-      <input
+      <S.Input
+        modalType={modalType}
         readOnly={modalType === 'R'}
         value={modalType === 'R' ? targetSchedule.startedAt : startedAt}
         onChange={(e) => setStartedAt(e.target.value)}
         type="datetime-local"
       />
       <div>종료 시간</div>
-      <input
+      <S.Input
+        modalType={modalType}
         readOnly={modalType === 'R'}
         value={modalType === 'R' ? targetSchedule.endedAt : endedAt}
         onChange={(e) => setEndedAt(e.target.value)}
@@ -285,8 +303,16 @@ const ScheduleModalContents = ({
       </div>
       <div>첨부 파일</div>
 
-      {targetSchedule.documentName ? (
-        <div>{targetSchedule.documentName}</div>
+      {modalType === 'R' ? (
+        <S.Input
+          modalType={modalType}
+          value={
+            targetSchedule.documentName
+              ? targetSchedule.documentName
+              : '첨부파일이 없습니다'
+          }
+          readOnly
+        />
       ) : (
         <FileUploading
           filePath="schedule-doc"
@@ -295,14 +321,16 @@ const ScheduleModalContents = ({
         />
       )}
       <div>내용</div>
-      <textarea
+      <S.Textarea
+        modalType={modalType}
         readOnly={modalType === 'R'}
         value={modalType === 'R' ? targetSchedule.detail : detail}
-        onChange={(e) => setDetail(e.target.value)}
+        onChange={onChangeTextarea}
         name="content"
         id=""
         placeholder="일정 내용"
-      ></textarea>
+        ref={textareaRef}
+      ></S.Textarea>
       <div style={{ color: colors.semantic.danger, fontSize: '12px' }}>
         {detailError}
       </div>
@@ -310,16 +338,55 @@ const ScheduleModalContents = ({
         <Button color="success" text="등록" onClick={editSchedule} />
       )}
       {modalType === 'R' && (
-        <div>
+        <S.ButtonWrapper>
           <Button color="success" text="수정" onClick={handleEditMode} />
           <Button color="danger" text="삭제" onClick={deleteSchedule} />
-        </div>
+        </S.ButtonWrapper>
       )}
       {modalType === 'U' && (
-        <Button color="success" text="등록" onClick={editSchedule} />
+        <Button color="success" text="수정" onClick={editSchedule} />
       )}
     </>
   );
+};
+
+const S = {
+  Input: styled.input<{ modalType: ModalType }>`
+    width: 100%;
+    height: 40px;
+    line-height: 1;
+    padding: 0 ${padding.md};
+    border: ${border.default};
+    border-radius: ${border.radius.xs};
+
+    ${(props) =>
+      props.modalType === 'R'
+        ? `background-color: ${colors.scale.neutral.s95};
+          outline: none
+          `
+        : `outline-color: ${colors.semantic.hover.primary};`}
+  `,
+  Textarea: styled.textarea<{ modalType: ModalType }>`
+    width: 100%;
+    min-height: 104px;
+    max-height: 176px;
+    line-height: 1;
+    padding: ${padding.md};
+    border: ${border.default};
+    border-radius: ${border.radius.xs};
+    resize: none;
+
+    ${(props) =>
+      props.modalType === 'R'
+        ? `background-color: ${colors.scale.neutral.s95};
+          outline: none
+          `
+        : `outline-color: ${colors.semantic.hover.primary};`}
+  `,
+  ButtonWrapper: styled.button`
+    display: flex;
+    justify-content: space-between;
+  `,
 };
 
 export default ScheduleModalContents;
