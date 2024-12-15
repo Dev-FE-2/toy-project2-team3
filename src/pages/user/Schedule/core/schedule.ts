@@ -44,8 +44,6 @@ interface TargetSchedule extends ScheduleList {
   index: number;
   name: string;
   userId: string;
-  documentName: string;
-  documentUrl: string;
 }
 
 type ModalType = 'C' | 'R' | 'U' | 'D';
