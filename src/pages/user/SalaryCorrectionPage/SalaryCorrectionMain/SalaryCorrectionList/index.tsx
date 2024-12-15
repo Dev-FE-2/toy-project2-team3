@@ -123,7 +123,7 @@ const SalaryCorrectionList = () => {
             </div>
           ))
         ) : (
-          <div>표시할 데이터가 없거나 불러오는 중입니다.</div>
+          <div>데이터가 존재하지 않습니다.</div>
         )}
       </S.SalaryMainContainer>
 
