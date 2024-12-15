@@ -51,7 +51,6 @@ const S = {
     display: flex;
   `,
   Title: styled.div`
-    margin-left: 7vw;
     font-size: 32px;
     margin-right: auto;
     font-weight: bold;

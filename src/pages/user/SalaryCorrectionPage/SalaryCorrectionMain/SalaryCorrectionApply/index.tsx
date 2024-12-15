@@ -38,9 +38,8 @@ const SalaryCorrectionApply: React.FC<ApplyProps> = ({ setIsVisible }) => {
 
 const S = {
   ApplyContainer: styled.div`
-    width: 70vw;
+    width: 100%;
     height: 85vh;
-    margin-left: 7vw;
     margin-top: 2vh;
     display: flex;
     flex-direction: column;

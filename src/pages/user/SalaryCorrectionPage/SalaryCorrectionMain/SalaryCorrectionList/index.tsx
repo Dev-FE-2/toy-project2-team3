@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import type { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
-import Pagination from '../../../../../components/Pagination';
+import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useFetchUserInfo } from '../../../../../hooks';
-//import Loading from '../../../../../components/Loading';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -22,14 +22,14 @@ const SalaryCorrectionList = () => {
   const [items, setItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const currentPage = useSelector((state) => state.pagination.currentPage);
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
   const { userInfo, isLoading } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
-      setLoading(true);
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
@@ -50,8 +50,6 @@ const SalaryCorrectionList = () => {
       } catch (err) {
         console.error(err);
         setItems([]);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -77,6 +75,8 @@ const SalaryCorrectionList = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.SalaryContainer>
@@ -139,9 +139,8 @@ const SalaryCorrectionList = () => {
 
 const S = {
   SalaryContainer: styled.div`
-    width: 70vw;
+    width: 100%;
     height: 70vh;
-    margin-left: 7vw;
     margin-top: 2vh;
     border: 1px solid ${colors.semantic.text.gray};
     display: flex;
