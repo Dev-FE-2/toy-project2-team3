@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { styled } from 'styled-components';
-import { padding } from '../../styles';
+import { padding } from '../../../styles';
 
 type PageContainerProps = {
   children: ReactNode;

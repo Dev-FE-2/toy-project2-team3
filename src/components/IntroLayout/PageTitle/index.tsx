@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { styled } from 'styled-components';
-import { padding, font } from '../../styles';
+import { padding, font } from '../../../styles';
 
 type PageTitleProps = {
   children: ReactNode;
