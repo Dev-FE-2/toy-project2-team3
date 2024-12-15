@@ -26,8 +26,8 @@ function Router() {
         <Route path="/" element={<Layout />}>
           {/* Layout 중첩 라우팅 */}
 
-          {/* 기본 경로는 로그인 페이지로 리다이렉트 */}
-          <Route index element={<Navigate to={URL.userHome.link} replace />} />
+          {/* 기본 경로 리다이렉트 설정 */}
+          <Route index element={<Navigate to={URL.schedule.link} replace />} />
 
           {/* user */}
 
@@ -91,8 +91,7 @@ function Router() {
         <Route path={URL.login.link} element={<Login />} />
         <Route path={URL.signup.link} element={<SignUp />} />
 
-        {/**!SECTION
-         * @TODO /intro/ 중첩 element로 IntroLayout 컴포넌트로 리팩토링 
+        {/**TODO - /intro/ 중첩 element로 IntroLayout 컴포넌트로 리팩토링 
          * 
           <Route path={URL.login.link} element={<Navigate to="/intro/login" replace />} />
           <Route path={URL.signup.link} element={<Navigate to="/intro/login" replace />} />

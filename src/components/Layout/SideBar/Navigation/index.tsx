@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../state/store';
+// import { useSelector } from 'react-redux';
+// import type { RootState } from '../../../../state/store';
 import { URL } from '../../../../constant';
 import { ITEMS_DATA } from './constant';
 import type { NavigationProps } from './type';
@@ -12,12 +12,12 @@ const {
   editProfile,
   salaryDetails,
   salaryCorrection,
-  employeeList,
-  salaryRequest,
+  // employeeList,
+  // salaryRequest,
 } = URL;
 
 const Navigation = ({ style }: NavigationProps) => {
-  const { userInfo } = useSelector((state: RootState) => state.user);
+  // const { userInfo } = useSelector((state: RootState) => state.user);
   const { padding } = style;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -120,7 +120,9 @@ const Navigation = ({ style }: NavigationProps) => {
         </React.Fragment>
       ))}
 
-      {userInfo?.isAdmin && (
+      {/**TODO - 어드민 기능 구현 후 사용
+       *  
+        {userInfo?.isAdmin && (
         <>
           <S.Link to={employeeList.link} onClick={() => handleItemClick(5)}>
             <S.MainNavItem
@@ -147,7 +149,7 @@ const Navigation = ({ style }: NavigationProps) => {
             </S.MainNavItem>
           </S.Link>
         </>
-      )}
+      )} */}
     </S.Navigation>
   );
 };
