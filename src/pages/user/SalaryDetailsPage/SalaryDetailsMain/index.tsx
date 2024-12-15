@@ -156,7 +156,7 @@ const SalaryDetailsMain = () => {
       <S.PaginationContainer>
         <PagiNation maxPage={2} />
       </S.PaginationContainer>
-      
+
       {isModalOpen && (
         <NormalPayStub item={selectedItem} onClose={closeModal} />
       )}

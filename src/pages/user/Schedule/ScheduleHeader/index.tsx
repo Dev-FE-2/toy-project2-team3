@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { useState } from 'react';
 import { border } from '../../../../styles';
-import { StyledCheckButton } from '../../../../components';
+// import { StyledCheckButton } from '../../../../components';
 import { MONTHS } from '../constants';
 
 interface ScheduleHeaderProps {
