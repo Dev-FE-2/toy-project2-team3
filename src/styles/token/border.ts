@@ -8,6 +8,7 @@ export const border = {
   default: `1px solid ${colors.semantic.border}`,
   radius: {
     xs: '4px',
+    sm: '8px',
     lg: '32px',
     values: {
       xs: 4,
