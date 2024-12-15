@@ -7,30 +7,10 @@ import { border, colors, padding } from '../../../../../../styles';
 import { fetchUserInfo } from '../../../../../../firebase';
 import { User } from '../../../../../../types/interface';
 import styled from 'styled-components';
-
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface TargetSchedule extends ScheduleList {
-  id: string;
-  index: number;
-  name: string;
-  userId: string;
-  documentName: string;
-  documentUrl: string;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../../state/store';
+import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
+import { ScheduleData, ScheduleList } from '../../schedule';
 
 interface NewScheduleEntry {
   title: string;
@@ -46,18 +26,17 @@ interface NewScheduleEntry {
 type ModalType = 'C' | 'R' | 'U' | 'D';
 
 interface ScheduleModalContentsProps {
-  targetSchedule: TargetSchedule;
-  modalType: ModalType;
-  setModalType: (type: ModalType) => void;
   handleOnCloseModal: () => void;
 }
 
 const ScheduleModalContents = ({
-  modalType,
-  setModalType,
-  targetSchedule,
   handleOnCloseModal,
 }: ScheduleModalContentsProps) => {
+  const dispatch = useDispatch();
+  const { targetSchedule, modalType } = useSelector(
+    (state: RootState) => state.schedule
+  );
+
   const [title, setTitle] = useState('');
   const [startedAt, setStartedAt] = useState('');
   const [endedAt, setEndedAt] = useState('');
@@ -80,6 +59,13 @@ const ScheduleModalContents = ({
       unSubscribe();
     };
   }, []);
+
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  if (!targetSchedule) {
+    handleOnCloseModal();
+    return null;
+  }
 
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
@@ -244,10 +230,8 @@ const ScheduleModalContents = ({
     setDetail(targetSchedule.detail);
     setDocumentUrl(targetSchedule.documentUrl);
     setDocumentName(targetSchedule.documentName);
-    setModalType('U');
+    dispatch(setModalType('U'));
   };
-
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDetail(e.target.value);

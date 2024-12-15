@@ -23,8 +23,8 @@ interface ScheduleList {
   startedAt: string;
   title: string;
   updatedAt: string;
-  documentName?: string;
-  documentUrl?: string;
+  documentName: string;
+  documentUrl: string;
 }
 
 interface ScheduleData {
