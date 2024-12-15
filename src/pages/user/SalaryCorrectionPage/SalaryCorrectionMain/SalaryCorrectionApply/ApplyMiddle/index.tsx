@@ -85,7 +85,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         return;
       }
       const hoursDiff = Math.abs(end.getTime() - start.getTime()) / 36e5;
-  
+
       const filePaths: string[] = [];
       const uploadPromises = uploadedFiles.map(async (file) => {
         return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
@@ -106,14 +106,14 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         description, // 이 부분에서 description을 그대로 사용
         filePath: filePaths.join(', '),
       };
-  
+
       // 상태 업데이트
       setLocalOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
       setOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
-  
+
       const newTotal = overtimeTotal + hoursDiff;
       onOvertimeUpdate(newTotal);
-  
+
       // 입력 초기화
       setOvertimeStart('');
       setOvertimeEnd('');
@@ -124,7 +124,6 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
       alert('시작 시간과 종료 시간을 입력하세요.');
     }
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -357,6 +356,11 @@ const S = {
       cursor: pointer;
       margin-bottom: 1.5vh;
       margin-right: 2vw;
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
     }
 
     .attach__button {
@@ -369,6 +373,11 @@ const S = {
       cursor: pointer;
       margin-bottom: 1.5vh;
       margin-right: 2vw;
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
     }
   `,
   ApplyMiddleRow: styled.div`

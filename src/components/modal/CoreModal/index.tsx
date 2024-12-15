@@ -105,6 +105,10 @@ export const StyledCheckButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &hover: {
+    background-color: ${colors.semantic.hover};
+  }
 `;
 
 export default CoreModal;
