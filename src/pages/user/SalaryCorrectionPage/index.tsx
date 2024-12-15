@@ -34,7 +34,6 @@ const S = {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
   `,
   MainContainer: styled.div`
     display: flex;

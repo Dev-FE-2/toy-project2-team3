@@ -32,8 +32,8 @@ const S = {
 
       .page-container {
         width: 100%;
-        max-width: 1400px;
-        padding: ${padding.xl} ${padding.md};
+        max-width: 1500px;
+        padding: 100px ${padding.md};
         height: 100vh;
         display: flex;
         flex-direction: column;
