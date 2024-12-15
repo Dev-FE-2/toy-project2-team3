@@ -1,13 +1,15 @@
 import { useState, ChangeEvent, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
-import { Input, ErrorMessage } from '../../../components/form';
+import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,7 +26,7 @@ const LoginForm = () => {
         password
       );
 
-      alert('성공적으로 로그인 했습니다!');
+      navigate('/userHome');
 
       console.log('로그인 성공 후 반환되는 데이터', userCredential);
     } catch (error) {
@@ -37,7 +39,10 @@ const LoginForm = () => {
   };
 
   return (
-    <article>
+    <Form>
+      <LinkText linkTo="/signup">
+        아직 회원가입하지 않으셨나요? <strong>회원가입하기</strong>
+      </LinkText>
       <Input
         type="email"
         label="이메일"
@@ -45,6 +50,7 @@ const LoginForm = () => {
         value={email}
         placeholder="이메일을 입력해주세요"
         onChange={onChangeEmail}
+        required={true}
       />
       <Input
         type="password"
@@ -53,12 +59,16 @@ const LoginForm = () => {
         value={password}
         placeholder="비밀번호를 입력해주세요"
         onChange={onChangePassword}
+        required={true}
       />
-      <button type="submit" onClick={handleSubmit}>
+      <button className="button primary" type="submit" onClick={handleSubmit}>
         로그인
       </button>
-      {errorMessage && <ErrorMessage value={errorMessage}></ErrorMessage>}
-    </article>
+      <ErrorMessage>{errorMessage}</ErrorMessage>
+      {/* <LinkText linkTo="/signup">
+        비밀번호를 잊으셨나요? <strong>비밀번호 재설정</strong>
+      </LinkText> */}
+    </Form>
   );
 };
 
