@@ -1,17 +1,17 @@
 const NESTED_PATHS = {
   index: {
     text: 'index',
-    pathName: '',
+    name: '',
     link: '/',
   },
   intro: {
     text: 'intro',
-    pathName: 'intro',
+    name: 'intro',
     link: '/intro/',
   },
   admin: {
     text: 'admin',
-    pathName: 'admin',
+    name: 'admin',
     link: '/admin/',
   },
 };
@@ -19,58 +19,58 @@ const NESTED_PATHS = {
 const URL = {
   userHome: {
     text: 'HOME',
-    pathName: 'userHome',
+    name: 'userHome',
     link: '/userHome',
   },
   editProfile: {
     text: '나의 정보',
-    pathName: 'editProfile',
+    name: 'editProfile',
     link: '/editProfile',
   },
   schedule: {
     text: '나의 업무',
-    pathName: 'schedule',
+    name: 'schedule',
     link: '/schedule',
   },
   attendance: {
     text: '나의 근태',
-    pathName: 'attendance',
+    name: 'attendance',
     link: '/attendance',
   },
   salary: {
     text: '나의 급여',
-    pathName: 'salary',
+    name: 'salary',
     link: '/salary',
   },
   salaryDetails: {
     text: '급여 내역',
-    pathName: 'salaryDetails',
+    name: 'salaryDetails',
     link: '/salaryDetails',
   },
   salaryCorrection: {
     text: '급여 정정 신청',
-    pathName: 'salaryCorrection',
+    name: 'salaryCorrection',
     link: '/salaryCorrection',
   },
   login: {
     text: '로그인',
-    pathName: 'login',
+    name: 'login',
     link: '/login',
   },
   signup: {
     text: '회원가입',
-    pathName: 'signup',
+    name: 'signup',
     link: '/signup',
   },
   employeeList: {
     text: '직원 관리',
-    pathName: 'employeeList',
-    link: `/${NESTED_PATHS.admin.pathName}/employeeList`,
+    name: 'employeeList',
+    link: `/${NESTED_PATHS.admin.name}/employeeList`,
   },
   salaryRequest: {
     text: '급여 정정 신청',
-    pathName: 'salaryRequest',
-    link: `/${NESTED_PATHS.admin.pathName}/salaryRequest`,
+    name: 'salaryRequest',
+    link: `/${NESTED_PATHS.admin.name}/salaryRequest`,
   },
 };
 

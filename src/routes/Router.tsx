@@ -33,7 +33,7 @@ function Router() {
 
           {/* 유저 메인 페이지 */}
           <Route
-            path={URL.userHome.pathName}
+            path={URL.userHome.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <UserHome />
@@ -42,7 +42,7 @@ function Router() {
           />
           {/* 회원 정보 페이지 */}
           <Route
-            path={URL.editProfile.pathName}
+            path={URL.editProfile.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <EditProfile />
@@ -51,7 +51,7 @@ function Router() {
           />
           {/* 업무 일정 페이지 */}
           <Route
-            path={URL.schedule.pathName}
+            path={URL.schedule.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Schedule />
@@ -60,7 +60,7 @@ function Router() {
           />
           {/* 근태 관리 페이지 */}
           <Route
-            path={URL.attendance.pathName}
+            path={URL.attendance.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Attendance />
@@ -69,7 +69,7 @@ function Router() {
           />
           {/* 급여 정정 신청 페이지 */}
           <Route
-            path={URL.salaryCorrection.pathName}
+            path={URL.salaryCorrection.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <SalaryCorrection />
@@ -78,7 +78,7 @@ function Router() {
           />
           {/* 급여 내역 페이지 */}
           <Route
-            path={URL.salaryDetails.pathName}
+            path={URL.salaryDetails.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <SalaryDetails />
@@ -97,20 +97,17 @@ function Router() {
           <Route path={URL.login.link} element={<Navigate to="/intro/login" replace />} />
           <Route path={URL.signup.link} element={<Navigate to="/intro/login" replace />} />
           <Route path={NESTED_PATHS.intro.link} element={<IntroLayout />}>
-            <Route path={URL.login.pathName} element={<Login />} />
-            <Route path={URL.signup.pathName} element={<SignUp />} />
+            <Route path={URL.login.name} element={<Login />} />
+            <Route path={URL.signup.name} element={<SignUp />} />
           </Route>
          */}
 
         {/** admin */}
         <Route path={NESTED_PATHS.admin.link} element={<Layout />}>
           {/* 관리자 직원 목록 */}
-          <Route path={URL.employeeList.pathName} element={<EmployeeList />} />
+          <Route path={URL.employeeList.name} element={<EmployeeList />} />
           {/* 급여 정정 요청 페이지 */}
-          <Route
-            path={URL.salaryRequest.pathName}
-            element={<SalaryRequest />}
-          />
+          <Route path={URL.salaryRequest.name} element={<SalaryRequest />} />
         </Route>
       </Routes>
     </BrowserRouter>
