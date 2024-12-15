@@ -1,17 +1,19 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { getPageTitle } from '../../utils';
 import { padding, font } from '../../styles';
 import { default as SideBar } from './SideBar';
-// import { PageContainer, PageTitle } from "../../components";
 
 const Layout = () => {
+  const location = useLocation();
+
   return (
     <S.Layout>
       <SideBar />
       <main>
         <section className="page-container">
-          <h1 className="page-title">타이틀</h1>
-          <Outlet /> {/* 메인 콘텐츠 */}
+          <h1 className="page-title">{getPageTitle(location.pathname)}</h1>
+          <Outlet /> {/* 페이지 콘텐츠 */}
         </section>
       </main>
     </S.Layout>

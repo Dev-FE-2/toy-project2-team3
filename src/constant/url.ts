@@ -1,4 +1,12 @@
-const NESTED_PATHS = {
+type UrlType = {
+  [key: string]: {
+    text: string;
+    name: string;
+    link: string;
+  };
+};
+
+const NESTED_PATHS: UrlType = {
   index: {
     text: 'index',
     name: '',
@@ -16,7 +24,7 @@ const NESTED_PATHS = {
   },
 };
 
-const URL = {
+const URL: UrlType = {
   userHome: {
     text: 'HOME',
     name: 'userHome',
