@@ -7,7 +7,15 @@ import UserProfilePhoto from '../../../UserProfilePhoto';
 import LoggoutButton from './LoggoutButton';
 import defaultImage from 'public/avatar.svg';
 
-const UserStatus = () => {
+type UserStatusProps = {
+  style: {
+    padding: string;
+  };
+};
+
+const UserStatus = ({ style }: UserStatusProps) => {
+  const { padding } = style;
+
   const navigate = useNavigate();
   const { isLoggedIn, userInfo } = useSelector(
     (state: RootState) => state.user
@@ -18,7 +26,7 @@ const UserStatus = () => {
   };
 
   return isLoggedIn ? (
-    <S.UserStatusWrap>
+    <S.UserStatusWrap padding={padding}>
       <S.UserStatus>
         <UserProfilePhoto
           width="40"
@@ -41,10 +49,11 @@ const UserStatus = () => {
 };
 
 const S = {
-  UserStatusWrap: styled.article`
+  UserStatusWrap: styled.article<UserStatusProps['style']>`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: ${(props) => props.padding};
   `,
   UserStatus: styled.article`
     display: flex;

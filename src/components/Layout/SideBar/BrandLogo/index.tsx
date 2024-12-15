@@ -1,31 +1,53 @@
 import styled from 'styled-components';
-import PokemonLogo from '../../../../../public/PokemonLogo.png';
+import { colors, padding, border } from '../../../../styles';
+import PokemonLogo from '../../../../assets/pokemonBall.svg';
 
-const BrandLogo = () => {
+const BrandLogo = ({ style }: BrandLogoProps) => {
+  const { padding } = style;
+
   return (
-    <StyledSideBarTop>
-      <img src={PokemonLogo} alt="Pokemon Logo" />
-      Pokemon ERP
-    </StyledSideBarTop>
+    <S.Logo padding={padding}>
+      <div className="logo-image">
+        <img src={PokemonLogo} alt="Pokemon ERP" />
+      </div>
+      <div className="logo-text">Pokemon ERP</div>
+    </S.Logo>
   );
 };
 
-const StyledSideBarTop = styled.div`
-  display: flex;
-  align-items: center;
-  color: #63a002;
-  font-weight: 700;
-  font-size: 24px;
-  text-align: left;
-  height: 10vh;
-  margin-bottom: 3vh;
-  border-bottom: 1px solid #63a002;
+type BrandLogoProps = {
+  style: {
+    padding: string;
+  };
+};
 
-  img {
-    width: 2.08vw;
-    height: auto; /* 비율 유지 */
-    margin-right: 2vh;
-  }
-`;
+type LogoProps = {
+  padding: string;
+};
+
+const S = {
+  Logo: styled.article<LogoProps>`
+    display: flex;
+    align-items: center;
+    gap: ${padding.md};
+    border-bottom: ${border.default};
+    height: 80px;
+    padding: ${(props) => props.padding};
+
+    .logo-image {
+      height: 40px;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .logo-text {
+      color: ${colors.semantic.primary};
+      font-weight: 500;
+      font-size: 24px;
+    }
+  `,
+};
 
 export default BrandLogo;
