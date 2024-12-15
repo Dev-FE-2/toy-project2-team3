@@ -12,7 +12,15 @@ import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type UserState = Pick<
   User,
-  'userId' | 'email' | 'name' | 'profileImgUrl' | 'team' | 'position'
+  | 'userId'
+  | 'email'
+  | 'name'
+  | 'profileImgUrl'
+  | 'team'
+  | 'position'
+  | 'department'
+  | 'isActivated'
+  | 'isAdmin'
 >;
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
@@ -52,6 +60,9 @@ const LoginForm = () => {
           profileImgUrl: userInfo.profileImgUrl,
           team: userInfo.team,
           position: userInfo.position,
+          department: userInfo.department,
+          isAdmin: userInfo.isAdmin,
+          isActivated: userInfo.isActivated,
         })
       );
 

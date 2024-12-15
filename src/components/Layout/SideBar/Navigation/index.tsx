@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import { fetchUserInfo } from '../../../../firebase';
-import type { User } from '../../../../types/interface';
-
-// 타입 정의
-type BaseContainerProps = {
-  isActive?: boolean;
-  isHovered?: boolean;
-};
+import { useSelector } from 'react-redux';
+import styled, { css } from 'styled-components';
+import type { RootState } from '../../../../state/store';
+import { padding, colors, border } from '../../../../styles';
+import type { BaseContainerProps, NavigationProps } from './type';
 
 const items = [
   { id: 0, icon: 'home', text: 'Pokemon ERP', link: '/userHome' },
@@ -18,20 +14,14 @@ const items = [
   { id: 4, icon: 'paid', text: '나의 급여', hasSubItems: true },
 ];
 
-// Navigation 컴포넌트
-const Navigation = () => {
+const Navigation = ({ style }: NavigationProps) => {
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const { padding } = style;
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [expandedSalary, setExpandedSalary] = useState(false);
-  const [userInfo, setUserInfo] = useState<User | null>(null);
   const location = useLocation();
-
-  useEffect(() => {
-    const unsubscribe = fetchUserInfo((info) => {
-      setUserInfo(info);
-    });
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     const storedIndex = localStorage.getItem('activeIndex');
@@ -68,16 +58,16 @@ const Navigation = () => {
   };
 
   return (
-    <>
+    <S.Navigation padding={padding}>
       {items.map((item) => (
         <React.Fragment key={item.id}>
-          <StyledLink
+          <S.Link
             to={item.link}
             onClick={
               item.id === 4 ? handleSalaryClick : () => handleItemClick(item.id)
             }
           >
-            <StyledMainContainer
+            <S.MainContainer
               isActive={
                 activeIndex === item.id ||
                 (item.id === 4 && (activeIndex === 100 || activeIndex === 101))
@@ -86,77 +76,74 @@ const Navigation = () => {
               onMouseEnter={() => setHoveredIndex(item.id)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="material-symbols-outlined">{item.icon}</div>
+              <span className="material-symbols-outlined">{item.icon}</span>
               {item.text}
               {item.id === 4 && expandedSalary && (
-                <div className="material-symbols-outlined arrow">
+                <span className="material-symbols-outlined arrow">
                   arrow_drop_down
-                </div>
+                </span>
               )}
-            </StyledMainContainer>
-          </StyledLink>
+            </S.MainContainer>
+          </S.Link>
           {item.id === 4 && expandedSalary && (
-            <StyledRowContainer>
-              <StyledLink
-                to="/salaryDetails"
-                onClick={() => handleItemClick(100)}
-              >
-                <StyledSubContainer
+            <S.RowContainer>
+              <S.Link to="/salaryDetails" onClick={() => handleItemClick(100)}>
+                <S.SubContainer
                   isActive={activeIndex === 100}
                   isHovered={hoveredIndex === 100}
                   onMouseEnter={() => setHoveredIndex(100)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   급여 내역
-                </StyledSubContainer>
-              </StyledLink>
-              <StyledLink
+                </S.SubContainer>
+              </S.Link>
+              <S.Link
                 to="/salaryCorrection"
                 onClick={() => handleItemClick(101)}
               >
-                <StyledSubContainer
+                <S.SubContainer
                   isActive={activeIndex === 101}
                   isHovered={hoveredIndex === 101}
                   onMouseEnter={() => setHoveredIndex(101)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   급여 정정 신청
-                </StyledSubContainer>
-              </StyledLink>
-            </StyledRowContainer>
+                </S.SubContainer>
+              </S.Link>
+            </S.RowContainer>
           )}
         </React.Fragment>
       ))}
 
       {userInfo?.isAdmin && (
         <>
-          <StyledLink to="/employeeList" onClick={() => handleItemClick(5)}>
-            <StyledMainContainer
+          <S.Link to="/employeeList" onClick={() => handleItemClick(5)}>
+            <S.MainContainer
               isActive={activeIndex === 5}
               isHovered={hoveredIndex === 5}
               onMouseEnter={() => setHoveredIndex(5)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="material-symbols-outlined">
+              <span className="material-symbols-outlined">
                 supervisor_account
-              </div>
+              </span>
               직원 관리
-            </StyledMainContainer>
-          </StyledLink>
-          <StyledLink to="/salaryRequest" onClick={() => handleItemClick(6)}>
-            <StyledMainContainer
+            </S.MainContainer>
+          </S.Link>
+          <S.Link to="/salaryRequest" onClick={() => handleItemClick(6)}>
+            <S.MainContainer
               isActive={activeIndex === 6}
               isHovered={hoveredIndex === 6}
               onMouseEnter={() => setHoveredIndex(6)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="material-symbols-outlined">check_box</div>
+              <span className="material-symbols-outlined">check_box</span>
               급여 정정 신청 관리
-            </StyledMainContainer>
-          </StyledLink>
+            </S.MainContainer>
+          </S.Link>
         </>
       )}
-    </>
+    </S.Navigation>
   );
 };
 
@@ -164,53 +151,63 @@ const Navigation = () => {
 const baseContainerStyles = css<BaseContainerProps>`
   display: flex;
   align-items: center;
+  gap: ${padding.sm};
+  padding: ${padding.sm};
+  border-radius: ${border.radius.sm};
+  color: ${(props) =>
+    props.isActive ? colors.semantic.text.light : colors.semantic.text.dark};
+  background-color: ${(props) =>
+    props.isActive
+      ? colors.semantic.primary
+      : props.isHovered
+        ? colors.semantic.hover.primary
+        : colors.semantic.light};
   font-weight: bold;
   text-align: left;
-  height: 6vh;
-  margin-bottom: 1.5vh;
-  cursor: pointer;
   transition: background-color 0.3s;
-  border-radius: 8px;
-  color: ${(props) => (props.isActive ? '#fff' : '#4A493F')};
-  background-color: ${(props) =>
-    props.isActive ? '#63A002' : props.isHovered ? '#E5F4DD' : '#fff'};
 `;
 
-const StyledMainContainer = styled.div<BaseContainerProps>`
-  ${baseContainerStyles}
-  font-size: 20px;
+const S = {
+  Navigation: styled.nav<NavigationProps['style']>`
+    flex: 1;
+    padding: ${padding.lg} ${(props) => props.padding};
+    display: flex;
+    flex-direction: column;
+    gap: ${(props) => props.padding};
+  `,
+  Link: styled(Link)`
+    text-decoration: none;
+  `,
+  MainContainer: styled.div<BaseContainerProps>`
+    ${baseContainerStyles}
+    font-size: 20px;
 
-  .material-symbols-outlined {
-    margin-right: 1vh;
-    font-size: 24px; /* 아이콘 크기 조절 */
-    filter: ${(props) => (props.isActive ? 'brightness(0) invert(1)' : 'none')};
-  }
+    .material-symbols-outlined {
+      font-size: 24px; /* 아이콘 크기 조절 */
+      filter: ${(props) =>
+        props.isActive ? 'brightness(0) invert(1)' : 'none'};
+    }
 
-  .arrow {
-    margin-left: auto;
-    display: ${(props) => (props.isActive ? 'block' : 'none')};
-  }
-`;
-
-const StyledSubContainer = styled.div<BaseContainerProps>`
-  ${baseContainerStyles}
-  width: 13vw;
-  padding-left: 1vw;
-  font-size: 14px;
-  height: 4vh;
-  margin-bottom: 0.5vh;
-`;
-
-const StyledRowContainer = styled.div`
-  border-left: 1.5px solid #63a002;
-  margin-left: 1vh;
-  padding-left: 0.5vw;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
+    .arrow {
+      margin-left: auto;
+      display: ${(props) => (props.isActive ? 'block' : 'none')};
+    }
+  `,
+  SubContainer: styled.div<BaseContainerProps>`
+    ${baseContainerStyles}
+    width: 13vw;
+    padding-left: 1vw;
+    font-size: 14px;
+    height: 4vh;
+    margin-bottom: 0.5vh;
+  `,
+  RowContainer: styled.div`
+    border-left: 1.5px solid ${colors.semantic.primary};
+    margin-left: 1vh;
+    padding-left: 0.5vw;
+    display: flex;
+    flex-direction: column;
+  `,
+};
 
 export default Navigation;
