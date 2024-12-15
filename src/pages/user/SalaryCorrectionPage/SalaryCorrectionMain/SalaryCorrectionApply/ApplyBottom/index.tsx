@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useFetchUserInfo } from '../../../../../../hooks/';
-import { saveDataToDB } from '../../../../../../firebase'; // saveDataToDB 임포트
+import { saveDataToDB } from '../../../../../../firebase';
 import type { OvertimeRecord } from '../ApplyMiddle';
 import type { SalaryRequest } from '../../../../../../types/interface';
 import { colors } from '../../../../../../styles';
 import Loading from '../../../../../../components/Loading';
-import { fetchDataFromDB } from '../../../../../../firebase'; // fetchDataFromDB 임포트
+import { fetchDataFromDB } from '../../../../../../firebase';
+import { CoreModal } from '../../../../../../components';
 
 type ApplyBottomProps = {
   overtimeTotal: number;
@@ -19,8 +20,24 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
   overtimeTotal,
   setIsVisible,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'check' | 'error' | 'question'>(
+    'check'
+  );
+  const [modalMessage, setModalMessage] = useState('');
   const { userInfo, isLoading, error } = useFetchUserInfo();
   const [isSaving, setIsSaving] = useState(false);
+
+  const openModal = (type: 'check' | 'error' | 'question', message: string) => {
+    setModalType(type);
+    setModalMessage(message);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsVisible(false);
+  };
 
   const handleRegister = async () => {
     const createdAt = new Date().toISOString();
@@ -28,11 +45,11 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       month: 'long',
     });
 
-    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`; // 고유한 SalaryRequestId 생성
-    const newSalaryId = `salaryId-${new Date().getTime()}`; // 고유한 salaryId 생성
+    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`;
+    const newSalaryId = `salaryId-${new Date().getTime()}`;
 
     const newRequestItem = {
-      requestId: `requestId-${new Date().getTime()}`, // 고유한 requestId
+      requestId: `requestId-${new Date().getTime()}`,
       requestStartedAt: overtimeRecords[0].start,
       requestEndedAt: overtimeRecords[0].end,
       requestWorkingTime: overtimeRecords[0].hours,
@@ -46,56 +63,53 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       handledAt: '',
       handledUserId: '',
       rejectReason: '',
-      requestList: [newRequestItem], // 새로운 요청 항목 생성
+      requestList: [newRequestItem],
       requestedAt: createdAt,
       requestedTitle: `${requestedMonth} 급여 정산 오류`,
       requestedUserId: userInfo?.userId as string,
       salaryId: newSalaryId,
     };
 
-    setIsSaving(true); // 저장 중 상태로 변경
+    setIsSaving(true);
+
     try {
       // 기존 요청 데이터 가져오기
       const existingData = await fetchDataFromDB<SalaryRequest>({
         table: 'SalaryRequest',
-        key: userInfo?.userId, // 사용자 ID를 키로 사용
+        key: userInfo?.userId,
       });
 
       // 기존 요청 데이터가 있을 경우
       const updatedData = existingData
         ? {
             ...existingData.reduce((acc, curr) => {
-              acc[curr.id] = curr; // 기존 요청 데이터를 키로 재구성
+              acc[curr.id] = curr;
               return acc;
             }, {}),
             [newSalaryRequestId]: {
               ...newSalaryRequest,
               requestList: existingData[0]?.requestList
                 ? [...existingData[0].requestList, newRequestItem]
-                : [newRequestItem], // 기존 요청이 있을 경우 그 리스트에 추가
+                : [newRequestItem],
             },
           }
         : {
-            [newSalaryRequestId]: newSalaryRequest, // 새로운 요청 데이터만 포함
+            [newSalaryRequestId]: newSalaryRequest,
           };
-
-      // saveDataToDB를 사용하여 데이터 저장
       await saveDataToDB({
         table: 'SalaryRequest',
-        key: userInfo?.userId, // 사용자 ID를 key로 사용
-        data: updatedData, // 업데이트된 데이터 저장
+        key: userInfo?.userId,
+        data: updatedData,
       });
-
-      console.log('요청이 성공적으로 저장되었습니다.');
-      setIsVisible(false);
+      openModal('check', '정정 신청이 정상적으로 처리 되었습니다');
     } catch (err) {
-      console.error('저장 중 오류 발생:', err);
+      console.error(err);
+      openModal('error', '정정 신청 저장 중 오류가 발생했습니다.');
     } finally {
-      setIsSaving(false); // 저장 완료 상태로 변경
+      setIsSaving(false);
     }
   };
 
-  // 로딩 상태 처리
   if (isLoading) return <Loading />;
   if (error) return <div>오류 발생: {error.message}</div>;
 
@@ -112,7 +126,14 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       <button className="reg-btn" onClick={handleRegister} disabled={isSaving}>
         {isSaving ? '저장 중...' : '등록하기'}
       </button>
-      {error && <p>오류가 발생했습니다: {error.message}</p>}
+
+      {isModalOpen && (
+        <CoreModal
+          modalType={modalType}
+          modalMessage={modalMessage}
+          onClose={closeModal}
+        />
+      )}
     </S.ApplyBottomContainer>
   );
 };

@@ -1,21 +1,30 @@
 import React from 'react';
-import check_circle from '../../../../assets/icons/check_circle.svg';
 import { StyledCheckButton } from '../../../form/Button';
 import type { ModalProps } from '../../CoreModal';
+import styled from 'styled-components';
 
 const SuccessModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
   const handleConfirm = () => {
-    console.log('확인 버튼 클릭');
-    onClose(); // 모달 닫기
+    onClose();
   };
+
+  const check_circle = (
+    <MaterialIcon className="material-symbols-outlined">
+      check_circle
+    </MaterialIcon>
+  );
 
   return (
     <>
-      <img src={check_circle} alt="help" />
+      {check_circle}
       {ModalMessage}
       <StyledCheckButton onClick={handleConfirm}>확인</StyledCheckButton>
     </>
   );
 };
+
+const MaterialIcon = styled.div`
+  font-size: 48px;
+`;
 
 export default SuccessModal;
