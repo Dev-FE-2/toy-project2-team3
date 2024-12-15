@@ -71,9 +71,8 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
     };
 
     setIsSaving(true);
-
+    
     try {
-      // 기존 요청 데이터 가져오기
       const existingData = await fetchDataFromDB<SalaryRequest>({
         table: 'SalaryRequest',
         key: userInfo?.userId,
@@ -96,6 +95,8 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
         : {
             [newSalaryRequestId]: newSalaryRequest,
           };
+      
+      // saveDataToDB를 사용하여 데이터 저장
       await saveDataToDB({
         table: 'SalaryRequest',
         key: userInfo?.userId,
@@ -110,6 +111,8 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
     }
   };
 
+
+  // 로딩 상태 처리
   if (isLoading) return <Loading />;
   if (error) return <div>오류 발생: {error.message}</div>;
 

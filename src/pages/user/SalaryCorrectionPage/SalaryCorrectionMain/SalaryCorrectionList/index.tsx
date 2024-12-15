@@ -52,7 +52,6 @@ const SalaryCorrectionList = () => {
         setItems([]);
       } finally {
         setLoading(false);
-        console.log(loading);
       }
     };
 

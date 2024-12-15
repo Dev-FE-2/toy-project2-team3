@@ -24,6 +24,7 @@ const formatDate = (dateString: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
+
 // 총 근무 시간 계산 함수 (시간과 분으로 반환)
 const calculateTotalWorkTime = (attachments: SalaryRequestItem[]) => {
   const totalMinutes = attachments.reduce((total, att) => {
@@ -64,8 +65,6 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
         console.log(err);
       } finally {
         setLoading(false);
-        console.log(salaryCorrectData);
-        console.log(setAttachments);
       }
     };
     fetchSalaryCorrecteData();
@@ -96,6 +95,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                           }
                         >
                           {getFilteredFileNames([att.requestDocumentUrl])}{' '}
+                          {/* 실제 파일명 출력 */}
                         </button>
                       ) : (
                         '첨부 파일 없음'

@@ -90,7 +90,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
       const uploadPromises = uploadedFiles.map(async (file) => {
         return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
       });
-  
+
       // 모든 파일 업로드 완료 대기
       const urls = await Promise.all(uploadPromises);
       urls.forEach((url) => {
@@ -98,7 +98,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
           filePaths.push(url);
         }
       });
-  
+
       const newRecord: OvertimeRecord = {
         start: overtimeStart,
         end: overtimeEnd,
