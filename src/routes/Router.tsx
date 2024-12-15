@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../state/store';
+import { URL, NESTED_PATHS } from '../constant';
 import { default as ProtectedRoute } from './ProtectedRoute';
 import { Layout } from '../components';
 import {
@@ -26,85 +27,90 @@ function Router() {
           {/* Layout 중첩 라우팅 */}
 
           {/* 기본 경로는 로그인 페이지로 리다이렉트 */}
-          <Route index element={<Navigate to="/userHome" replace />} />
+          <Route index element={<Navigate to={URL.userHome.link} replace />} />
 
           {/* user */}
+
+          {/* 유저 메인 페이지 */}
           <Route
-            path="userHome"
+            path={URL.userHome.pathName}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <UserHome />
               </ProtectedRoute>
             }
           />
-          {/* 유저 메인 페이지 */}
+          {/* 회원 정보 페이지 */}
           <Route
-            path="schedule"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Schedule />
-              </ProtectedRoute>
-            }
-          />
-          {/* 업무 일정 페이지 */}
-          <Route
-            path="editProfile"
+            path={URL.editProfile.pathName}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <EditProfile />
               </ProtectedRoute>
             }
           />
-          {/* 회원 정보 페이지 */}
+          {/* 업무 일정 페이지 */}
           <Route
-            path="attendance"
+            path={URL.schedule.pathName}
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Schedule />
+              </ProtectedRoute>
+            }
+          />
+          {/* 근태 관리 페이지 */}
+          <Route
+            path={URL.attendance.pathName}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Attendance />
               </ProtectedRoute>
             }
           />
-          {/* 근태 관리 페이지 */}
+          {/* 급여 정정 신청 페이지 */}
           <Route
-            path="salaryCorrection"
+            path={URL.salaryCorrection.pathName}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <SalaryCorrection />
               </ProtectedRoute>
             }
           />
-          {/* 급여 정정 신청 페이지 */}
+          {/* 급여 내역 페이지 */}
           <Route
-            path="salaryDetails"
+            path={URL.salaryDetails.pathName}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <SalaryDetails />
               </ProtectedRoute>
             }
           />
-          {/* 급여 내역 페이지 */}
         </Route>
 
-        {/* Intro */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        {/** Intro */}
+        <Route path={URL.login.link} element={<Login />} />
+        <Route path={URL.signup.link} element={<SignUp />} />
 
         {/**!SECTION
          * @TODO /intro/ 중첩 element로 IntroLayout 컴포넌트로 리팩토링 
          * 
-          <Route path="/login" element={<Navigate to="/intro/login" replace />} />
-          <Route path="/signup" element={<Navigate to="/intro/login" replace />} />
-          <Route path="/intro/" element={<IntroLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<SignUp />} />
+          <Route path={URL.login.link} element={<Navigate to="/intro/login" replace />} />
+          <Route path={URL.signup.link} element={<Navigate to="/intro/login" replace />} />
+          <Route path={NESTED_PATHS.intro.link} element={<IntroLayout />}>
+            <Route path={URL.login.pathName} element={<Login />} />
+            <Route path={URL.signup.pathName} element={<SignUp />} />
           </Route>
          */}
 
-        <Route path="admin" element>
+        {/** admin */}
+        <Route path={NESTED_PATHS.admin.link} element={<Layout />}>
           {/* 관리자 직원 목록 */}
-          <Route path="employeeList" element={<EmployeeList />} />
+          <Route path={URL.employeeList.pathName} element={<EmployeeList />} />
           {/* 급여 정정 요청 페이지 */}
-          <Route path="salaryRequest" element={<SalaryRequest />} />
+          <Route
+            path={URL.salaryRequest.pathName}
+            element={<SalaryRequest />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

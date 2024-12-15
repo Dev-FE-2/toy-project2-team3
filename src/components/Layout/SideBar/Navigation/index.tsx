@@ -2,15 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../state/store';
+import { URL } from '../../../../constant';
 import type { NavigationProps } from './type';
 import { S } from './style';
 
+const {
+  userHome,
+  editProfile,
+  schedule,
+  attendance,
+  salaryDetails,
+  salaryCorrection,
+  employeeList,
+  salaryRequest,
+  salary,
+} = URL;
+
 const items = [
-  { id: 0, icon: 'home', text: 'HOME', link: '/userHome' },
-  { id: 1, icon: 'account_circle', text: '나의 정보', link: '/editProfile' },
-  { id: 2, icon: 'calendar_month', text: '나의 업무', link: '/schedule' },
-  { id: 3, icon: 'schedule', text: '나의 근태', link: '/attendance' },
-  { id: 4, icon: 'paid', text: '나의 급여', hasSubItems: true },
+  { id: 0, icon: 'home', text: 'HOME', link: userHome.link },
+  {
+    id: 1,
+    icon: 'account_circle',
+    text: editProfile.text,
+    link: editProfile.link,
+  },
+  { id: 2, icon: 'calendar_month', text: schedule.text, link: schedule.link },
+  { id: 3, icon: 'schedule', text: attendance.text, link: attendance.link },
+  { id: 4, icon: 'paid', text: salary.text, hasSubItems: true },
 ];
 
 const Navigation = ({ style }: NavigationProps) => {
@@ -28,7 +46,7 @@ const Navigation = ({ style }: NavigationProps) => {
       localStorage.getItem('expandedSalary') === 'true';
     setActiveIndex(Number(storedIndex));
 
-    if (location.pathname === '/editProfile') {
+    if (location.pathname === editProfile.link) {
       setActiveIndex(1);
     }
 
@@ -86,18 +104,21 @@ const Navigation = ({ style }: NavigationProps) => {
           </S.Link>
           {item.id === 4 && expandedSalary && (
             <S.SubNavWrapper>
-              <S.Link to="/salaryDetails" onClick={() => handleItemClick(100)}>
+              <S.Link
+                to={salaryDetails.link}
+                onClick={() => handleItemClick(100)}
+              >
                 <S.SubNavItem
                   isActive={activeIndex === 100}
                   isHovered={hoveredIndex === 100}
                   onMouseEnter={() => setHoveredIndex(100)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  급여 내역
+                  {salaryDetails.text}
                 </S.SubNavItem>
               </S.Link>
               <S.Link
-                to="/salaryCorrection"
+                to={salaryCorrection.link}
                 onClick={() => handleItemClick(101)}
               >
                 <S.SubNavItem
@@ -106,7 +127,7 @@ const Navigation = ({ style }: NavigationProps) => {
                   onMouseEnter={() => setHoveredIndex(101)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  급여 정정 신청
+                  {salaryCorrection.text}
                 </S.SubNavItem>
               </S.Link>
             </S.SubNavWrapper>
@@ -116,7 +137,7 @@ const Navigation = ({ style }: NavigationProps) => {
 
       {userInfo?.isAdmin && (
         <>
-          <S.Link to="/employeeList" onClick={() => handleItemClick(5)}>
+          <S.Link to={employeeList.link} onClick={() => handleItemClick(5)}>
             <S.MainNavItem
               isActive={activeIndex === 5}
               isHovered={hoveredIndex === 5}
@@ -126,10 +147,10 @@ const Navigation = ({ style }: NavigationProps) => {
               <span className="material-symbols-outlined">
                 supervisor_account
               </span>
-              직원 관리
+              {employeeList.text}
             </S.MainNavItem>
           </S.Link>
-          <S.Link to="/salaryRequest" onClick={() => handleItemClick(6)}>
+          <S.Link to={salaryRequest.link} onClick={() => handleItemClick(6)}>
             <S.MainNavItem
               isActive={activeIndex === 6}
               isHovered={hoveredIndex === 6}
@@ -137,7 +158,7 @@ const Navigation = ({ style }: NavigationProps) => {
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <span className="material-symbols-outlined">check_box</span>
-              급여 정정 신청 관리
+              {salaryRequest.text}
             </S.MainNavItem>
           </S.Link>
         </>
