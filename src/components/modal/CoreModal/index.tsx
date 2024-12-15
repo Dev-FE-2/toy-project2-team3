@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ErrorModal from '../CoreModal/ErrorModal';
 import QuestionModal from '../CoreModal/QuestionModal';
-import SuccessModal from '../CoreModal/SuccessModal';
 import { colors, font } from '../../../styles';
+import SuccessModal from './SuccessModal';
 
 type CoreModalProps = {
   modalType: 'check' | 'error' | 'question';
@@ -16,7 +16,6 @@ export type ModalProps = {
   ModalMessage: string;
 };
 
-// CoreModal 컴포넌트
 const CoreModal: React.FC<CoreModalProps> = ({
   modalType,
   modalMessage,
@@ -45,14 +44,13 @@ const CoreModal: React.FC<CoreModalProps> = ({
         ) : modalType === 'question' ? (
           <QuestionModal onClose={onClose} ModalMessage={modalMessage} />
         ) : (
-          <div> No type Modal </div>
+          <div>No type Modal</div>
         )}
       </StyledModalContainer>
     </StyledModalBackground>
   );
 };
 
-// Styled 컴포넌트
 const StyledModalBackground = styled.div`
   position: fixed;
   top: 0;
@@ -76,12 +74,37 @@ const StyledModalContainer = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 1.5vh;
-  img {
-    width: 3.33vw;
-    height: auto;
-  }
+
   font-size: ${font.size.subHeading};
   font-weight: 700;
+`;
+
+export const StyledCancelButton = styled.div`
+  background-color: ${colors.semantic.danger};
+  color: ${colors.semantic.text.light};
+  border: none;
+  cursor: pointer;
+  width: 6vw;
+  height: 6vh;
+  font-size: ${font.size.paragraph};
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StyledCheckButton = styled.div`
+  background-color: ${colors.semantic.success};
+  color: ${colors.semantic.text.light};
+  border: none;
+  cursor: pointer;
+  width: 6vw;
+  height: 6vh;
+  font-size: ${font.size.paragraph};
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default CoreModal;

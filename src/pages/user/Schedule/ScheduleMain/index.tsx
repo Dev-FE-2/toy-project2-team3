@@ -1,9 +1,11 @@
 import MainCalendarWrapper from './MainCalendarWrapper';
-//import DetailScheduleWrapper from './DetailScheduleWrapper';
+import DetailScheduleWrapper from './DetailScheduleWrapper';
+import { SetStateAction } from 'react';
 
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -12,13 +14,34 @@ interface CurrentSchedule {
   userId?: string;
 }
 
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
+
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+  documentName: string;
+  documentUrl: string;
+}
+
 interface ScheduleMainProps {
   currentSchedule: CurrentSchedule;
   currentMonth: number;
   currentYear: number;
   isDayClick: boolean;
+  clickedDate: number[];
   setIsSixWeek: (prop: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
+  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
+  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
 }
 
 const ScheduleMain = ({
@@ -26,8 +49,11 @@ const ScheduleMain = ({
   currentMonth,
   currentYear,
   isDayClick,
+  clickedDate,
   setIsSixWeek,
   setIsDayClick,
+  setClickedDate,
+  handleRModalOpen,
 }: ScheduleMainProps) => {
   return (
     <>
@@ -38,10 +64,14 @@ const ScheduleMain = ({
           currentYear={currentYear}
           setIsSixWeek={setIsSixWeek}
           setIsDayClick={setIsDayClick}
+          setClickedDate={setClickedDate}
         />
       ) : (
-        <DetailScheduleWrapper currentSchedule={currentSchedule} />
-        // <DetailScheduleWrapper />
+        <DetailScheduleWrapper
+          currentSchedule={currentSchedule}
+          clickedDate={clickedDate}
+          handleRModalOpen={handleRModalOpen}
+        />
       )}
     </>
   );

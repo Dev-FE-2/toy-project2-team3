@@ -1,8 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
+import { Item } from '../../../SalaryDetailsMain/';
 
-const ModalBottom = () => {
+type BottomProps = {
+  item: Item;
+};
+
+const ModalBottom: React.FC<BottomProps> = ({ item }) => {
+  const wage =
+    item.baseWorkingHours > 0 ? item.baseSalary / item.baseWorkingHours : 0;
   return (
     <S.ModalBottom>
       <S.ModalBottomRow>
@@ -13,19 +20,30 @@ const ModalBottom = () => {
       <S.ModalBottomRow>
         <S.ItemCeil>연장근로수당</S.ItemCeil>
         <S.ItemCeilDouble>
-          연장근로시간 수<div className="value">(16시간) x 15,822원 x 1.5</div>
+          연장근로시간 수
+          <div className="value">
+            ({item.overtimeHours}시간) x {wage.toLocaleString()}(원) x 1.5
+          </div>
         </S.ItemCeilDouble>
         <S.ItemCeil>
-          <div className="value">379,728</div>
+          <div className="value">
+            {(wage * 1.5 * item.overtimeHours).toLocaleString()}
+          </div>
         </S.ItemCeil>
       </S.ModalBottomRow>
       <S.ModalBottomRow>
         <S.ItemCeil>야간근로수당</S.ItemCeil>
         <S.ItemCeilDouble>
-          야간근로시간 수<div className="value">(2시간) x 15,822원 x 0.5</div>
+          야간근로시간 수
+          <div className="value">
+            ({item.nightWorkingHours}시간) x {wage.toLocaleString()}(원) x 0.5
+          </div>
         </S.ItemCeilDouble>
         <S.ItemCeil>
-          <div className="value">15,822</div>
+          <div className="value">
+            {' '}
+            {(wage * 0.5 * item.nightWorkingHours).toLocaleString()}
+          </div>
         </S.ItemCeil>
       </S.ModalBottomRow>
       <S.ModalBottomRow>

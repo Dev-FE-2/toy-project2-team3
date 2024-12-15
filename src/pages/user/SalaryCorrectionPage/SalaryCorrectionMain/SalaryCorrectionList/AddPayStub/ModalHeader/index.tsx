@@ -1,12 +1,13 @@
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles';
-import { useFetchUserInfo } from '../../../../../../hooks';
+import { colors } from '../../../../../../../styles';
+import { useFetchUserInfo } from '../../../../../../../hooks';
+import Loading from '../../../../../../../components/Loading';
 
 const ModalHeader = () => {
   const { userInfo, isLoading, error } = useFetchUserInfo();
 
-  if (isLoading) return <div>로딩중 입니다.. </div>;
-  if (error) return <div>에러 : {error.message}</div>;
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류 발생: {error.message}</div>;
 
   return (
     <S.ModalHeader>
@@ -32,7 +33,7 @@ const S = {
     background-color: black;
     font-size: 20px;
     text-align: center;
-
+    font-weight: 700;
     .key {
       width: 20%;
       background-color: #fff;

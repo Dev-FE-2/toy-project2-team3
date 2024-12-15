@@ -20,7 +20,6 @@ type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
