@@ -174,8 +174,6 @@ const S = {
   SalaryMainContainer: styled.div`
     width: 100%;
     min-height: 7.8%;
-    margin-left: 6vw;
-    margin-right: 6vw;
     cursor: pointer;
     justify-content: center;
     align-items: center;
