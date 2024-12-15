@@ -3,71 +3,19 @@ import styled from 'styled-components';
 import { border, colors } from '../../../../../styles';
 import DetailSchedule from './DetailSchedule';
 import { fetchDataFromDB } from '../../../../../firebase';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../state/store';
+import {
+  CurrentSchedule,
+  FormattedUserOrTeamScheduleData,
+  ScheduleData,
+  TeamMembersData,
+} from '../../core/schedule';
 
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  documentName: string;
-  documentUrl: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface FormattedUserOrTeamScheduleData extends ScheduleData {
-  type: string;
-  name: string;
-  number: number;
-}
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
-
-interface DetailScheduleWrapperProps {
-  currentSchedule: CurrentSchedule;
-  clickedDate: number[];
-  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
-}
-
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface TargetSchedule extends ScheduleList {
-  id: string;
-  index: number;
-  name: string;
-  userId: string;
-  documentName: string;
-  documentUrl: string;
-}
-
-const DetailScheduleWrapper = ({
-  currentSchedule,
-  clickedDate,
-  handleRModalOpen,
-}: DetailScheduleWrapperProps) => {
+const DetailScheduleWrapper = () => {
+  const { currentSchedule, clickedDate } = useSelector(
+    (state: RootState) => state.schedule
+  );
   const [currentTime, setCurrentTime] = useState(new Date());
   const [clickedDateTeamScheduleData, setClickedDateTeamScheduleData] =
     useState<FormattedUserOrTeamScheduleData[]>([]);
@@ -187,9 +135,8 @@ const DetailScheduleWrapper = ({
         ))}
         <DetailSchedule
           formattedClickedDate={formattedClickedDate}
-          TEAM_MEMBERS_LENGTH={TEAM_MEMBERS_LENGTH}
+          teamMembersLength={TEAM_MEMBERS_LENGTH}
           clickedDateTeamScheduleData={clickedDateTeamScheduleData}
-          handleRModalOpen={handleRModalOpen}
         />
         {formattedClickedDate === currentDate && (
           <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
