@@ -84,6 +84,8 @@ const DetailScheduleWrapper = ({
   const formattedDay = String(day).padStart(2, '0');
   const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
 
+  const currentDate = `${currentTime.getFullYear()}-${currentTime.getMonth() + 1}-${currentTime.getDate()}`;
+
   const filterClickedDateTeamSchedule = (
     startedAt: string,
     endedAt: string
@@ -189,7 +191,9 @@ const DetailScheduleWrapper = ({
           clickedDateTeamScheduleData={clickedDateTeamScheduleData}
           handleRModalOpen={handleRModalOpen}
         />
-        <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
+        {formattedClickedDate === currentDate && (
+          <S.CurrentTimeLine style={{ top: `${TIME_LINE_POSITION}px` }} />
+        )}
       </S.ScheduleContainer>
     </>
   );
