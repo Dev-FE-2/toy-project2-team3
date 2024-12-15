@@ -5,6 +5,7 @@ import MainCalendar from './MainCalendar';
 
 const ScheduleMain = () => {
   const { isDayClick } = useSelector((state: RootState) => state.schedule);
+
   return <>{!isDayClick ? <MainCalendar /> : <DetailScheduleWrapper />}</>;
 };
 
