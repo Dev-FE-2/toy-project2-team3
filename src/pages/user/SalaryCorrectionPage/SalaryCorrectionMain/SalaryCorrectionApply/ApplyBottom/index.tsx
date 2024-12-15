@@ -71,7 +71,7 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
     };
 
     setIsSaving(true);
-    
+
     try {
       const existingData = await fetchDataFromDB<SalaryRequest>({
         table: 'SalaryRequest',
@@ -95,7 +95,7 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
         : {
             [newSalaryRequestId]: newSalaryRequest,
           };
-      
+
       // saveDataToDB를 사용하여 데이터 저장
       await saveDataToDB({
         table: 'SalaryRequest',
@@ -110,7 +110,6 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       setIsSaving(false);
     }
   };
-
 
   // 로딩 상태 처리
   if (isLoading) return <Loading />;
@@ -163,6 +162,12 @@ const S = {
       display: flex;
       justify-content: center;
       align-items: center;
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover {
+        background-color: ${colors.semantic.hover.primary};
+        color: ${colors.semantic.text.dark};
+      }
     }
   `,
 };

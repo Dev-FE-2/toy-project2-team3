@@ -105,10 +105,6 @@ const SalaryDetailsMain = () => {
       ) : (
         <div>데이터가 존재하지 않습니다.</div>
       )}
-
-      <S.PaginationContainer>
-        <PagiNation maxPage={2} />
-      </S.PaginationContainer>
       {isModalOpen && (
         <NormalPayStub item={selectedItem} onClose={closeModal} />
       )}

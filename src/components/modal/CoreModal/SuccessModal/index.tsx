@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledCheckButton } from '../../../form/Button';
+import { StyledCheckButton } from '../';
 import type { ModalProps } from '../../CoreModal';
 import styled from 'styled-components';
 
