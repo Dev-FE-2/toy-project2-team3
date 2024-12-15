@@ -41,21 +41,20 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
 
   const handleRegister = async () => {
     const createdAt = new Date().toISOString();
-    const requestedMonth = new Date(createdAt).toLocaleString('ko-KR', {
-      month: 'long',
-    });
+    const requestedMonth = new Date(createdAt).getMonth();
 
     const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`;
     const newSalaryId = `salaryId-${new Date().getTime()}`;
 
-    const newRequestItem = {
+    // 여러 요청 항목 생성
+    const requestList = overtimeRecords.map((record) => ({
       requestId: `requestId-${new Date().getTime()}`,
-      requestStartedAt: overtimeRecords[0].start,
-      requestEndedAt: overtimeRecords[0].end,
-      requestWorkingTime: overtimeRecords[0].hours,
-      requestDetail: overtimeRecords[0].description,
-      requestDocumentUrl: overtimeRecords[0].filePath,
-    };
+      requestStartedAt: record.start,
+      requestEndedAt: record.end,
+      requestWorkingTime: record.hours,
+      requestDetail: record.description,
+      requestDocumentUrl: record.filePath,
+    }));
 
     const newSalaryRequest: SalaryRequest = {
       handleDetail: '',
@@ -63,9 +62,9 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
       handledAt: '',
       handledUserId: '',
       rejectReason: '',
-      requestList: [newRequestItem],
+      requestList,
       requestedAt: createdAt,
-      requestedTitle: `${requestedMonth} 급여 정산 오류`,
+      requestedTitle: `${requestedMonth}월 급여 정산 오류`,
       requestedUserId: userInfo?.userId as string,
       salaryId: newSalaryId,
     };
@@ -73,28 +72,38 @@ const ApplyBottom: React.FC<ApplyBottomProps> = ({
     setIsSaving(true);
 
     try {
-      const existingData = await fetchDataFromDB<SalaryRequest>({
-        table: 'SalaryRequest',
-        key: userInfo?.userId,
-      });
+      const existingData =
+        (await fetchDataFromDB<SalaryRequest>({
+          table: 'SalaryRequest',
+          key: userInfo?.userId,
+        })) || {};
 
-      // 기존 요청 데이터가 있을 경우
-      const updatedData = existingData
-        ? {
-            ...existingData.reduce((acc, curr) => {
-              acc[curr.id] = curr;
-              return acc;
-            }, {}),
-            [newSalaryRequestId]: {
-              ...newSalaryRequest,
-              requestList: existingData[0]?.requestList
-                ? [...existingData[0].requestList, newRequestItem]
-                : [newRequestItem],
-            },
-          }
-        : {
-            [newSalaryRequestId]: newSalaryRequest,
-          };
+      // 기존 요청 데이터에서 특정 SalaryRequestId 찾기
+      const existingRequestId = Object.keys(existingData).find(
+        (id) => id === newSalaryRequestId
+      );
+
+      let updatedData;
+
+      if (existingRequestId) {
+        // 기존 요청이 있을 경우
+        updatedData = {
+          ...existingData,
+          [existingRequestId]: {
+            ...existingData[existingRequestId],
+            requestList: [
+              ...(existingData[existingRequestId]?.requestList || []),
+              ...requestList,
+            ],
+          },
+        };
+      } else {
+        // 새로운 SalaryRequestId 생성
+        updatedData = {
+          ...existingData,
+          [newSalaryRequestId]: newSalaryRequest,
+        };
+      }
 
       // saveDataToDB를 사용하여 데이터 저장
       await saveDataToDB({

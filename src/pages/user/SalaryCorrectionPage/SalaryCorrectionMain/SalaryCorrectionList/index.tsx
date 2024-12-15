@@ -7,7 +7,6 @@ import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useFetchUserInfo } from '../../../../../hooks';
-//import Loading from '../../../../../components/Loading';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -20,6 +19,7 @@ const formatDate = (dateString: string) => {
 const SalaryCorrectionList = () => {
   const ITEM_PER_PAGE = 10;
   const [items, setItems] = useState<SalaryRequest[]>([]);
+  const [currentPageItems, setCurrentPageItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,13 +60,13 @@ const SalaryCorrectionList = () => {
     }
   }, [userInfo, isLoading]);
 
-  // 로딩 중일 때 로딩 컴포넌트 표시
-  //if (loading) return <Loading />;
-
   // 현재 페이지의 항목 계산
-  const indexOfLastItem = currentPage * ITEM_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
-  const currentPageItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    const indexOfLastItem = currentPage * ITEM_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
+    const currentItemsSlice = items.slice(indexOfFirstItem, indexOfLastItem);
+    setCurrentPageItems(currentItemsSlice);
+  }, [currentPage, items]); // items가 변경될 때도 currentPageItems를 업데이트
 
   const handleItemClick = (item: SalaryRequest) => {
     setSelectedItem(item);
@@ -95,7 +95,9 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {currentPageItems.length > 0 ? (
+        {loading ? (
+          <div>로딩 중...</div>
+        ) : currentPageItems.length > 0 ? (
           currentPageItems.map((item) => (
             <div
               className="salary__item-container"
