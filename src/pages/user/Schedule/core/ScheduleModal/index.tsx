@@ -61,6 +61,7 @@ const ScheduleModal = ({
           targetSchedule={targetSchedule}
           modalType={modalType}
           setModalType={setModalType}
+          handleOnCloseModal={handleOnCloseModal}
         />
       </S.ModalWrapper>
     </S.ModalBackground>

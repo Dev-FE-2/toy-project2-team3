@@ -49,12 +49,14 @@ interface ScheduleModalContentsProps {
   targetSchedule: TargetSchedule;
   modalType: ModalType;
   setModalType: (type: ModalType) => void;
+  handleOnCloseModal: () => void;
 }
 
 const ScheduleModalContents = ({
   modalType,
   setModalType,
   targetSchedule,
+  handleOnCloseModal,
 }: ScheduleModalContentsProps) => {
   const [title, setTitle] = useState('');
   const [startedAt, setStartedAt] = useState('');
@@ -62,6 +64,8 @@ const ScheduleModalContents = ({
   const [detail, setDetail] = useState('');
   const [documentName, setDocumentName] = useState('');
   const [documentUrl, setDocumentUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [titleError, setTitleError] = useState('');
   const [detailError, setDetailError] = useState('');
   const [timeError, setTimeError] = useState('');
@@ -103,20 +107,6 @@ const ScheduleModalContents = ({
       }
     });
 
-    // for (const schedule of existingSchedules) {
-    //   const existingStart = new Date(schedule.startedAt).getTime();
-    //   const existingEnd = new Date(schedule.endedAt).getTime();
-
-    //   if (
-    //     (newStart >= existingStart && newStart < existingEnd) ||
-    //     (newEnd > existingStart && newEnd <= existingEnd) ||
-    //     (newStart <= existingStart && newEnd >= existingEnd)
-    //   ) {
-    //     setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
-    //     return false;
-    //   }
-    // }
-
     setTimeError('');
 
     return true;
@@ -124,6 +114,10 @@ const ScheduleModalContents = ({
 
   const editSchedule = async () => {
     try {
+      if (isUploading) return;
+
+      setIsLoading(true);
+
       if (!title.trim()) {
         setTitleError('제목을 입력해주세요.');
         return;
@@ -202,19 +196,21 @@ const ScheduleModalContents = ({
         });
       }
 
-      //const userId = // 등록의 경우 현재 로그인한 유저의 userId, 수정의 경우 클릭한 유저의 userId
-
       setTitle('');
       setStartedAt('');
       setEndedAt('');
       setDetail('');
     } catch (error) {
       console.error('Schedule creation failed:', error);
+    } finally {
+      handleOnCloseModal();
+      setIsLoading(false);
     }
   };
 
   const deleteSchedule = async () => {
     try {
+      setIsLoading(true);
       const clearScheduleEntry = {
         title: '',
         startedAt: '',
@@ -235,6 +231,9 @@ const ScheduleModalContents = ({
       });
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
+    } finally {
+      setIsLoading(false);
+      handleOnCloseModal();
     }
   };
 
@@ -318,6 +317,7 @@ const ScheduleModalContents = ({
           filePath="schedule-doc"
           setUrl={setDocumentUrl}
           setName={setDocumentName}
+          setIsLoading={setIsUploading}
         />
       )}
       <div>내용</div>
@@ -335,16 +335,28 @@ const ScheduleModalContents = ({
         {detailError}
       </div>
       {modalType === 'C' && (
-        <Button color="success" text="등록" onClick={editSchedule} />
+        <Button
+          color={isUploading || isLoading ? 'disabled' : 'success'}
+          text="등록"
+          onClick={editSchedule}
+        />
+      )}
+      {modalType === 'U' && (
+        <Button
+          color={isUploading || isLoading ? 'disabled' : 'success'}
+          text="수정"
+          onClick={editSchedule}
+        />
       )}
       {modalType === 'R' && (
         <S.ButtonWrapper>
           <Button color="success" text="수정" onClick={handleEditMode} />
-          <Button color="danger" text="삭제" onClick={deleteSchedule} />
+          <Button
+            color={isLoading ? 'disabled' : 'success'}
+            text="삭제"
+            onClick={deleteSchedule}
+          />
         </S.ButtonWrapper>
-      )}
-      {modalType === 'U' && (
-        <Button color="success" text="수정" onClick={editSchedule} />
       )}
     </>
   );
