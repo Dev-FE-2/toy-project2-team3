@@ -82,7 +82,7 @@ const SalaryCorrectionList = () => {
     <S.SalaryContainer>
       <S.SalaryLabelContainer>
         <div className="item-ceil">
-          <p>날짜</p>
+          <p>신청 날짜</p>
         </div>
         <div className="item-ceil">
           <p>제목</p>
