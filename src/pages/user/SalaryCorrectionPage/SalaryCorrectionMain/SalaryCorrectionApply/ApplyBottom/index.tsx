@@ -177,6 +177,12 @@ const S = {
         background-color: ${colors.semantic.hover.primary};
         color: ${colors.semantic.text.dark};
       }
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover {
+        background-color: ${colors.semantic.hover.primary};
+        color: ${colors.semantic.text.dark};
+      }
     }
   `,
 };

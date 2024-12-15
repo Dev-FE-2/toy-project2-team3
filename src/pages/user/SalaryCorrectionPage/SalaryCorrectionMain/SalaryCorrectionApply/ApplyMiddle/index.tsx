@@ -404,6 +404,11 @@ const S = {
         background-color: ${colors.semantic.hover.secondary};
         color: ${colors.semantic.text.dark};
       }
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
     }
 
     .attach__button {
@@ -416,6 +421,11 @@ const S = {
       cursor: pointer;
       margin-bottom: 1.5vh;
       margin-right: 2vw;
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
       border-radius: 8px;
       &:hover {
         background-color: ${colors.semantic.hover.secondary};
