@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 import { colors, border } from '../../../../../../styles';
 import { MONTHS } from '../../../constants';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../state/store';
 
 interface MonthPickerDetailProps {
-  currentMonth: number;
   handleMonthClick: (clickedMonth: number) => void;
 }
 
-const MonthPickerDetail = ({
-  currentMonth,
-  handleMonthClick,
-}: MonthPickerDetailProps) => {
+const MonthPickerDetail = ({ handleMonthClick }: MonthPickerDetailProps) => {
+  const { currentMonth } = useSelector((state: RootState) => state.schedule);
   const MONTHS_ARRAY = Object.values(MONTHS);
 
   return (

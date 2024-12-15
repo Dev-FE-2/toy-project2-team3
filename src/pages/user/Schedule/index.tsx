@@ -47,10 +47,6 @@ interface TargetSchedule extends ScheduleList {
 type ModalType = 'C' | 'R' | 'U' | 'D';
 
 const Schedule = () => {
-  const CURRENT_MONTH = new Date().getMonth() + 1;
-  const CURRENT_YEAR = new Date().getFullYear();
-  const [currentMonth, setCurrentMonth] = useState(CURRENT_MONTH);
-  const [currentYear, setCurrentYear] = useState(CURRENT_YEAR);
   const [targetSchedule, setTargetSchedule] = useState<TargetSchedule>({
     id: '',
     index: 0,
@@ -76,11 +72,6 @@ const Schedule = () => {
   const [isDayClick, setIsDayClick] = useState(false);
   const [clickedDate, setClickedDate] = useState<number[]>([]);
   const { userInfo, error, isLoading } = useFetchUserInfo();
-
-  const handleYearMonthChange = (year: number, month: number) => {
-    setCurrentYear(year);
-    setCurrentMonth(month);
-  };
 
   const getTeamsData = async () => {
     const teamsData = (await fetchDataFromDB({ table: 'Teams' })) as TeamData[];
@@ -108,11 +99,6 @@ const Schedule = () => {
     getCurrentUserTeamsData();
   }, [userInfo]);
 
-  const handleCModalOpen = () => {
-    setModalType('C');
-    setIsModalOpen(true);
-  };
-
   const handleRModalOpen = (targetSchedule: TargetSchedule) => {
     setModalType('R');
     setTargetSchedule(targetSchedule);
@@ -131,16 +117,7 @@ const Schedule = () => {
       <S.Wrapper>
         <ScheduleSideBar />
         <div>
-          <ScheduleHeader
-            currentMonth={currentMonth}
-            currentYear={currentYear}
-            isDayClick={isDayClick}
-            clickedDate={clickedDate}
-            teamData={teamData}
-            handleYearMonthChange={handleYearMonthChange}
-            handleCModalOpen={handleCModalOpen}
-            setIsDayClick={setIsDayClick}
-          />
+          <ScheduleHeader />
           <ScheduleMain
             currentSchedule={currentSchedule}
             currentMonth={currentMonth}

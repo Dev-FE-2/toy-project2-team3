@@ -1,45 +1,83 @@
 import styled from 'styled-components';
 import { border } from '../../../../../styles';
 import MonthPickerDetail from './MonthPickerDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../state/store';
+import { MONTHS } from '../../constants';
+import {
+  setCurrentMonth,
+  setCurrentYear,
+} from '../../../../../slices/schedule/scheduleSlice';
+import { useState } from 'react';
 
-interface SetIsMonthPickerDetailOpen {
-  content: string | number;
-  currentMonth: number;
-  isMonthPickerDetailOpen: boolean;
-  handleMonthClick: (clickedMonth: number) => void;
-  setIsMonthPickerDetailOpen: (open: boolean) => void;
-  onClickLeft: () => void;
-  onClickRight: () => void;
-}
+const MonthPicker = () => {
+  const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
+  const dispatch = useDispatch();
 
-const MonthPicker = ({
-  content,
-  currentMonth,
-  isMonthPickerDetailOpen,
-  handleMonthClick,
-  setIsMonthPickerDetailOpen,
-  onClickLeft,
-  onClickRight,
-}: SetIsMonthPickerDetailOpen) => {
+  const { currentMonth, currentYear } = useSelector(
+    (state: RootState) => state.schedule
+  );
+
   const handleOnClickMonth = () => {
     setIsMonthPickerDetailOpen(true);
   };
 
+  const handleYearMonthChange = (year: number, month: number) => {
+    dispatch(setCurrentYear(year));
+    dispatch(setCurrentMonth(month));
+  };
+
+  const handleMonthClick = (clickedMonth: number) => {
+    handleYearMonthChange(currentYear, clickedMonth + 1);
+    setIsMonthPickerDetailOpen(false);
+  };
+
+  const handlePrevMonth = () => {
+    const newYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+    const newMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+    handleYearMonthChange(newYear, newMonth);
+  };
+
+  const handlePrevYear = () => {
+    const newYear = currentYear - 1;
+    handleYearMonthChange(newYear, currentMonth);
+  };
+
+  const handleNextMonth = () => {
+    const newYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+    const newMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+    handleYearMonthChange(newYear, newMonth);
+  };
+
+  const handleNextYear = () => {
+    const newYear = currentYear + 1;
+    handleYearMonthChange(newYear, currentMonth);
+  };
+
+  const content = isMonthPickerDetailOpen
+    ? currentYear
+    : `${currentYear} ${MONTHS[currentMonth]}`;
+
+  const onClickLeftArrow = isMonthPickerDetailOpen
+    ? handlePrevYear
+    : handlePrevMonth;
+
+  const onClickRightArrow = isMonthPickerDetailOpen
+    ? handleNextYear
+    : handleNextMonth;
+
   return (
     <>
       <S.Wrapper>
-        <div className="material-symbols-outlined" onClick={onClickLeft}>
+        <div className="material-symbols-outlined" onClick={onClickLeftArrow}>
           chevron_left
         </div>
         <div onClick={handleOnClickMonth}>{content}</div>
-        <div className="material-symbols-outlined" onClick={onClickRight}>
+        <div className="material-symbols-outlined" onClick={onClickRightArrow}>
           chevron_right
         </div>
         {isMonthPickerDetailOpen && (
-          <MonthPickerDetail
-            currentMonth={currentMonth}
-            handleMonthClick={handleMonthClick}
-          />
+          <MonthPickerDetail handleMonthClick={handleMonthClick} />
         )}
       </S.Wrapper>
     </>
