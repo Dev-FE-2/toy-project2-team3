@@ -210,25 +210,29 @@ const ScheduleModalContents = ({
 
   const deleteSchedule = async () => {
     try {
-      setIsLoading(true);
-      const clearScheduleEntry = {
-        title: '',
-        startedAt: '',
-        endedAt: '',
-        detail: '',
-        documentName: '',
-        documentUrl: '',
-        createdAt: '',
-        updatedAt: '',
-      };
+      if (confirm('일정을 삭제하시겠습니까?')) {
+        setIsLoading(true);
+        const clearScheduleEntry = {
+          title: '',
+          startedAt: '',
+          endedAt: '',
+          detail: '',
+          documentName: '',
+          documentUrl: '',
+          createdAt: '',
+          updatedAt: '',
+        };
 
-      await saveDataToDB({
-        table: 'Schedule',
-        key: targetSchedule.id
-          ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
-          : '',
-        data: clearScheduleEntry,
-      });
+        console.log(targetSchedule.index);
+
+        await saveDataToDB({
+          table: 'Schedule',
+          key: targetSchedule.id
+            ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
+            : '',
+          data: clearScheduleEntry,
+        });
+      }
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
     } finally {
@@ -369,7 +373,7 @@ const ScheduleModalContents = ({
         <S.ButtonWrapper>
           <Button color="success" text="수정" onClick={handleEditMode} />
           <Button
-            color={isLoading ? 'disabled' : 'success'}
+            color={isLoading ? 'disabled' : 'danger'}
             text="삭제"
             onClick={deleteSchedule}
           />
