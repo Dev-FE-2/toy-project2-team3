@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { RootState } from '../../../../state/store';
+import type { RootState } from '../../../../state/store';
 import { colors, font, padding } from '../../../../styles';
 import UserProfilePhoto from '../../../UserProfilePhoto';
 import LoggoutButton from './LoggoutButton';
@@ -35,9 +35,11 @@ const UserStatus = ({ style }: UserStatusProps) => {
           onClick={handleProfile}
         />
         <div className="user-state">
-          <span className="user-name">{userInfo.name}</span>
+          <span className="user-name">
+            {userInfo.name} {userInfo.position}
+          </span>
           <span className="state-info">
-            {userInfo.team} {userInfo.position}
+            {userInfo.team} {userInfo.department}
           </span>
         </div>
       </S.UserStatus>
