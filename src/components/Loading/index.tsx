@@ -27,6 +27,7 @@ const S = {
     justify-content: center;
     align-items: center;
     padding: ${padding.xl};
+    background-color: rgba(256, 256, 256, 0.7);
 
     .spinner {
       width: 50px;
