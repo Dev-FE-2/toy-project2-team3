@@ -1,34 +1,28 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
+import { border, padding } from '../../../styles';
 import BrandLogo from './BrandLogo';
 import Navigation from './Navigation';
 import UserStatus from './UserStatus';
 
 const SideBar = () => {
   return (
-    <StyledSideBarContainer>
-      <StyledSideBar>
-        <BrandLogo />
-        <Navigation />
-        <UserStatus />
-      </StyledSideBar>
-      <Outlet /> {/* 메인 콘텐츠 */}
-    </StyledSideBarContainer>
+    <S.SideBar>
+      <BrandLogo style={{ padding: padding.md }} />
+      <Navigation style={{ padding: padding.md }} />
+      <UserStatus style={{ padding: padding.md }} />
+    </S.SideBar>
   );
 };
 
-const StyledSideBarContainer = styled.div`
-  display: flex;
-`;
-
-const StyledSideBar = styled.div`
-  position: relative;
-  width: 16.67vw;
-  height: 100vh;
-  padding: 0 1vw;
-  overflow: hidden;
-  border-right: 0.7px solid #91918b;
-`;
+const S = {
+  SideBar: styled.aside`
+    height: 100vh;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: ${border.default};
+  `,
+};
 
 export default SideBar;
