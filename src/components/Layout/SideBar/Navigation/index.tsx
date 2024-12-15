@@ -62,12 +62,12 @@ const Navigation = ({ style }: NavigationProps) => {
       {items.map((item) => (
         <React.Fragment key={item.id}>
           <S.Link
-            to={item.link}
+            to={item.link ?? ''}
             onClick={
               item.id === 4 ? handleSalaryClick : () => handleItemClick(item.id)
             }
           >
-            <S.MainContainer
+            <S.MainNavItem
               isActive={
                 activeIndex === item.id ||
                 (item.id === 4 && (activeIndex === 100 || activeIndex === 101))
@@ -83,34 +83,34 @@ const Navigation = ({ style }: NavigationProps) => {
                   arrow_drop_down
                 </span>
               )}
-            </S.MainContainer>
+            </S.MainNavItem>
           </S.Link>
           {item.id === 4 && expandedSalary && (
-            <S.RowContainer>
+            <S.SubNavWrapper>
               <S.Link to="/salaryDetails" onClick={() => handleItemClick(100)}>
-                <S.SubContainer
+                <S.SubNavItem
                   isActive={activeIndex === 100}
                   isHovered={hoveredIndex === 100}
                   onMouseEnter={() => setHoveredIndex(100)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   급여 내역
-                </S.SubContainer>
+                </S.SubNavItem>
               </S.Link>
               <S.Link
                 to="/salaryCorrection"
                 onClick={() => handleItemClick(101)}
               >
-                <S.SubContainer
+                <S.SubNavItem
                   isActive={activeIndex === 101}
                   isHovered={hoveredIndex === 101}
                   onMouseEnter={() => setHoveredIndex(101)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   급여 정정 신청
-                </S.SubContainer>
+                </S.SubNavItem>
               </S.Link>
-            </S.RowContainer>
+            </S.SubNavWrapper>
           )}
         </React.Fragment>
       ))}
@@ -118,7 +118,7 @@ const Navigation = ({ style }: NavigationProps) => {
       {userInfo?.isAdmin && (
         <>
           <S.Link to="/employeeList" onClick={() => handleItemClick(5)}>
-            <S.MainContainer
+            <S.MainNavItem
               isActive={activeIndex === 5}
               isHovered={hoveredIndex === 5}
               onMouseEnter={() => setHoveredIndex(5)}
@@ -128,10 +128,10 @@ const Navigation = ({ style }: NavigationProps) => {
                 supervisor_account
               </span>
               직원 관리
-            </S.MainContainer>
+            </S.MainNavItem>
           </S.Link>
           <S.Link to="/salaryRequest" onClick={() => handleItemClick(6)}>
-            <S.MainContainer
+            <S.MainNavItem
               isActive={activeIndex === 6}
               isHovered={hoveredIndex === 6}
               onMouseEnter={() => setHoveredIndex(6)}
@@ -139,7 +139,7 @@ const Navigation = ({ style }: NavigationProps) => {
             >
               <span className="material-symbols-outlined">check_box</span>
               급여 정정 신청 관리
-            </S.MainContainer>
+            </S.MainNavItem>
           </S.Link>
         </>
       )}
@@ -148,7 +148,7 @@ const Navigation = ({ style }: NavigationProps) => {
 };
 
 // 공통 CSS 스타일 정의
-const baseContainerStyles = css<BaseContainerProps>`
+const navItemCSS = css<BaseContainerProps>`
   display: flex;
   align-items: center;
   gap: ${padding.sm};
@@ -178,8 +178,8 @@ const S = {
   Link: styled(Link)`
     text-decoration: none;
   `,
-  MainContainer: styled.div<BaseContainerProps>`
-    ${baseContainerStyles}
+  MainNavItem: styled.div<BaseContainerProps>`
+    ${navItemCSS}
     font-size: 20px;
 
     .material-symbols-outlined {
@@ -193,15 +193,15 @@ const S = {
       display: ${(props) => (props.isActive ? 'block' : 'none')};
     }
   `,
-  SubContainer: styled.div<BaseContainerProps>`
-    ${baseContainerStyles}
-    width: 13vw;
+  SubNavItem: styled.div<BaseContainerProps>`
+    ${navItemCSS}
+    /* width: 13vw; */
     padding-left: 1vw;
     font-size: 14px;
     height: 4vh;
     margin-bottom: 0.5vh;
   `,
-  RowContainer: styled.div`
+  SubNavWrapper: styled.div`
     border-left: 1.5px solid ${colors.semantic.primary};
     margin-left: 1vh;
     padding-left: 0.5vw;
