@@ -29,6 +29,8 @@ const S = {
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: 100vh;
+      overflow: auto;
 
       .page-container {
         width: 100%;
