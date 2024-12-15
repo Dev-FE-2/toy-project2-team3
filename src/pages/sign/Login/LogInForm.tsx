@@ -7,7 +7,7 @@ import { ref, get, DatabaseReference } from 'firebase/database';
 import { auth, database } from '../../../firebaseConfig';
 import { login } from '../../../slices/user/actions';
 import { User } from '../../../types/interface';
-import { COLLECTION_NAME } from '../../../constant';
+import { COLLECTION_NAME, URL } from '../../../constant';
 import { Form, Input, ErrorMessage, LinkText } from '../../../components';
 
 type UserState = Pick<
@@ -66,11 +66,13 @@ const LoginForm = () => {
         })
       );
 
-      navigate('/userHome');
+      navigate(URL.index.link);
     } catch (error) {
       if (error instanceof FirebaseError) {
-        setErrorMessage(error.message);
+        console.error(error.message, error);
+        setErrorMessage('확인되지 않습니다. 이메일과 비밀번호를 확인하세요.');
       } else {
+        console.error(error);
         setErrorMessage('알 수 없는 에러가 발생했습니다!');
       }
     }
@@ -78,7 +80,7 @@ const LoginForm = () => {
 
   return (
     <Form>
-      <LinkText linkTo="/signup">
+      <LinkText linkTo={URL.signup.link}>
         아직 회원가입하지 않으셨나요? <strong>회원가입하기</strong>
       </LinkText>
       <Input
@@ -103,7 +105,7 @@ const LoginForm = () => {
         로그인
       </button>
       <ErrorMessage>{errorMessage}</ErrorMessage>
-      {/* <LinkText linkTo="/signup">
+      {/* <LinkText linkTo="">
         비밀번호를 잊으셨나요? <strong>비밀번호 재설정</strong>
       </LinkText> */}
     </Form>

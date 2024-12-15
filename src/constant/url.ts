@@ -25,6 +25,11 @@ const NESTED_PATHS: UrlType = {
 };
 
 const URL: UrlType = {
+  index: {
+    text: 'index',
+    name: '',
+    link: '/',
+  },
   userHome: {
     text: 'HOME',
     name: 'userHome',

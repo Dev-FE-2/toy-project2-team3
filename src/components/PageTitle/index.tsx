@@ -12,9 +12,9 @@ const PageTitle: React.FC<PageTitleProps> = ({ children }) => {
 
 const S = {
   TitleHeadline: styled.h1`
-    font-size: ${font.size.heading};
+    font-size: ${font.size.headingLight};
     line-height: 1;
-    font-weight: ${font.weight.heading};
+    font-weight: ${font.weight.headingLight};
     margin-bottom: ${padding.md};
     text-align: center;
   `,
