@@ -51,7 +51,6 @@ const Schedule = () => {
   const CURRENT_YEAR = new Date().getFullYear();
   const [currentMonth, setCurrentMonth] = useState(CURRENT_MONTH);
   const [currentYear, setCurrentYear] = useState(CURRENT_YEAR);
-  const [isSixWeek, setIsSixWeek] = useState(false);
   const [targetSchedule, setTargetSchedule] = useState<TargetSchedule>({
     id: '',
     index: 0,
@@ -130,12 +129,7 @@ const Schedule = () => {
   return (
     <>
       <S.Wrapper>
-        <ScheduleSideBar
-          isSixWeek={isSixWeek}
-          isDayClick={isDayClick}
-          teamData={teamData}
-          setCurrentSchedule={setCurrentSchedule}
-        />
+        <ScheduleSideBar />
         <div>
           <ScheduleHeader
             currentMonth={currentMonth}

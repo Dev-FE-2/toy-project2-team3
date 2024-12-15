@@ -1,26 +1,19 @@
 import styled from 'styled-components';
 import { colors } from '../../../../../styles';
+import { useDispatch } from 'react-redux';
+import { setCurrentSchedule } from '../../../../../slices/schedule/scheduleSlice';
+import { CurrentSchedule, TeamMembersData } from '../schedule';
 
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
-
-interface Team {
+interface TeamListProps {
   name: string;
   members: TeamMembersData[];
-  setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
 }
-const TeamList = ({ name, members, setCurrentSchedule }: Team) => {
+
+const TeamList = ({ name, members }: TeamListProps) => {
+  const dispatch = useDispatch();
+
   const handleTeamOrUserClick = ({ type, teamId, userId }: CurrentSchedule) => {
-    setCurrentSchedule({ type, teamId, userId });
+    dispatch(setCurrentSchedule({ type, teamId, userId }));
   };
 
   const assignColor = (number: number, type: string) => {
