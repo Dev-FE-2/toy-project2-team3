@@ -24,6 +24,22 @@ const formatDate = (dateString: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
+
+// 총 근무 시간 계산 함수 (시간과 분으로 반환)
+const calculateTotalWorkTime = (attachments: SalaryRequestItem[]) => {
+  const totalMinutes = attachments.reduce((total, att) => {
+    const start = new Date(att.requestStartedAt);
+    const end = new Date(att.requestEndedAt);
+    const workMinutes = (end.getTime() - start.getTime()) / (1000 * 60); // 분 단위로 변환
+    return total + workMinutes;
+  }, 0);
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return { hours, minutes };
+};
+
 const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
   const [salaryCorrectData, setsalaryCorrecteData] = useState<SalaryRequest[]>(
     []
@@ -52,9 +68,11 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
       }
     };
     fetchSalaryCorrecteData();
-    console.log(salaryCorrectData);
-    console.log(setAttachments);
   }, [item.salaryId]);
+
+  // 총 근무 시간 계산
+  const { hours: totalHours, minutes: totalMinutes } =
+    calculateTotalWorkTime(attachments);
 
   return (
     <S.ModalMiddle>
@@ -88,7 +106,14 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
             </S.ScrollableValue>
           </S.ModalMiddleRow>
           <S.ModalMiddleRow>
-            <div className="key">정정 요청 시간</div>
+            <div className="key">
+              <S.ModalMiddleColumn>
+                정정 요청 시간
+                <span>
+                  (총 근무 시간: {totalHours}시간 {totalMinutes}분)
+                </span>
+              </S.ModalMiddleColumn>
+            </div>
             <S.ScrollableValue>
               {attachments.length > 0
                 ? attachments.map((att) => (
@@ -185,6 +210,14 @@ const S = {
   ModalMiddleRow: styled.div`
     display: flex;
     flex-direction: row;
+    span {
+      font-size: 12px;
+    }
+  `,
+
+  ModalMiddleColumn: styled.div`
+    display: flex;
+    flex-direction: column;
   `,
 
   ScrollableValue: styled.div`

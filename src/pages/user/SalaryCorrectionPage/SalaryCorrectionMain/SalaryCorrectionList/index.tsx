@@ -7,7 +7,7 @@ import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useFetchUserInfo } from '../../../../../hooks';
-import Loading from '../../../../../components/Loading';
+//import Loading from '../../../../../components/Loading';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -25,8 +25,7 @@ const SalaryCorrectionList = () => {
   const [loading, setLoading] = useState(true);
 
   const currentPage = useSelector((state) => state.pagination.currentPage);
-
-  const { userInfo, error, isLoading } = useFetchUserInfo();
+  const { userInfo, isLoading } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
@@ -36,13 +35,21 @@ const SalaryCorrectionList = () => {
           table: 'SalaryRequest',
           key: userInfo?.userId,
         });
+
         if (data) {
-          setItems(data);
+          const sortedData = Object.values(data).sort((a, b) => {
+            return (
+              new Date(b.requestedAt).getTime() -
+              new Date(a.requestedAt).getTime()
+            );
+          });
+          setItems(sortedData);
         } else {
-          console.log(error);
+          setItems([]);
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
+        setItems([]);
       } finally {
         setLoading(false);
       }
@@ -53,10 +60,8 @@ const SalaryCorrectionList = () => {
     }
   }, [userInfo, isLoading]);
 
-  // 로딩 및 에러 처리
-  if (loading) return <Loading />;
-
-  if (error) return <div>오류 발생: {error.message}</div>;
+  // 로딩 중일 때 로딩 컴포넌트 표시
+  //if (loading) return <Loading />;
 
   // 현재 페이지의 항목 계산
   const indexOfLastItem = currentPage * ITEM_PER_PAGE;
@@ -90,33 +95,38 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {currentPageItems.map((item) => (
-          <div
-            className="salary__item-container"
-            key={item.salaryId}
-            onClick={() => handleItemClick(item)}
-          >
-            <div className="item-ceil">
-              <span>{formatDate(item.requestedAt)}</span>
+        {currentPageItems.length > 0 ? (
+          currentPageItems.map((item) => (
+            <div
+              className="salary__item-container"
+              key={item.salaryId}
+              onClick={() => handleItemClick(item)}
+            >
+              <div className="item-ceil">
+                <span>{formatDate(item.requestedAt)}</span>
+              </div>
+              <div className="item-ceil">
+                <span>{item.requestedTitle}</span>
+              </div>
+              <div className="item-ceil align-center">
+                {item.handleStatus === '승인' ? (
+                  <div className="status approve">승인</div>
+                ) : item.handleStatus === '거부' ? (
+                  <div className="status reject">거부</div>
+                ) : (
+                  <div className="status processing">처리 전</div>
+                )}
+              </div>
+              <div className="item-ceil align-center">
+                <span>{item.rejectReason}</span>
+              </div>
             </div>
-            <div className="item-ceil">
-              <span>{item.requestedTitle}</span>
-            </div>
-            <div className="item-ceil align-center">
-              {item.handleStatus === '승인' ? (
-                <div className="status approve">승인</div>
-              ) : item.handleStatus === '거부' ? (
-                <div className="status reject">거부</div>
-              ) : (
-                <div className="status processing">처리 전</div>
-              )}
-            </div>
-            <div className="item-ceil align-center">
-              <span>{item.rejectReason}</span>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div>표시할 데이터가 없거나 불러오는 중입니다.</div>
+        )}
       </S.SalaryMainContainer>
+
       <S.PaginationContainer>
         <Pagination maxPage={Math.ceil(items.length / ITEM_PER_PAGE)} />
       </S.PaginationContainer>

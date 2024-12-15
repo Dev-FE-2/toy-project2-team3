@@ -85,7 +85,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         return;
       }
       const hoursDiff = Math.abs(end.getTime() - start.getTime()) / 36e5;
-
+  
       const filePaths: string[] = [];
       const uploadPromises = uploadedFiles.map(async (file) => {
         return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
@@ -103,27 +103,28 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         start: overtimeStart,
         end: overtimeEnd,
         hours: hoursDiff,
-        description,
+        description, // 이 부분에서 description을 그대로 사용
         filePath: filePaths.join(', '),
       };
-
+  
       // 상태 업데이트
       setLocalOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
       setOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
-
+  
       const newTotal = overtimeTotal + hoursDiff;
       onOvertimeUpdate(newTotal);
-
+  
       // 입력 초기화
       setOvertimeStart('');
       setOvertimeEnd('');
-      setDescription('');
+      setDescription(''); // 설명 초기화 추가
       setUploadedFiles([]);
       setFileName('파일 선택');
     } else {
       alert('시작 시간과 종료 시간을 입력하세요.');
     }
   };
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
