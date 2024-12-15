@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import MainCalendarDays from './MainCalendarDays';
-import { border } from '../../../../../../styles';
-import { DAYS_OF_WEEK_LIST } from '../../../constants';
+import { border } from '../../../../../styles';
+import { DAYS_OF_WEEK_LIST } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../../state/store';
-import { setIsSixWeek } from '../../../../../../slices/schedule/scheduleSlice';
+import { RootState } from '../../../../../state/store';
+import { setIsSixWeek } from '../../../../../slices/schedule/scheduleSlice';
 
 const MainCalendar = () => {
   const { currentMonth, currentYear } = useSelector(

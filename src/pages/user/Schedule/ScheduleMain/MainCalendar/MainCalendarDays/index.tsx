@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { colors, border, padding } from '../../../../../../../styles';
+import { colors, border, padding } from '../../../../../../styles';
 import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../state/store';
+import { RootState } from '../../../../../../state/store';
 import {
   setClickedDate,
   setIsDayClick,
-} from '../../../../../../../slices/schedule/scheduleSlice';
+} from '../../../../../../slices/schedule/scheduleSlice';
 
 interface MainCalendarDaysProps {
   day: number;

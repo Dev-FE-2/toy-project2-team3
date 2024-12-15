@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { border, colors, padding } from '../../../../../../../../styles';
-import { fetchDataFromDB } from '../../../../../../../../firebase/fetchDataFromDB';
+import { colors, border, padding } from '../../../../../../../styles';
+import { fetchDataFromDB } from '../../../../../../../firebase';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../../state/store';
+import { RootState } from '../../../../../../../state/store';
 import {
   CurrentSchedule,
   FormattedUserOrTeamScheduleData,
   ScheduleData,
-} from '../../../../../core/schedule';
+} from '../../../../core/schedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
