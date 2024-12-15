@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
-import FileUploading from '../../../../../../components/FileUploading';
-
-type OvertimeRecord = {
+import { uploadFile, deleteFile } from '../../../../../../utils';
+import { useFetchUserInfo } from '../../../../../../hooks';
+export type OvertimeRecord = {
   start: string;
   end: string;
   hours: number;
@@ -13,39 +13,70 @@ type OvertimeRecord = {
 
 type MiddleProps = {
   onOvertimeUpdate: (newTotal: number) => void;
+  setOvertimeRecords: React.Dispatch<React.SetStateAction<OvertimeRecord[]>>;
+  overtimeTotal: number;
+  setOvertimeTotal: React.Dispatch<React.SetStateAction<number>>;
 };
 
+// 초과 근무 시간 포맷
 export const formatOvertimeTotal = (totalHours: number) => {
   const hours = Math.floor(totalHours);
   const minutes = Math.round((totalHours - hours) * 60);
   return `${hours}시간 ${minutes}분`;
 };
 
-const formatFileName = (fileName: string) => {
-  return fileName.length > 7 ? `${fileName.slice(0, 7)}...` : fileName;
+// URL에서 이름 추출
+export const getFilteredFileNames = (filePaths: string[]) => {
+  return filePaths
+    .map((path) => {
+      const decodedPath = decodeURIComponent(path);
+      const fileNameWithQuery = decodedPath.split('/').pop();
+      const fileName = fileNameWithQuery?.split('?')[0];
+      return fileName?.replace(/^\d+_?/, '');
+    })
+    .join(', ');
 };
 
-const ApplyMiddle: React.FC<MiddleProps> = ({ onOvertimeUpdate }) => {
+// 날짜 포맷
+const formatDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  };
+  return date
+    .toLocaleString('ko-KR', options)
+    .replace(',', '')
+    .replace('PM', '오후')
+    .replace('AM', '오전');
+};
+
+const ApplyMiddle: React.FC<MiddleProps> = ({
+  onOvertimeUpdate,
+  setOvertimeRecords,
+  overtimeTotal,
+  setOvertimeTotal,
+}) => {
   const [overtimeStart, setOvertimeStart] = useState('');
   const [overtimeEnd, setOvertimeEnd] = useState('');
   const [description, setDescription] = useState('');
-  const [overtimeRecords, setOvertimeRecords] = useState<OvertimeRecord[]>([]);
-  const [filePath, setFilePath] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [fileName, setFileName] = useState<string>('파일 선택');
+  const [overtimeRecords, setLocalOvertimeRecords] = useState<OvertimeRecord[]>(
+    []
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const formatDateTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    let hours = date.getHours();
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const ampm = hours >= 12 ? '오후' : '오전';
-    hours = hours % 12;
-    hours = hours ? String(hours).padStart(2, '0') : '12';
-    return `${year}-${month}-${day} ${ampm} ${hours}:${minutes}`;
-  };
+  const { userInfo, error } = useFetchUserInfo();
 
-  const handleAdd = () => {
+  if (error) return <div>오류 발생: {error.message}</div>;
+  const userId = userInfo?.userId;
+
+  const handleAdd = async () => {
     if (overtimeStart && overtimeEnd) {
       const start = new Date(overtimeStart);
       const end = new Date(overtimeEnd);
@@ -53,47 +84,85 @@ const ApplyMiddle: React.FC<MiddleProps> = ({ onOvertimeUpdate }) => {
         alert('종료시간이 시작 시간보다 빠를 순 없습니다.');
         return;
       }
-      const hoursDiff = Math.abs(end.getTime() - start.getTime()) / 36e5; // 시간 차이 계산
+      const hoursDiff = Math.abs(end.getTime() - start.getTime()) / 36e5;
+  
+      const filePaths: string[] = [];
+      const uploadPromises = uploadedFiles.map(async (file) => {
+        return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
+      });
+
+      // 모든 파일 업로드 완료 대기
+      const urls = await Promise.all(uploadPromises);
+      urls.forEach((url) => {
+        if (url) {
+          filePaths.push(url);
+        }
+      });
 
       const newRecord: OvertimeRecord = {
         start: overtimeStart,
         end: overtimeEnd,
         hours: hoursDiff,
-        description,
-        filePath,
+        description, // 이 부분에서 description을 그대로 사용
+        filePath: filePaths.join(', '),
       };
-
-      const newRecords = [...overtimeRecords, newRecord];
-      setOvertimeRecords(newRecords);
-
-      const totalHours = newRecords.reduce(
-        (total, record) => total + record.hours,
-        0
-      );
-      onOvertimeUpdate(totalHours);
-
+  
+      // 상태 업데이트
+      setLocalOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
+      setOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
+  
+      const newTotal = overtimeTotal + hoursDiff;
+      onOvertimeUpdate(newTotal);
+  
+      // 입력 초기화
       setOvertimeStart('');
       setOvertimeEnd('');
-      setDescription('');
-      setFilePath('');
+      setDescription(''); // 설명 초기화 추가
+      setUploadedFiles([]);
+      setFileName('파일 선택');
     } else {
       alert('시작 시간과 종료 시간을 입력하세요.');
     }
   };
+  
 
-  const handleDelete = (index: number) => {
-    const newRecords = overtimeRecords.filter((_, i) => i !== index);
-    setOvertimeRecords(newRecords);
-
-    const totalHours = newRecords.reduce(
-      (total, record) => total + record.hours,
-      0
-    );
-    onOvertimeUpdate(totalHours);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setUploadedFiles(files);
+    if (files.length > 0) {
+      setFileName(files.map((file) => file.name).join(', '));
+    }
+    console.log('선택한 파일:', files);
   };
 
-  const handleFileUpload = (url: string) => {
-    setFilePath(url);
+  const handleDelete = async (index: number) => {
+    const deletedRecord = overtimeRecords[index];
+
+    // 로컬 상태에서 삭제
+    setLocalOvertimeRecords((prevRecords) =>
+      prevRecords.filter((_, i) => i !== index)
+    );
+    const updatedRecords = overtimeRecords.filter((_, i) => i !== index);
+
+    // 파일 삭제
+    if (deletedRecord.filePath) {
+      const filePaths = deletedRecord.filePath.split(', ');
+      await Promise.all(
+        filePaths.map(async (filePath) => {
+          const path = filePath.trim();
+          return deleteFile(path);
+        })
+      );
+    }
+
+    // 총 시간 업데이트
+    const newTotal = Math.max(0, overtimeTotal - deletedRecord.hours);
+    setOvertimeRecords(updatedRecords);
+    setOvertimeTotal(newTotal);
+    onOvertimeUpdate(newTotal);
+    console.log(
+      `삭제된 항목 인덱스: ${index}, 삭제된 시간: ${deletedRecord.hours}`
+    );
   };
 
   return (
@@ -145,12 +214,23 @@ const ApplyMiddle: React.FC<MiddleProps> = ({ onOvertimeUpdate }) => {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="설명"
           />
-          <FileUploading
-            filePath={`overtime/${Date.now()}`}
-            setUrl={handleFileUpload}
+
+          <button
+            className="attach__button"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {fileName}
+          </button>
+          <input
+            type="file"
+            className="upload"
+            multiple
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
           />
-          <button className="button" onClick={handleAdd}>
-            추가
+          <button className="button" onClick={handleAdd} disabled={isLoading}>
+            {isLoading ? '저장 중...' : '추가'}
           </button>
         </S.ApplyMiddleRow>
         <S.RecordList>
@@ -158,29 +238,39 @@ const ApplyMiddle: React.FC<MiddleProps> = ({ onOvertimeUpdate }) => {
             <S.RecordItem key={index}>
               <input
                 type="text"
-                className="input"
-                value={formatDateTime(record.start)}
+                value={formatDate(new Date(record.start))}
                 readOnly
+                className="input"
               />
               <input
                 type="text"
-                className="input"
-                value={formatDateTime(record.end)}
+                value={formatDate(new Date(record.end))}
                 readOnly
+                className="input"
               />
               <input
                 type="text"
-                className="time"
                 value={formatOvertimeTotal(record.hours)}
                 readOnly
+                className="time"
               />
               <input
                 type="text"
-                className="description"
                 value={record.description}
                 readOnly
+                className="description"
               />
-              <span>{formatFileName(record.filePath || '')}</span>
+              <input
+                type="text"
+                value={
+                  record.filePath && record.filePath.split(', ').length > 0
+                    ? getFilteredFileNames(record.filePath.split(', '))
+                    : '파일 없음'
+                }
+                readOnly
+                className="input"
+              />
+
               <button className="button" onClick={() => handleDelete(index)}>
                 삭제
               </button>
@@ -191,6 +281,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({ onOvertimeUpdate }) => {
     </S.ApplyMiddleContainer>
   );
 };
+
 const S = {
   ApplyMiddleContainer: styled.div`
     width: 100%;
@@ -198,33 +289,31 @@ const S = {
     border-bottom: 2px solid ${colors.semantic.border};
   `,
   ApplyTitleContainer: styled.div`
-      font-size: 20px;
-      font-weight: bold;
-      max-height: 40%;
-      border: 2px solid ${colors.semantic.border};
+    font-size: 20px;
+    font-weight: bold;
+    max-height: 40%;
+    border: 2px solid ${colors.semantic.border};
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+
+    .title {
+      max-width: 30%;
       display: flex;
-      javascript
+      justify-content: center;
+      margin-left: 2vw;
+      margin-right: 2vw;
+    }
+    .description {
+      max-width: 30%;
+      margin-left: 6vw;
+      margin-right: 9vw;
+      display: flex;
+      justify-content: center;
+    }
+  `,
 
-
-        padding: 15px;
-        align-items: center; 
-        justify-content: center;
-
-        .title {
-            max-width: 30%;
-            display: flex;
-            justify-content: center; 
-            margin-left: 2vw;
-            margin-right: 2vw;
-        }
-        .description {
-            max-width: 30%;
-            margin-left: 6vw;
-            margin-right: 9vw;
-            display: flex; 
-            justify-content: center; 
-        }
-    `,
   ApplyItemContainer: styled.div`
     padding: 20px;
     overflow-y: auto;
@@ -258,22 +347,21 @@ const S = {
       margin-bottom: 1.5vh;
       background-color: ${colors.semantic.background.light};
     }
-    .attach {
-      width: 9%;
+    .button {
+      min-width: 7%;
+      max-width: 7%;
       height: 5vh;
       background-color: ${colors.semantic.background.dark};
       color: white;
       border: none;
       cursor: pointer;
-      margin-right: 5vw;
       margin-bottom: 1.5vh;
-      margin-left: 3vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin-right: 2vw;
     }
-    .button {
-      min-width: 7%;
+
+    .attach__button {
+      min-width: 15%;
+      max-width: 15%;
       height: 5vh;
       background-color: ${colors.semantic.background.dark};
       color: white;
@@ -295,22 +383,6 @@ const S = {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-
-    span {
-      width: 9%;
-      height: 5vh;
-      background-color: ${colors.semantic.background.dark};
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-right: 5vw;
-      margin-bottom: 1.5vh;
-      margin-left: 3vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   `,
 };
-
 export default ApplyMiddle;

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '../../styles';
 import { useRef, useState } from 'react';
 import {
   ref,
@@ -8,17 +7,25 @@ import {
   deleteObject,
 } from 'firebase/storage';
 import { storage } from '../../firebaseConfig';
+import Button from '../form/Button';
 
 interface FileUploadingProps {
   filePath: string;
   setUrl: (url: string) => void;
+  setName?: (name: string) => void;
+  setIsLoading?: (isLoading: boolean) => void;
 }
 
-const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
+const FileUploading = ({
+  filePath,
+  setUrl,
+  setName,
+  setIsLoading,
+}: FileUploadingProps) => {
   const [isFileUpload, setIsFileUpload] = useState(false);
   const [fileName, setFileName] = useState('');
   const [displayFileName, setDisplayFileName] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOrigin, setIsLoadingOrigin] = useState(false);
   const FILE_INPUT_REF = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +33,17 @@ const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
     if (!file) return;
 
     const uniqueFileName = `${Date.now()}_${file.name}`;
-    setIsLoading(true);
-    setFileName(uniqueFileName);
+    setIsLoadingOrigin(true);
     setDisplayFileName(file.name);
+    setFileName(file.name);
+
+    if (setName) {
+      setName(file.name);
+    }
+
+    if (setIsLoading) {
+      setIsLoading(true);
+    }
 
     try {
       const fileRef = ref(storage, `${filePath}/${uniqueFileName}`);
@@ -39,14 +54,22 @@ const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
     } catch (error) {
       console.error('파일 업로드 실패:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingOrigin(false);
+
+      if (setIsLoading) {
+        setIsLoading(false);
+      }
     }
   };
 
   const handleFileDelete = async () => {
     if (!isFileUpload) return;
 
-    setIsLoading(true);
+    setIsLoadingOrigin(true);
+
+    if (setIsLoading) {
+      setIsLoading(true);
+    }
 
     try {
       const fileRef = ref(storage, `${filePath}/${fileName}`);
@@ -57,7 +80,11 @@ const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
     } catch (error) {
       console.error('파일 삭제 실패:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingOrigin(false);
+
+      if (setIsLoading) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -76,7 +103,7 @@ const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
         type="file"
         style={{ display: 'none' }}
         onChange={handleFileUpload}
-        disabled={isLoading}
+        disabled={isLoadingOrigin}
       />
       <S.Input
         type="text"
@@ -84,20 +111,26 @@ const FileUploading = ({ filePath, setUrl }: FileUploadingProps) => {
         placeholder="파일 추가를 눌러주세요."
         readOnly
       />
-      <S.Button
-        isFileUpload={isFileUpload}
+      <Button
+        color={
+          isLoadingOrigin ? 'disabled' : isFileUpload ? 'danger' : 'success'
+        }
+        text={
+          isLoadingOrigin
+            ? '처리 중...'
+            : isFileUpload
+              ? '파일 삭제'
+              : '파일 추가'
+        }
         onClick={handleButtonClick}
-        disabled={isLoading}
-      >
-        {isFileUpload ? '파일 삭제' : '파일 추가'}
-      </S.Button>
+        padding="13px 9px"
+      />
     </S.Wrapper>
   );
 };
 const S = {
   Wrapper: styled.div`
-    border: 1px solid black;
-    width: 1000px;
+    width: 100%;
     height: 51px;
     display: flex;
     justify-content: center;
@@ -106,41 +139,7 @@ const S = {
   `,
   Input: styled.input`
     padding: 12px;
-  `,
-  Button: styled.button<{ isFileUpload: boolean; disabled: boolean }>`
-    padding: 13px 28px;
-    border-radius: 6px;
-    min-width: 120px;
-    min-height: 51px;
-    cursor: pointer;
-
-    ${(props) =>
-      props.disabled
-        ? `background-color: ${colors.semantic.disabled};
-          color: ${colors.semantic.light};
-          cursor: not-allowed`
-        : `
-    background-color: ${
-      props.isFileUpload ? colors.semantic.danger : colors.semantic.success
-    };
-    color: ${colors.semantic.light};
-    border: 1px solid
-      ${props.isFileUpload ? colors.semantic.danger : colors.semantic.success};
-
-    &:hover {
-      background-color: ${
-        props.isFileUpload
-          ? colors.semantic.hover.danger
-          : colors.semantic.hover.success
-      };
-      color: ${
-        props.isFileUpload ? colors.semantic.danger : colors.semantic.success
-      };
-      border: 1px solid
-        ${
-          props.isFileUpload ? colors.semantic.danger : colors.semantic.success
-        };
-    }`}
+    flex: 1;
   `,
 };
 

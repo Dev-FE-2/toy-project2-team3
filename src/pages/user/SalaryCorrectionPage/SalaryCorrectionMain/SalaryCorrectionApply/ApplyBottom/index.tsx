@@ -1,12 +1,121 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useFetchUserInfo } from '../../../../../../hooks/';
+import { saveDataToDB } from '../../../../../../firebase';
+import type { OvertimeRecord } from '../ApplyMiddle';
+import type { SalaryRequest } from '../../../../../../types/interface';
 import { colors } from '../../../../../../styles';
+import Loading from '../../../../../../components/Loading';
+import { fetchDataFromDB } from '../../../../../../firebase';
+import { CoreModal } from '../../../../../../components';
 
-type BottomProps = {
+type ApplyBottomProps = {
   overtimeTotal: number;
+  overtimeRecords: OvertimeRecord[];
+  setIsVisible: (visible: boolean) => void;
 };
 
-const ApplyBottom: React.FC<BottomProps> = ({ overtimeTotal }) => {
+const ApplyBottom: React.FC<ApplyBottomProps> = ({
+  overtimeRecords,
+  overtimeTotal,
+  setIsVisible,
+}) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'check' | 'error' | 'question'>(
+    'check'
+  );
+  const [modalMessage, setModalMessage] = useState('');
+  const { userInfo, isLoading, error } = useFetchUserInfo();
+  const [isSaving, setIsSaving] = useState(false);
+
+  const openModal = (type: 'check' | 'error' | 'question', message: string) => {
+    setModalType(type);
+    setModalMessage(message);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsVisible(false);
+  };
+
+  const handleRegister = async () => {
+    const createdAt = new Date().toISOString();
+    const requestedMonth = new Date(createdAt).toLocaleString('ko-KR', {
+      month: 'long',
+    });
+
+    const newSalaryRequestId = `salaryRequestId-${new Date().getTime()}`;
+    const newSalaryId = `salaryId-${new Date().getTime()}`;
+
+    const newRequestItem = {
+      requestId: `requestId-${new Date().getTime()}`,
+      requestStartedAt: overtimeRecords[0].start,
+      requestEndedAt: overtimeRecords[0].end,
+      requestWorkingTime: overtimeRecords[0].hours,
+      requestDetail: overtimeRecords[0].description,
+      requestDocumentUrl: overtimeRecords[0].filePath,
+    };
+
+    const newSalaryRequest: SalaryRequest = {
+      handleDetail: '',
+      handleStatus: '처리 전',
+      handledAt: '',
+      handledUserId: '',
+      rejectReason: '',
+      requestList: [newRequestItem],
+      requestedAt: createdAt,
+      requestedTitle: `${requestedMonth} 급여 정산 오류`,
+      requestedUserId: userInfo?.userId as string,
+      salaryId: newSalaryId,
+    };
+
+    setIsSaving(true);
+    
+    try {
+      const existingData = await fetchDataFromDB<SalaryRequest>({
+        table: 'SalaryRequest',
+        key: userInfo?.userId,
+      });
+
+      // 기존 요청 데이터가 있을 경우
+      const updatedData = existingData
+        ? {
+            ...existingData.reduce((acc, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            }, {}),
+            [newSalaryRequestId]: {
+              ...newSalaryRequest,
+              requestList: existingData[0]?.requestList
+                ? [...existingData[0].requestList, newRequestItem]
+                : [newRequestItem],
+            },
+          }
+        : {
+            [newSalaryRequestId]: newSalaryRequest,
+          };
+      
+      // saveDataToDB를 사용하여 데이터 저장
+      await saveDataToDB({
+        table: 'SalaryRequest',
+        key: userInfo?.userId,
+        data: updatedData,
+      });
+      openModal('check', '정정 신청이 정상적으로 처리 되었습니다');
+    } catch (err) {
+      console.error(err);
+      openModal('error', '정정 신청 저장 중 오류가 발생했습니다.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+
+  // 로딩 상태 처리
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류 발생: {error.message}</div>;
+
   // 총 시간을 시간과 분으로 변환
   const formatOvertimeTotal = (totalHours: number) => {
     const hours = Math.floor(totalHours);
@@ -17,9 +126,17 @@ const ApplyBottom: React.FC<BottomProps> = ({ overtimeTotal }) => {
   return (
     <S.ApplyBottomContainer>
       <p>연장 근무 합계 시간 : {formatOvertimeTotal(overtimeTotal)}</p>
-      <button className="reg-btn" value="등록하기">
-        등록하기
+      <button className="reg-btn" onClick={handleRegister} disabled={isSaving}>
+        {isSaving ? '저장 중...' : '등록하기'}
       </button>
+
+      {isModalOpen && (
+        <CoreModal
+          modalType={modalType}
+          modalMessage={modalMessage}
+          onClose={closeModal}
+        />
+      )}
     </S.ApplyBottomContainer>
   );
 };
@@ -30,12 +147,12 @@ const S = {
     height: 17vh;
     padding: 20px;
     display: flex;
-    flex-direction: column; // 세로 방향으로 정렬
-    align-items: center; // 가운데 정렬
+    flex-direction: column;
+    align-items: center;
     p {
-      text-align: left; // 왼쪽 정렬
+      text-align: left;
       margin-bottom: 0.7vh;
-      width: 100%; // 전체 너비를 차지하도록
+      width: 100%;
     }
     .reg-btn {
       background-color: ${colors.semantic.primary};

@@ -40,11 +40,12 @@ const S = {
     background-color: ${colors.semantic.light};
     width: 15rem;
     position: absolute;
-    top: 2.25rem;
+    top: 1.5rem;
+    left: -1px;
     z-index: 3;
   `,
   Month: styled.div`
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
     width: 100%;

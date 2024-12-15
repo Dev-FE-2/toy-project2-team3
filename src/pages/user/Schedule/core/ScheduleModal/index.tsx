@@ -1,17 +1,43 @@
 import styled from 'styled-components';
 import { border, colors, padding } from '../../../../../styles';
-import AddScheduleModalContents from './AddScheduleModalContents';
 import { MouseEvent } from 'react';
+import ScheduleModalContents from './ScheduleModalContents';
 
-type AddScheduleModalProps = {
-  setIsAddScheduleModalOpen: (isOpen: boolean) => void;
-};
+interface ScheduleList {
+  createdAt: string;
+  detail: string;
+  endedAt: string;
+  startedAt: string;
+  title: string;
+  updatedAt: string;
+}
 
-const AddScheduleModal = ({
-  setIsAddScheduleModalOpen,
+interface TargetSchedule extends ScheduleList {
+  id: string;
+  index: number;
+  name: string;
+  userId: string;
+  documentName: string;
+  documentUrl: string;
+}
+
+type ModalType = 'C' | 'R' | 'U' | 'D';
+
+interface AddScheduleModalProps {
+  targetSchedule: TargetSchedule;
+  modalType: ModalType;
+  setModalType: (type: ModalType) => void;
+  setIsModalOpen: (isOpen: boolean) => void;
+}
+
+const ScheduleModal = ({
+  targetSchedule,
+  modalType,
+  setModalType,
+  setIsModalOpen,
 }: AddScheduleModalProps) => {
   const handleOnCloseModal = () => {
-    setIsAddScheduleModalOpen(false);
+    setIsModalOpen(false);
   };
 
   const handleBackgroundClick = () => {
@@ -31,7 +57,11 @@ const AddScheduleModal = ({
         >
           close
         </S.CloseIcon>
-        <AddScheduleModalContents />
+        <ScheduleModalContents
+          targetSchedule={targetSchedule}
+          modalType={modalType}
+          setModalType={setModalType}
+        />
       </S.ModalWrapper>
     </S.ModalBackground>
   );
@@ -48,12 +78,13 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
   `,
   ModalWrapper: styled.div`
     position: relative;
     background-color: ${colors.semantic.light};
     width: 333px;
-    height: 888px;
+    /* height: 555px; */
     border-radius: ${border.radius.xs};
     padding: ${padding.md};
     display: flex;
@@ -68,4 +99,4 @@ const S = {
   `,
 };
 
-export default AddScheduleModal;
+export default ScheduleModal;

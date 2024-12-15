@@ -1,50 +1,97 @@
+import React from 'react';
 import styled from 'styled-components';
-import { colors, font } from '../../../styles';
+import { colors } from '../../../styles';
 
-export const StyledCancelButton = styled.div`
-  background-color: ${colors.semantic.danger};
-  color: ${colors.semantic.text.light};
-  border: none;
-  cursor: pointer;
-  width: 6vw;
-  height: 6vh;
-  font-size: ${font.size.paragraph};
-  font-weight: normal;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+type Color = 'primary' | 'success' | 'danger' | 'disabled';
 
-export const StyledCheckButton = styled.div`
-  background-color: ${colors.semantic.success};
-  color: ${colors.semantic.text.light};
-  border: none;
-  cursor: pointer;
-  width: 6vw;
-  height: 6vh;
-  font-size: ${font.size.paragraph};
-  font-weight: normal;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+interface ButtonProps {
+  color: Color;
+  text: string;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  padding?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+}
 
-export const StyleCorrectiondButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Button = ({
+  color,
+  text,
+  onClick,
+  padding,
+  maxWidth,
+  maxHeight,
+}: ButtonProps) => {
+  return (
+    <S.Button
+      color={color}
+      padding={padding}
+      maxWidth={maxWidth}
+      maxHeight={maxHeight}
+      onClick={onClick}
+    >
+      {text}
+    </S.Button>
+  );
+};
 
-  width: 6.25vw;
-  height: 4.63vh;
-  background-color: ${colors.semantic.primary};
-  color: ${colors.semantic.text.light};
-  font-size: inherit;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
+const S = {
+  Button: styled.button<{
+    color: Color;
+    padding?: string;
+    maxWidth?: string;
+    maxHeight?: string;
+  }>`
+    box-sizing: border-box;
+    padding: ${(props) => (props.padding ? props.padding : '13px 28px')};
+    border-radius: 6px;
+    max-width: ${(props) => props.maxWidth && props.maxWidth};
+    max-height: ${(props) => props.maxHeight && props.maxHeight};
+    cursor: pointer;
+    ${(props) =>
+      props.color === 'primary' &&
+      `background-color: ${colors.semantic.primary};
+       border: 1px solid ${colors.semantic.primary};
+       color: ${colors.semantic.light};
+       
+       &:hover {
+         background-color: ${colors.semantic.hover.primary};
+         border: 1px solid ${colors.semantic.primary};
+         color: ${colors.semantic.primary};
+       }
+       `}
 
-  &:hover {
-    background-color: ${colors.semantic.hover.primary};
-    color: ${colors.semantic.primary};
-  }
-`;
+    ${(props) =>
+      props.color === 'success' &&
+      `background-color: ${colors.semantic.success};
+       border: 1px solid ${colors.semantic.success};
+       color: ${colors.semantic.light};
+       
+       &:hover {
+         background-color: ${colors.semantic.hover.success};
+         border: 1px solid ${colors.semantic.success};
+         color: ${colors.semantic.success};
+       }
+       `}
+    ${(props) =>
+      props.color === 'danger' &&
+      `background-color: ${colors.semantic.danger};
+       border: 1px solid ${colors.semantic.danger};
+       color: ${colors.semantic.light};
+       
+       &:hover {
+         background-color: ${colors.semantic.hover.danger};
+         border: 1px solid ${colors.semantic.danger};
+         color: ${colors.semantic.danger};
+       }
+       `}
+    ${(props) =>
+      props.color === 'disabled' &&
+      `background-color: ${colors.semantic.disabled};
+       border: 1px solid ${colors.semantic.disabled};
+       color: ${colors.semantic.light};
+       cursor: not-allowed;
+       `}
+  `,
+};
+
+export default Button;
