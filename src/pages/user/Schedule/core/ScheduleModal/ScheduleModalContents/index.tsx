@@ -261,6 +261,15 @@ const ScheduleModalContents = ({
     }
   };
 
+  const handleFileDownload = (fileUrl: string, fileName: string) => {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <div style={{ fontSize: '20px', fontWeight: '700' }}>
@@ -302,13 +311,21 @@ const ScheduleModalContents = ({
       </div>
       <div>첨부 파일</div>
 
-      {modalType === 'R' ? (
+      {modalType === 'R' || modalType === 'U' ? (
         <S.Input
+          documentName={targetSchedule.documentName}
           modalType={modalType}
           value={
             targetSchedule.documentName
               ? targetSchedule.documentName
               : '첨부파일이 없습니다'
+          }
+          onClick={() =>
+            targetSchedule.documentName &&
+            handleFileDownload(
+              targetSchedule.documentUrl,
+              targetSchedule.documentName
+            )
           }
           readOnly
         />
@@ -363,7 +380,7 @@ const ScheduleModalContents = ({
 };
 
 const S = {
-  Input: styled.input<{ modalType: ModalType }>`
+  Input: styled.input<{ modalType: ModalType; documentName?: string }>`
     width: 100%;
     height: 40px;
     line-height: 1;
@@ -371,12 +388,14 @@ const S = {
     border: ${border.default};
     border-radius: ${border.radius.xs};
 
+    ${(props) => props.documentName && `cursor: pointer;`};
+
     ${(props) =>
-      props.modalType === 'R'
+      props.modalType === 'R' || props.documentName
         ? `background-color: ${colors.scale.neutral.s95};
           outline: none
           `
-        : `outline-color: ${colors.semantic.hover.primary};`}
+        : `outline-color: ${colors.semantic.hover.primary};`};
   `,
   Textarea: styled.textarea<{ modalType: ModalType }>`
     width: 100%;
