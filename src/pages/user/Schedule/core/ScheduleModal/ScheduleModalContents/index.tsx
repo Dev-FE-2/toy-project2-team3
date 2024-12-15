@@ -12,17 +12,6 @@ import { RootState } from '../../../../../../state/store';
 import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
 import { ScheduleData, ScheduleList } from '../../schedule';
 
-interface NewScheduleEntry {
-  title: string;
-  startedAt: string;
-  endedAt: string;
-  detail: string;
-  documentName: string;
-  documentUrl: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 type ModalType = 'C' | 'R' | 'U' | 'D';
 
 interface ScheduleModalContentsProps {
@@ -41,8 +30,8 @@ const ScheduleModalContents = ({
   const [startedAt, setStartedAt] = useState('');
   const [endedAt, setEndedAt] = useState('');
   const [detail, setDetail] = useState('');
-  const [documentName, setDocumentName] = useState('');
-  const [documentUrl, setDocumentUrl] = useState('');
+  const [documentName, setDocumentName] = useState<string | undefined>('');
+  const [documentUrl, setDocumentUrl] = useState<string | undefined>('');
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [titleError, setTitleError] = useState('');
@@ -62,14 +51,9 @@ const ScheduleModalContents = ({
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  if (!targetSchedule) {
-    handleOnCloseModal();
-    return null;
-  }
-
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
-    newSchedule: NewScheduleEntry
+    newSchedule: ScheduleList
   ) => {
     const newStartedAt = new Date(newSchedule.startedAt).getTime();
     const newEndedAt = new Date(newSchedule.endedAt).getTime();
@@ -305,6 +289,7 @@ const ScheduleModalContents = ({
           }
           onClick={() =>
             targetSchedule.documentName &&
+            targetSchedule.documentUrl &&
             handleFileDownload(
               targetSchedule.documentUrl,
               targetSchedule.documentName

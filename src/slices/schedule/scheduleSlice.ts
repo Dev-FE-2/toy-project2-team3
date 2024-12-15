@@ -10,7 +10,7 @@ interface ScheduleState {
   currentMonth: number;
   currentYear: number;
   isSixWeek: boolean;
-  targetSchedule: TargetSchedule | null;
+  targetSchedule: TargetSchedule;
   modalType: ModalType;
   isModalOpen: boolean;
   teamData: TeamData[];
@@ -23,7 +23,20 @@ const initialState: ScheduleState = {
   currentMonth: new Date().getMonth() + 1,
   currentYear: new Date().getFullYear(),
   isSixWeek: false,
-  targetSchedule: null,
+  targetSchedule: {
+    createdAt: '',
+    detail: '',
+    endedAt: '',
+    startedAt: '',
+    title: '',
+    updatedAt: '',
+    documentName: '',
+    documentUrl: '',
+    id: '',
+    index: 0,
+    name: '',
+    userId: '',
+  },
   modalType: 'C',
   isModalOpen: false,
   teamData: [],
@@ -49,10 +62,7 @@ const scheduleSlice = createSlice({
     setIsSixWeek: (state, action: PayloadAction<boolean>) => {
       state.isSixWeek = action.payload;
     },
-    setTargetSchedule: (
-      state,
-      action: PayloadAction<TargetSchedule | null>
-    ) => {
+    setTargetSchedule: (state, action: PayloadAction<TargetSchedule>) => {
       state.targetSchedule = action.payload;
     },
     setModalType: (state, action: PayloadAction<ModalType>) => {

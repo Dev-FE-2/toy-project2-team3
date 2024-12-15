@@ -77,6 +77,7 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
   };
 
   const fetchSchedules = useCallback(async () => {
+    console.log(currentSchedule);
     const scheduleData = (await fetchDataFromDB({
       table: 'Schedule',
     })) as ScheduleData[];
