@@ -3,33 +3,18 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../state/store';
 import { URL } from '../../../../constant';
+import { ITEMS_DATA } from './constant';
 import type { NavigationProps } from './type';
 import { S } from './style';
 
+const items = ITEMS_DATA;
 const {
-  userHome,
   editProfile,
-  schedule,
-  attendance,
   salaryDetails,
   salaryCorrection,
   employeeList,
   salaryRequest,
-  salary,
 } = URL;
-
-const items = [
-  { id: 0, icon: 'home', text: 'HOME', link: userHome.link },
-  {
-    id: 1,
-    icon: 'account_circle',
-    text: editProfile.text,
-    link: editProfile.link,
-  },
-  { id: 2, icon: 'calendar_month', text: schedule.text, link: schedule.link },
-  { id: 3, icon: 'schedule', text: attendance.text, link: attendance.link },
-  { id: 4, icon: 'paid', text: salary.text, hasSubItems: true },
-];
 
 const Navigation = ({ style }: NavigationProps) => {
   const { userInfo } = useSelector((state: RootState) => state.user);
