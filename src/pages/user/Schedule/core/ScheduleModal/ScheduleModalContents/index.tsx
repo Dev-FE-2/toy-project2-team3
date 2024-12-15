@@ -256,7 +256,6 @@ const ScheduleModalContents = ({
       textareaRef.current.style.height = '0px';
       const scrollHeight = textareaRef.current.scrollHeight;
 
-      console.log(scrollHeight);
       textareaRef.current.style.height = scrollHeight + 'px';
     }
   };

@@ -78,10 +78,6 @@ const Schedule = () => {
   const [clickedDate, setClickedDate] = useState<number[]>([]);
   const { userInfo, error, isLoading } = useFetchUserInfo();
 
-  console.log(userInfo);
-
-  console.log(currentSchedule);
-
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
     setCurrentMonth(month);
@@ -92,21 +88,15 @@ const Schedule = () => {
 
     setTeamData(teamsData);
 
-    console.log(teamsData);
-
     return teamsData;
   };
 
   const getCurrentUserTeamsData = () => {
-    console.log(teamData);
-    console.log(userInfo && userInfo);
-
     const currentUserTeams = teamData.find((team) =>
       team.members.some(
         (member) => userInfo && member.userId === userInfo.userId
       )
     )?.members as TeamMembersData[];
-    console.log(currentUserTeams);
 
     setCurrentSchedule({
       type: 'team',

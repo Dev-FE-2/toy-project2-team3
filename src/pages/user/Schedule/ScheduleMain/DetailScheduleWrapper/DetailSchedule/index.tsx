@@ -131,8 +131,6 @@ const DetailSchedule = ({
     };
 
     handleRModalOpen(targetSchedule);
-
-    console.log(targetSchedule);
   };
 
   return (
