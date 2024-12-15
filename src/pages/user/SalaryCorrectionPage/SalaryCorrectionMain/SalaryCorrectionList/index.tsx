@@ -1,118 +1,77 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { colors } from '../../../../../styles';
-import PagiNation from '../../../../../components/Pagination';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../state/store';
+import Pagination from '../../../../../components/Pagination';
+import AddPayStub from './AddPayStub';
+import type { SalaryRequest } from '../../../../../types/interface';
+import { fetchDataFromDB } from '../../../../../firebase';
+import { useFetchUserInfo } from '../../../../../hooks';
+import Loading from '../../../../../components/Loading';
 
-type Item = {
-  id: number;
-  date: string;
-  title: string;
-  status: string;
-  reason: string;
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
-const items: Item[] = [
-  {
-    id: 0,
-    date: '2024-11-27',
-    title: '2024년 10월 급여 정산 오류',
-    status: '처리 전',
-    reason: '',
-  },
-  {
-    id: 1,
-    date: '2024-10-25',
-    title: '2024년 09월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 2,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '거부',
-    reason: '돈이 없어요',
-  },
-  {
-    id: 3,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 4,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 5,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 6,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 7,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 8,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 9,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 10,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-  {
-    id: 11,
-    date: '2024-09-25',
-    title: '2024년 08월 급여 정산 오류',
-    status: '승인',
-    reason: '',
-  },
-];
 
 const SalaryCorrectionList = () => {
-  const ITEMPERPAGE = 10;
-  const [currentPageItems, setCurrentPageItems] = useState<Item[]>([]);
+  const ITEM_PER_PAGE = 10;
+  const [items, setItems] = useState<SalaryRequest[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const currentPage = useSelector(
-    (state: RootState) => state.pagination.currentPage
-  );
+  const currentPage = useSelector((state) => state.pagination.currentPage);
+
+  const { userInfo, error, isLoading } = useFetchUserInfo();
 
   useEffect(() => {
-    const indexOfLastItem = currentPage * ITEMPERPAGE;
-    const indexOfFirstItem = indexOfLastItem - ITEMPERPAGE;
-    const currentItemsSlice = items.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentPageItems(currentItemsSlice);
-  }, [currentPage]);
+    const fetchSalaryRequestData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchDataFromDB<SalaryRequest>({
+          table: 'SalaryRequest',
+          key: userInfo?.userId,
+        });
+        if (data) {
+          setItems(data);
+        } else {
+          console.log(error);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!isLoading && userInfo) {
+      fetchSalaryRequestData();
+    }
+  }, [userInfo, isLoading]);
+
+  // 로딩 및 에러 처리
+  if (loading) return <Loading />;
+
+  if (error) return <div>오류 발생: {error.message}</div>;
+
+  // 현재 페이지의 항목 계산
+  const indexOfLastItem = currentPage * ITEM_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
+  const currentPageItems = items.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleItemClick = (item: SalaryRequest) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
 
   return (
     <S.SalaryContainer>
@@ -132,31 +91,38 @@ const SalaryCorrectionList = () => {
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
         {currentPageItems.map((item) => (
-          <div className="salary__item-container" key={item.id}>
+          <div
+            className="salary__item-container"
+            key={item.salaryId}
+            onClick={() => handleItemClick(item)}
+          >
             <div className="item-ceil">
-              <span>{item.date}</span>
+              <span>{formatDate(item.requestedAt)}</span>
             </div>
             <div className="item-ceil">
-              <span>{item.title}</span>
+              <span>{item.requestedTitle}</span>
             </div>
             <div className="item-ceil align-center">
-              {item.status === '승인' ? (
+              {item.handleStatus === '승인' ? (
                 <div className="status approve">승인</div>
-              ) : item.status === '거부' ? (
+              ) : item.handleStatus === '거부' ? (
                 <div className="status reject">거부</div>
               ) : (
                 <div className="status processing">처리 전</div>
               )}
             </div>
             <div className="item-ceil align-center">
-              <span>{item.reason}</span>
+              <span>{item.rejectReason}</span>
             </div>
           </div>
         ))}
       </S.SalaryMainContainer>
       <S.PaginationContainer>
-        <PagiNation maxPage={2} />
+        <Pagination maxPage={Math.ceil(items.length / ITEM_PER_PAGE)} />
       </S.PaginationContainer>
+      {isModalOpen && selectedItem && (
+        <AddPayStub item={selectedItem} onClose={closeModal} />
+      )}
     </S.SalaryContainer>
   );
 };
