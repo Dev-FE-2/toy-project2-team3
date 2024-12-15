@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
 import { fetchDataFromDB } from '../../../../../../firebase';
 import type { Attendance } from '../../../../../../types/interface';
+import { useFetchUserInfo } from '../../../../../../hooks';
 
 const ApplyHeader = () => {
   const today = new Date();
@@ -23,13 +24,15 @@ const ApplyHeader = () => {
   const [nightWorkingHours, setNightWorkingHours] =
     useState<string>('0시간 0분');
 
+  const { userInfo } = useFetchUserInfo();
+
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
         setLoading(true);
         const data = await fetchDataFromDB<Attendance>({
           table: 'Attendance',
-          key: 'gRvGt6IuotQ2d3FzXXFoCbepLAg1',
+          key: userInfo?.userId,
         });
 
         if (data) {

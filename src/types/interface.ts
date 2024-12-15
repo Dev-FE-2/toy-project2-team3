@@ -61,6 +61,8 @@ export interface SalaryRequest {
   requestedUserId: string; // 정정 신청한 직원
   requestList: SalaryRequestItem[];
   requestedAt: string; // ISO timestamp
+  requestedTitle: string;
+  rejectReason: string;
   handledUserId?: string; // 정정 신청을 처리한 관리자, 정정 신청 처리 전인 경우 담당자가 없기에 옵셔널
   handleStatus: '처리 전' | '승인' | '거부';
   handleDetail?: string; // 정정 신청 처리 전인 경우 사유가 없기에 옵셔널

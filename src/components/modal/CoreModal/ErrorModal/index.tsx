@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import warning from '../../../../assets/icons/warning.svg';
-import { StyledCancelButton, StyledCheckButton } from '../../../Button';
+import { StyledCancelButton, StyledCheckButton } from '..';
 import type { ModalProps } from '../../CoreModal';
 
 const ErrorModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
   const handleConfirm = () => {
-    console.log('확인 버튼 클릭');
-    onClose(); // 모달 닫기
+    onClose();
   };
+
+  const warning = (
+    <MaterialIcon className="material-symbols-outlined">warning</MaterialIcon>
+  );
 
   const handleRetry = () => {};
 
   return (
     <>
-      <img src={warning} alt="help" />
+      {warning}
       {ModalMessage}
       <StyledButtonContainer>
         <StyledCheckButton onClick={handleConfirm}>확인</StyledCheckButton>
@@ -27,6 +29,10 @@ const ErrorModal: React.FC<ModalProps> = ({ onClose, ModalMessage }) => {
 const StyledButtonContainer = styled.div`
   display: flex;
   gap: 3.36vw;
+`;
+
+const MaterialIcon = styled.div`
+  font-size: 48px;
 `;
 
 export default ErrorModal;
