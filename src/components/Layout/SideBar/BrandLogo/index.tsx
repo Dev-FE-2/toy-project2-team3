@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { URL } from '../../../../constant';
 import { colors, padding, border } from '../../../../styles';
 import PokemonLogo from '../../../../assets/pokemonBall.svg';
 
@@ -7,7 +8,7 @@ const BrandLogo = ({ style }: BrandLogoProps) => {
   const { padding } = style;
 
   return (
-    <Link to="/">
+    <Link to={URL.index.link}>
       <S.Logo padding={padding}>
         <div className="logo-image">
           <img src={PokemonLogo} alt="Pokemon ERP" />

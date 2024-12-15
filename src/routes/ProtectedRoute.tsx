@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
+import { URL } from '../constant';
 
 interface ProtectedRouteParams {
   isLoggedIn: boolean;
@@ -10,7 +11,7 @@ const ProtectedRoute = ({ isLoggedIn, children }: ProtectedRouteParams) => {
   // 인증되지 않았으면 로그인 페이지로 리다이렉트
   // 인증되었으면 자식 컴포넌트를 렌더링
 
-  return !isLoggedIn ? <Navigate to="/login" replace /> : children;
+  return !isLoggedIn ? <Navigate to={URL.login.link} replace /> : children;
 };
 
 export default ProtectedRoute;
