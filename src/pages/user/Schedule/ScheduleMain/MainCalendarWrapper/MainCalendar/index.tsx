@@ -1,5 +1,18 @@
 import styled from 'styled-components';
 import MainCalendarDays from './MainCalendarDays';
+import { SetStateAction } from 'react';
+
+interface TeamMembersData {
+  name: string;
+  userId: string;
+  number: number;
+}
+
+interface CurrentSchedule {
+  type: string;
+  teamId: TeamMembersData[];
+  userId?: string;
+}
 
 interface TeamMembersData {
   name: string;
@@ -18,6 +31,7 @@ interface MainCalendarProps {
   currentMonth: number;
   setIsSixWeek: (prop: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
+  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
 }
 
 const MainCalendar = ({
@@ -26,6 +40,7 @@ const MainCalendar = ({
   currentMonth,
   setIsSixWeek,
   setIsDayClick,
+  setClickedDate,
 }: MainCalendarProps) => {
   const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
   const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
@@ -48,7 +63,6 @@ const MainCalendar = ({
     prevMonthDays.length + currentMonthDays.length > 35 ? 42 : 35;
 
   const isSixWeekCalendar = () => TOTAL_DISPLAYED_DAYS === 42;
-  console.log(isSixWeekCalendar());
 
   if (isSixWeekCalendar()) {
     setIsSixWeek(true);
@@ -76,6 +90,7 @@ const MainCalendar = ({
           currentMonth={currentMonth}
           day={day}
           setIsDayClick={setIsDayClick}
+          setClickedDate={setClickedDate}
           isCurrentMonth={
             index >= prevMonthDays.length &&
             index < prevMonthDays.length + currentMonthDays.length

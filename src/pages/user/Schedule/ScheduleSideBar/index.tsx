@@ -11,6 +11,7 @@ interface TeamData {
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {

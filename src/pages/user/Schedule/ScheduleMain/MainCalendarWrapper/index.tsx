@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import MainCalendar from './MainCalendar';
 import { border } from '../../../../../styles';
 import { DAYS_OF_WEEK_LIST } from '../../constants';
+import { SetStateAction } from 'react';
 
 interface TeamMembersData {
   name: string;
   userId: string;
+  number: number;
 }
 
 interface CurrentSchedule {
@@ -20,6 +22,7 @@ interface MainCalendarWrapperProps {
   currentYear: number;
   setIsSixWeek: (prop: boolean) => void;
   setIsDayClick: (prop: boolean) => void;
+  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
 }
 
 const MainCalendarWrapper = ({
@@ -28,6 +31,7 @@ const MainCalendarWrapper = ({
   currentYear,
   setIsSixWeek,
   setIsDayClick,
+  setClickedDate,
 }: MainCalendarWrapperProps) => {
   return (
     <>
@@ -43,6 +47,7 @@ const MainCalendarWrapper = ({
           currentMonth={currentMonth}
           setIsSixWeek={setIsSixWeek}
           setIsDayClick={setIsDayClick}
+          setClickedDate={setClickedDate}
         />
       </S.CalendarWrapper>
     </>
