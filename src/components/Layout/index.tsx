@@ -8,7 +8,7 @@ const Layout = () => {
     <S.Layout>
       <SideBar />
       <main>
-        <Outlet /> {/* 메인 콘텐츠 */};
+        <Outlet /> {/* 메인 콘텐츠 */}
       </main>
     </S.Layout>
   );
