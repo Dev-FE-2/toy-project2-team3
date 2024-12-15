@@ -7,7 +7,7 @@ import { padding, colors, border } from '../../../../styles';
 import type { BaseContainerProps, NavigationProps } from './type';
 
 const items = [
-  { id: 0, icon: 'home', text: 'Pokemon ERP', link: '/userHome' },
+  { id: 0, icon: 'home', text: 'HOME', link: '/userHome' },
   { id: 1, icon: 'account_circle', text: '나의 정보', link: '/editProfile' },
   { id: 2, icon: 'calendar_month', text: '나의 업무', link: '/schedule' },
   { id: 3, icon: 'schedule', text: '나의 근태', link: '/attendance' },
