@@ -5,6 +5,8 @@ import ScheduleSideBar from './ScheduleSideBar';
 import { useEffect, useState } from 'react';
 import { fetchDataFromDB } from '../../../firebase/fetchDataFromDB';
 import ScheduleModal from './core/ScheduleModal';
+import { useFetchUserInfo } from '../../../hooks';
+import { Loading } from '../../../components';
 
 interface TeamData {
   id: string;
@@ -74,6 +76,11 @@ const Schedule = () => {
   });
   const [isDayClick, setIsDayClick] = useState(false);
   const [clickedDate, setClickedDate] = useState<number[]>([]);
+  const { userInfo, error, isLoading } = useFetchUserInfo();
+
+  console.log(userInfo);
+
+  console.log(currentSchedule);
 
   const handleYearMonthChange = (year: number, month: number) => {
     setCurrentYear(year);
@@ -85,8 +92,32 @@ const Schedule = () => {
 
     setTeamData(teamsData);
 
+    console.log(teamsData);
+
     return teamsData;
   };
+
+  const getCurrentUserTeamsData = () => {
+    console.log(teamData);
+    console.log(userInfo && userInfo);
+
+    const currentUserTeams = teamData.find((team) =>
+      team.members.some(
+        (member) => userInfo && member.userId === userInfo.userId
+      )
+    )?.members as TeamMembersData[];
+    console.log(currentUserTeams);
+
+    setCurrentSchedule({
+      type: 'team',
+      teamId: currentUserTeams,
+      userId: '',
+    });
+  };
+
+  useEffect(() => {
+    getCurrentUserTeamsData();
+  }, [userInfo]);
 
   const handleCModalOpen = () => {
     setModalType('C');
@@ -102,6 +133,9 @@ const Schedule = () => {
   useEffect(() => {
     getTeamsData();
   }, []);
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류 발생: {error.message}</div>;
 
   return (
     <>
