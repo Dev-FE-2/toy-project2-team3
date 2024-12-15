@@ -120,11 +120,8 @@ const Schedule = () => {
           <ScheduleHeader />
           <ScheduleMain
             currentSchedule={currentSchedule}
-            currentMonth={currentMonth}
-            currentYear={currentYear}
             isDayClick={isDayClick}
             clickedDate={clickedDate}
-            setIsSixWeek={setIsSixWeek}
             setIsDayClick={setIsDayClick}
             setClickedDate={setClickedDate}
             handleRModalOpen={handleRModalOpen}
