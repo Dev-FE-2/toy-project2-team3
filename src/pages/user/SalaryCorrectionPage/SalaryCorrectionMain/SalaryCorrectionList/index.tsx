@@ -96,7 +96,7 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {loading ? (
+        {isLoading ? (
           <div>로딩 중...</div>
         ) : currentPageItems.length > 0 ? (
           currentPageItems.map((item) => (
