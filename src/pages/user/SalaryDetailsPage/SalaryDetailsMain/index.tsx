@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { colors } from '../../../../styles';
-import { useFetchUserInfo } from '../../../../hooks';
-import NormalPayStub from './NormalPayStub';
-import { fetchDataFromDB } from '../../../../firebase';
-import Pagination from '../../../../components/Pagination';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../state/store';
+import styled from 'styled-components';
+import { fetchDataFromDB } from '../../../../firebase';
+import type { RootState } from '../../../../state/store';
+import { useFetchUserInfo } from '../../../../hooks';
+import { colors } from '../../../../styles';
+import NormalPayStub from './NormalPayStub';
+import { Loading, Pagination } from '../../../../components';
 
 export type Item = {
   id: string;
@@ -77,7 +77,7 @@ const SalaryDetailsMain = () => {
     setSelectedItem(null);
   };
 
-  if (isLoading) return <div>로딩중입니다...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>오류 발생: {error.message}</div>;
 
   return (
@@ -118,9 +118,8 @@ const SalaryDetailsMain = () => {
 
 const S = {
   MainContainer: styled.div`
-    width: 70vw;
+    width: 100%;
     height: 70vh;
-    margin-left: 7vw;
     border: 1px solid ${colors.semantic.text.gray};
     display: flex;
     flex-direction: column;

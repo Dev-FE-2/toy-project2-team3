@@ -1,6 +1,7 @@
 export const font = {
   size: {
-    heading: '28px',
+    heading: '32px',
+    headingLight: '28px',
     subHeading: '24px',
     paragraph: '16px',
     info: '14px',
@@ -15,6 +16,10 @@ export const font = {
   },
   family: "'Noto Sans KR', sans-serif",
   weight: {
-    heading: 300,
+    heading: 600,
+    headingLight: 300,
+    light: 300,
+    normal: 400,
+    bold: 500,
   },
 };

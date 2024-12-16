@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import type { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
-import Pagination from '../../../../../components/Pagination';
+import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useFetchUserInfo } from '../../../../../hooks';
-//import Loading from '../../../../../components/Loading';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -20,16 +20,17 @@ const formatDate = (dateString: string) => {
 const SalaryCorrectionList = () => {
   const ITEM_PER_PAGE = 10;
   const [items, setItems] = useState<SalaryRequest[]>([]);
+  const [currentPageItems, setCurrentPageItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const currentPage = useSelector((state) => state.pagination.currentPage);
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
   const { userInfo, isLoading } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
-      setLoading(true);
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
@@ -50,8 +51,6 @@ const SalaryCorrectionList = () => {
       } catch (err) {
         console.error(err);
         setItems([]);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -60,13 +59,13 @@ const SalaryCorrectionList = () => {
     }
   }, [userInfo, isLoading]);
 
-  // 로딩 중일 때 로딩 컴포넌트 표시
-  //if (loading) return <Loading />;
-
   // 현재 페이지의 항목 계산
-  const indexOfLastItem = currentPage * ITEM_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
-  const currentPageItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    const indexOfLastItem = currentPage * ITEM_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
+    const currentItemsSlice = items.slice(indexOfFirstItem, indexOfLastItem);
+    setCurrentPageItems(currentItemsSlice);
+  }, [currentPage, items]); // items가 변경될 때도 currentPageItems를 업데이트
 
   const handleItemClick = (item: SalaryRequest) => {
     setSelectedItem(item);
@@ -78,11 +77,13 @@ const SalaryCorrectionList = () => {
     setSelectedItem(null);
   };
 
+  if (isLoading) return <Loading />;
+
   return (
     <S.SalaryContainer>
       <S.SalaryLabelContainer>
         <div className="item-ceil">
-          <p>날짜</p>
+          <p>신청 날짜</p>
         </div>
         <div className="item-ceil">
           <p>제목</p>
@@ -95,7 +96,9 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {currentPageItems.length > 0 ? (
+        {loading ? (
+          <div>로딩 중...</div>
+        ) : currentPageItems.length > 0 ? (
           currentPageItems.map((item) => (
             <div
               className="salary__item-container"
@@ -123,7 +126,7 @@ const SalaryCorrectionList = () => {
             </div>
           ))
         ) : (
-          <div>표시할 데이터가 없거나 불러오는 중입니다.</div>
+          <div>데이터가 존재하지 않습니다.</div>
         )}
       </S.SalaryMainContainer>
 
@@ -139,9 +142,8 @@ const SalaryCorrectionList = () => {
 
 const S = {
   SalaryContainer: styled.div`
-    width: 70vw;
+    width: 100%;
     height: 70vh;
-    margin-left: 7vw;
     margin-top: 2vh;
     border: 1px solid ${colors.semantic.text.gray};
     display: flex;
@@ -175,8 +177,6 @@ const S = {
   SalaryMainContainer: styled.div`
     width: 100%;
     min-height: 7.8%;
-    margin-left: 6vw;
-    margin-right: 6vw;
     cursor: pointer;
     justify-content: center;
     align-items: center;

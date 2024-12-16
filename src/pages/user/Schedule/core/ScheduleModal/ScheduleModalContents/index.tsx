@@ -239,13 +239,15 @@ const ScheduleModalContents = ({
           return schedule;
         });
 
-      await saveDataToDB({
-        table: 'Schedule',
-        key: `${targetSchedule.id}/scheduleList`,
-        data: updatedScheduleList,
-      });
+      if (confirm('일정을 삭제하시겠습니까?')) {
+        await saveDataToDB({
+          table: 'Schedule',
+          key: `${targetSchedule.id}/scheduleList`,
+          data: updatedScheduleList,
+        });
 
-      await updateScheduleData();
+        await updateScheduleData();
+      }
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
     } finally {
@@ -384,7 +386,7 @@ const ScheduleModalContents = ({
         <S.ButtonWrapper>
           <Button color="success" text="수정" onClick={handleEditMode} />
           <Button
-            color={isLoading ? 'disabled' : 'success'}
+            color={isLoading ? 'disabled' : 'danger'}
             text="삭제"
             onClick={deleteSchedule}
           />

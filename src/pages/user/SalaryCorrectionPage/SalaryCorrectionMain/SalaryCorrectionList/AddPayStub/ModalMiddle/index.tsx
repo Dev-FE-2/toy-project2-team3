@@ -24,7 +24,6 @@ const formatDate = (dateString: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
 
-
 // 총 근무 시간 계산 함수 (시간과 분으로 반환)
 const calculateTotalWorkTime = (attachments: SalaryRequestItem[]) => {
   const totalMinutes = attachments.reduce((total, att) => {
@@ -65,6 +64,8 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
         console.log(err);
       } finally {
         setLoading(false);
+        console.log(salaryCorrectData);
+        console.log(setAttachments);
       }
     };
     fetchSalaryCorrecteData();
@@ -94,8 +95,7 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
                             window.open(att.requestDocumentUrl, '_blank')
                           }
                         >
-                          {getFilteredFileNames([att.requestDocumentUrl])}{' '}
-                          {/* 실제 파일명 출력 */}
+                          {getFilteredFileNames([att.requestDocumentUrl])}
                         </button>
                       ) : (
                         '첨부 파일 없음'
@@ -129,14 +129,18 @@ const ModalMiddle: React.FC<ModalMiddleProps> = ({ item }) => {
           <div className="description">
             {attachments.length > 0 ? (
               attachments.map((att) => (
-                <div key={att.requestId}>
-                  {att.requestDetail ? att.requestDetail : null}
-                </div>
+                <p key={att.requestId}>
+                  {att.requestDetail
+                    ? att.requestDetail.split('\n').map((line, index) => (
+                        <span key={index}>
+                          {line}
+                          <br />
+                        </span>
+                      ))
+                    : '설명이 작성되지 않았습니다.'}
+                </p>
               ))
             ) : (
-              <p>설명이 작성되지 않았습니다.</p>
-            )}
-            {attachments.every((att) => !att.requestDetail) && (
               <p>설명이 작성되지 않았습니다.</p>
             )}
           </div>
@@ -181,17 +185,18 @@ const S = {
       overflow-wrap: break-word;
       overflow: hidden;
     }
-
     .description {
       background-color: #fff;
       width: 100%;
       border: 1px solid ${colors.semantic.text.gray};
       min-height: 20vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 10px 0;
+      padding: 10px;
+      white-space: pre-wrap;
     }
 
     .reject {

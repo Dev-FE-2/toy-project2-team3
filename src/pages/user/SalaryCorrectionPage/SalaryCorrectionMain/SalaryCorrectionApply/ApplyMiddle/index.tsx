@@ -3,12 +3,23 @@ import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
 import { uploadFile, deleteFile } from '../../../../../../utils';
 import { useFetchUserInfo } from '../../../../../../hooks';
+
+export type RequestDetail = {
+  requestDetail: string;
+  requestDocumentUrl: string;
+  requestEndedAt: string;
+  requestId: string;
+  requestStartedAt: string;
+  requestWorkingTime: number;
+};
+
 export type OvertimeRecord = {
   start: string;
   end: string;
   hours: number;
   description: string;
   filePath?: string;
+  requestList: RequestDetail[];
 };
 
 type MiddleProps = {
@@ -91,7 +102,6 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         return uploadFile(file, `SalaryCorrection/${userId}`, setIsLoading);
       });
 
-      // 모든 파일 업로드 완료 대기
       const urls = await Promise.all(uploadPromises);
       urls.forEach((url) => {
         if (url) {
@@ -99,17 +109,50 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
         }
       });
 
-      const newRecord: OvertimeRecord = {
-        start: overtimeStart,
-        end: overtimeEnd,
-        hours: hoursDiff,
-        description, // 이 부분에서 description을 그대로 사용
-        filePath: filePaths.join(', '),
+      const newRequestId = `requestId-${Date.now()}`;
+
+      // 새로운 요청 생성
+      const newRequest: RequestDetail = {
+        requestDetail: description,
+        requestDocumentUrl: filePaths.join(', '),
+        requestEndedAt: overtimeEnd,
+        requestId: newRequestId,
+        requestStartedAt: overtimeStart,
+        requestWorkingTime: hoursDiff,
       };
 
-      // 상태 업데이트
-      setLocalOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
-      setOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
+      // 기존 OvertimeRecord를 찾기
+      const existingRecordIndex = overtimeRecords.findIndex(
+        (record) => record.start === overtimeStart && record.end === overtimeEnd
+      );
+
+      if (existingRecordIndex !== -1) {
+        // 기존 OvertimeRecord가 있을 경우 requestList에 추가
+        setLocalOvertimeRecords((prevRecords) => {
+          const updatedRecords = [...prevRecords];
+          updatedRecords[existingRecordIndex].requestList.push(newRequest);
+          return updatedRecords;
+        });
+        setOvertimeRecords((prevRecords) => {
+          const updatedRecords = [...prevRecords];
+          updatedRecords[existingRecordIndex].requestList.push(newRequest);
+          return updatedRecords;
+        });
+      } else {
+        // 새로운 OvertimeRecord 생성
+        const newRecord: OvertimeRecord = {
+          start: overtimeStart,
+          end: overtimeEnd,
+          hours: hoursDiff,
+          description,
+          filePath: filePaths.join(', '),
+          requestList: [newRequest],
+        };
+
+        // 상태 업데이트
+        setLocalOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
+        setOvertimeRecords((prevRecords) => [newRecord, ...prevRecords]);
+      }
 
       const newTotal = overtimeTotal + hoursDiff;
       onOvertimeUpdate(newTotal);
@@ -117,7 +160,7 @@ const ApplyMiddle: React.FC<MiddleProps> = ({
       // 입력 초기화
       setOvertimeStart('');
       setOvertimeEnd('');
-      setDescription(''); // 설명 초기화 추가
+      setDescription('');
       setUploadedFiles([]);
       setFileName('파일 선택');
     } else {
@@ -361,6 +404,11 @@ const S = {
         background-color: ${colors.semantic.hover.secondary};
         color: ${colors.semantic.text.dark};
       }
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
     }
 
     .attach__button {
@@ -378,12 +426,18 @@ const S = {
         background-color: ${colors.semantic.hover.secondary};
         color: ${colors.semantic.text.dark};
       }
+      border-radius: 8px;
+      &:hover {
+        background-color: ${colors.semantic.hover.secondary};
+        color: ${colors.semantic.text.dark};
+      }
     }
   `,
   ApplyMiddleRow: styled.div`
     display: flex;
-    justify-content: row;
     align-items: center;
+    word-break: keep-all;
+    white-space: nowrap;
   `,
   RecordList: styled.div`
     margin-top: 10px;
