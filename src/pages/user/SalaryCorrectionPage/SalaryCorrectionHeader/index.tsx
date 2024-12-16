@@ -23,6 +23,7 @@ export const StyleCorrectiondButton = styled.button`
     background-color: ${colors.semantic.hover.primary};
     color: ${colors.semantic.primary};
   }
+  margin-left: auto;
 `;
 
 const SalaryCorrectionHeader: React.FC<SalaryCorrectionHeaderProps> = ({
@@ -31,11 +32,6 @@ const SalaryCorrectionHeader: React.FC<SalaryCorrectionHeaderProps> = ({
 }) => {
   return (
     <S.SalaryHeader>
-      {isVisible ? (
-        <S.Title>급여 정정 신청</S.Title>
-      ) : (
-        <S.Title>급여 정정 내역</S.Title>
-      )}
       {!isVisible && (
         <StyleCorrectiondButton onClick={onToggleVisibility}>
           정정 신청
@@ -51,7 +47,6 @@ const S = {
     display: flex;
   `,
   Title: styled.div`
-    margin-left: 7vw;
     font-size: 32px;
     margin-right: auto;
     font-weight: bold;

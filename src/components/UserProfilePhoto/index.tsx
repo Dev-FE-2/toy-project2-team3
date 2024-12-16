@@ -33,11 +33,11 @@ const S = {
     border-radius: 50%;
     overflow: hidden;
     /* width: 40px;
-        height: 40px; */
+        height: 40px;
 
     img {
       width: 100%;
-    }
+    } */
   `,
 };
 

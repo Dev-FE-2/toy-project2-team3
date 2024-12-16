@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import type { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
-import Pagination from '../../../../../components/Pagination';
+import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
@@ -22,14 +23,14 @@ const SalaryCorrectionList = () => {
   const [currentPageItems, setCurrentPageItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const currentPage = useSelector((state) => state.pagination.currentPage);
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
   const { userInfo, isLoading } = useFetchUserInfo();
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
-      setLoading(true);
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
@@ -50,8 +51,6 @@ const SalaryCorrectionList = () => {
       } catch (err) {
         console.error(err);
         setItems([]);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -77,6 +76,8 @@ const SalaryCorrectionList = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.SalaryContainer>
@@ -125,7 +126,7 @@ const SalaryCorrectionList = () => {
             </div>
           ))
         ) : (
-          <div>표시할 데이터가 없거나 불러오는 중입니다.</div>
+          <div>데이터가 존재하지 않습니다.</div>
         )}
       </S.SalaryMainContainer>
 
@@ -141,9 +142,8 @@ const SalaryCorrectionList = () => {
 
 const S = {
   SalaryContainer: styled.div`
-    width: 70vw;
+    width: 100%;
     height: 70vh;
-    margin-left: 7vw;
     margin-top: 2vh;
     border: 1px solid ${colors.semantic.text.gray};
     display: flex;
@@ -177,8 +177,6 @@ const S = {
   SalaryMainContainer: styled.div`
     width: 100%;
     min-height: 7.8%;
-    margin-left: 6vw;
-    margin-right: 6vw;
     cursor: pointer;
     justify-content: center;
     align-items: center;

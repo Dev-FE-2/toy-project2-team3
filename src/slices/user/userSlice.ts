@@ -10,6 +10,9 @@ interface UserState {
     profileImgUrl: string | null;
     team: string | null;
     position: string | null;
+    department: string | null;
+    isAdmin: boolean;
+    isActivated: boolean;
   };
 }
 
@@ -29,6 +32,9 @@ const initialState: UserState = savedUserInfo
         profileImgUrl: null,
         team: null,
         position: null,
+        department: null,
+        isAdmin: null,
+        isActivated: null,
       },
     };
 
@@ -57,6 +63,9 @@ const userSlice = createSlice({
         profileImgUrl: null,
         team: null,
         position: null,
+        department: null,
+        isAdmin: false,
+        isActivated: false,
       };
       sessionStorage.removeItem('user');
     },

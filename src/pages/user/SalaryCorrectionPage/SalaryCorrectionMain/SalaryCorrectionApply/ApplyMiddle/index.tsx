@@ -435,8 +435,9 @@ const S = {
   `,
   ApplyMiddleRow: styled.div`
     display: flex;
-    justify-content: row;
     align-items: center;
+    word-break: keep-all;
+    white-space: nowrap;
   `,
   RecordList: styled.div`
     margin-top: 10px;
