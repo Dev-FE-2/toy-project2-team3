@@ -8,6 +8,7 @@ import {
 } from 'firebase/storage';
 import { storage } from '../../firebaseConfig';
 import Button from '../form/Button';
+import { border, colors, padding } from '../../styles';
 
 interface FileUploadingProps {
   filePath: string;
@@ -138,7 +139,15 @@ const S = {
     gap: 16px;
   `,
   Input: styled.input`
-    padding: 12px;
+    /* padding: 12px;
+    flex: 1; */
+    width: 100%;
+    height: 51px;
+    line-height: 1;
+    padding: 0 ${padding.md};
+    border: ${border.default};
+    border-radius: ${border.radius.xs};
+    outline-color: ${colors.semantic.hover.primary};
     flex: 1;
   `,
 };
