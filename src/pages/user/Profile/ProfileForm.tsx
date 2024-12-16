@@ -11,7 +11,6 @@ const ProfileForm = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
   const { saveData, isSaving, error } = useSaveData<FormData>({
     table: COLLECTION_NAME.users,
-    requireAuth: true, // 인증 여부 필요
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
