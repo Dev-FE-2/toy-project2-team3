@@ -13,9 +13,7 @@ import {
   setModalType,
   setScheduleData,
 } from '../../../../../../slices/schedule/scheduleSlice';
-import { ScheduleData, ScheduleList } from '../../schedule';
-
-type ModalType = 'C' | 'R' | 'U' | 'D';
+import { ModalType, ScheduleData, ScheduleList } from '../../schedule';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;
@@ -208,8 +206,6 @@ const ScheduleModalContents = ({
       setIsLoading(false);
     }
   };
-
-  console.log(targetSchedule);
 
   const deleteSchedule = async () => {
     try {

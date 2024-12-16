@@ -39,8 +39,6 @@ const Schedule = () => {
 
     dispatch(setTeamData(teamsData));
 
-    console.log(teamsData);
-
     return teamsData;
   };
 
