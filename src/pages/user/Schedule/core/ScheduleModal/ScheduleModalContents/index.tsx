@@ -67,15 +67,17 @@ const ScheduleModalContents = ({
     existingSchedules: ScheduleList[],
     newSchedule: ScheduleList
   ) => {
+    console.log('함수 실행됨');
     const newStartedAt = new Date(newSchedule.startedAt).getTime();
     const newEndedAt = new Date(newSchedule.endedAt).getTime();
 
     if (newEndedAt < newStartedAt) {
+      console.log('종료 시간이 더 과거임');
       setTimeError('종료 시간은 시작 시간보다 과거일 수 없습니다.');
       return false;
     }
 
-    existingSchedules.map((schedule) => {
+    for (const schedule of existingSchedules) {
       const existingStartedAt = new Date(schedule.startedAt).getTime();
       const existingEndedAt = new Date(schedule.endedAt).getTime();
 
@@ -84,13 +86,13 @@ const ScheduleModalContents = ({
         (newEndedAt > existingStartedAt && newEndedAt <= existingEndedAt) ||
         (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt)
       ) {
+        console.log('기존 일정과 겹치는 시간대임');
         setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
         return false;
       }
-    });
+    }
 
     setTimeError('');
-
     return true;
   };
 
@@ -140,6 +142,7 @@ const ScheduleModalContents = ({
           existingUserSchedule &&
           !isValidSchedule(existingUserSchedule.scheduleList, newScheduleEntry)
         ) {
+          console.log('안돼');
           return;
         }
 
@@ -152,6 +155,7 @@ const ScheduleModalContents = ({
               : '',
             data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
+          handleOnCloseModal();
         } else {
           // 존재하지 않던 유저의 스케줄 등록의 경우
           await saveDataToDB({
@@ -164,6 +168,7 @@ const ScheduleModalContents = ({
         }
 
         await updateScheduleData();
+        handleOnCloseModal();
       } else if (modalType === 'U') {
         const newScheduleEntry = {
           title,
@@ -177,6 +182,7 @@ const ScheduleModalContents = ({
         };
 
         if (!isValidSchedule([targetSchedule], newScheduleEntry)) {
+          console.log('안돼');
           return;
         }
 
@@ -197,6 +203,7 @@ const ScheduleModalContents = ({
         });
 
         await updateScheduleData();
+        handleOnCloseModal();
       }
 
       setTitle('');
@@ -206,7 +213,6 @@ const ScheduleModalContents = ({
     } catch (error) {
       console.error('Schedule creation failed:', error);
     } finally {
-      handleOnCloseModal();
       setIsLoading(false);
     }
   };
@@ -248,11 +254,11 @@ const ScheduleModalContents = ({
 
         await updateScheduleData();
       }
+      handleOnCloseModal();
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
     } finally {
       setIsLoading(false);
-      handleOnCloseModal();
     }
   };
 
