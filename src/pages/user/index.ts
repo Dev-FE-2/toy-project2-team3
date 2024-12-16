@@ -1,6 +1,6 @@
-export { default as UserHome } from './UserHome';
-export { default as Schedule } from './Schedule';
-export { default as EditProfile } from './Profile';
-export { default as Attendance } from './Attendance';
-export { default as SalaryCorrection } from './SalaryCorrectionPage';
-export { default as SalaryDetails } from './SalaryDetailsPage';
+export { default as UserHomePage } from './UserHomePage';
+export { default as SchedulePage } from './SchedulePage';
+export { default as ProfilePage } from './ProfilePage';
+export { default as AttendancePage } from './AttendancePage';
+export { default as SalaryCorrectionPage } from './SalaryCorrectionPage';
+export { default as SalaryDetailsPage } from './SalaryDetailsPage';
