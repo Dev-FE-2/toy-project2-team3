@@ -12,14 +12,21 @@ import {
 
 const ScheduleHeader = () => {
   const dispatch = useDispatch();
-  const { isDayClick, clickedDate, teamData } = useSelector(
+  const { isDayClick, clickedDate, teamData, currentSchedule } = useSelector(
     (state: RootState) => state.schedule
   );
   const [year, month, day] = clickedDate;
   const formattedMonth = String(month).padStart(2, '0');
   const formattedDay = String(day).padStart(2, '0');
   const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
-  const teamName = teamData.map((data) => data.name);
+  const teamName = teamData
+    .filter((data) => data.members === currentSchedule.teamId)
+    .map((d) => d.name);
+
+  console.log(teamName);
+
+  console.log(teamData);
+  console.log(currentSchedule);
 
   const handleCModalOpen = () => {
     dispatch(setModalType('C'));
