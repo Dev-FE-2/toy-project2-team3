@@ -2,3 +2,4 @@ export { default as counterReducer } from './counter/counterSlice';
 export { default as userReducer } from './user/userSlice';
 export { default as paginationReducer } from './pagination/paginationSlice';
 export { default as scheduleReducer } from './schedule/scheduleSlice';
+export { default as navigationReducer } from './navigation/navigationSlice';
