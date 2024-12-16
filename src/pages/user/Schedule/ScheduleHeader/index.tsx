@@ -1,83 +1,46 @@
 import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
-import { useState } from 'react';
 import { border } from '../../../../styles';
 import Button from '../../../../components/form/Button';
-import { MONTHS } from '../constants';
-
-interface TeamData {
-  id: string;
-  name: string;
-  members: TeamMembersData[];
-}
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface ScheduleHeaderProps {
-  currentMonth: number;
-  currentYear: number;
-  isDayClick: boolean;
-  clickedDate: number[];
-  teamData: TeamData[];
-  handleYearMonthChange: (year: number, month: number) => void;
-  handleCModalOpen: () => void;
-  setIsDayClick: (prop: boolean) => void;
-}
-
-const ScheduleHeader = ({
-  currentMonth,
-  currentYear,
-  isDayClick,
-  clickedDate,
-  teamData,
-  handleYearMonthChange,
-  handleCModalOpen,
+import type { RootState } from '../../../../state/store';
+import { useDispatch, useSelector } from 'react-redux';
+import {
   setIsDayClick,
-}: ScheduleHeaderProps) => {
-  const [isMonthPickerDetailOpen, setIsMonthPickerDetailOpen] = useState(false);
+  setIsModalOpen,
+  setModalType,
+} from '../../../../slices/schedule/scheduleSlice';
+
+const ScheduleHeader = () => {
+  const dispatch = useDispatch();
+  const { isDayClick, clickedDate, teamData, currentSchedule } = useSelector(
+    (state: RootState) => state.schedule
+  );
   const [year, month, day] = clickedDate;
   const formattedMonth = String(month).padStart(2, '0');
   const formattedDay = String(day).padStart(2, '0');
   const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
-  const teamName = teamData.map((data) => data.name);
+  const teamName = teamData
+    .filter((data) => data.members === currentSchedule.teamId)
+    .map((d) => d.name);
 
-  const handleMonthClick = (clickedMonth: number) => {
-    handleYearMonthChange(currentYear, clickedMonth + 1);
-    setIsMonthPickerDetailOpen(false);
+  console.log(teamName);
+
+  console.log(teamData);
+  console.log(currentSchedule);
+
+  const handleCModalOpen = () => {
+    dispatch(setModalType('C'));
+    dispatch(setIsModalOpen(true));
   };
-
-  const handlePrevMonth = () => {
-    const newYear = currentMonth === 1 ? currentYear - 1 : currentYear;
-    const newMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-    handleYearMonthChange(newYear, newMonth);
+  const handleDayClick = () => {
+    dispatch(setIsDayClick(false));
   };
-
-  const handlePrevYear = () => {
-    const newYear = currentYear - 1;
-    handleYearMonthChange(newYear, currentMonth);
-  };
-
-  const handleNextMonth = () => {
-    const newYear = currentMonth === 12 ? currentYear + 1 : currentYear;
-    const newMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-    handleYearMonthChange(newYear, newMonth);
-  };
-
-  const handleNextYear = () => {
-    const newYear = currentYear + 1;
-    handleYearMonthChange(newYear, currentMonth);
-  };
-
   return (
     <S.Header isDayClick={isDayClick}>
       {isDayClick ? (
         <>
           <S.Icon
-            onClick={() => setIsDayClick(false)}
+            onClick={handleDayClick}
             className="material-symbols-outlined"
           >
             arrow_back_ios
@@ -98,23 +61,7 @@ const ScheduleHeader = ({
       ) : (
         <>
           <div></div>
-          <MonthPicker
-            content={
-              isMonthPickerDetailOpen
-                ? currentYear
-                : `${currentYear} ${MONTHS[currentMonth]}`
-            }
-            currentMonth={currentMonth}
-            isMonthPickerDetailOpen={isMonthPickerDetailOpen}
-            handleMonthClick={handleMonthClick}
-            setIsMonthPickerDetailOpen={setIsMonthPickerDetailOpen}
-            onClickLeft={
-              isMonthPickerDetailOpen ? handlePrevYear : handlePrevMonth
-            }
-            onClickRight={
-              isMonthPickerDetailOpen ? handleNextYear : handleNextMonth
-            }
-          />
+          <MonthPicker />
           <div style={{ marginRight: '16px' }}>
             <Button
               color="primary"

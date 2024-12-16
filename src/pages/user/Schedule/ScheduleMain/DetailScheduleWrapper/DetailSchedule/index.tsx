@@ -1,61 +1,37 @@
 import styled from 'styled-components';
 import { colors, padding } from '../../../../../../styles';
-
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface FormattedUserOrTeamScheduleData extends ScheduleData {
-  type: string;
-  name: string;
-  number: number;
-}
-
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  documentName: string;
-  documentUrl: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface TargetSchedule extends ScheduleList {
-  id: string;
-  index: number;
-  name: string;
-  userId: string;
-  documentName: string;
-  documentUrl: string;
-}
+import type {
+  FormattedUserOrTeamScheduleData,
+  ScheduleList,
+  TargetSchedule,
+} from '../../../../../../types/schedule';
+import { useDispatch } from 'react-redux';
+import {
+  setIsModalOpen,
+  setModalType,
+  setTargetSchedule,
+} from '../../../../../../slices/schedule/scheduleSlice';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;
-  TEAM_MEMBERS_LENGTH: number;
+  teamMembersLength: number;
   clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
-  handleRModalOpen: (targetSchedule: TargetSchedule) => void;
 }
 
 const DetailSchedule = ({
   formattedClickedDate,
-  TEAM_MEMBERS_LENGTH,
+  teamMembersLength,
   clickedDateTeamScheduleData,
-  handleRModalOpen,
 }: DetailSchedulProps) => {
-  const SCHEDULE_GRID_WIDTH = (1250 - 40) / TEAM_MEMBERS_LENGTH - 0.3;
+  const dispatch = useDispatch();
+
+  const handleRModalOpen = (targetSchedule: TargetSchedule) => {
+    dispatch(setModalType('R'));
+    dispatch(setTargetSchedule(targetSchedule));
+    dispatch(setIsModalOpen(true));
+  };
+
+  const SCHEDULE_GRID_WIDTH = (1250 - 40) / teamMembersLength - 0.3;
 
   const calculatePosition = (startedAt: string, endedAt: string) => {
     const cuttedStartedAt = startedAt.slice(0, 10);
@@ -117,28 +93,26 @@ const DetailSchedule = ({
 
   const getTargetSchedule = (
     id: string,
-    index: number,
+    // index: number,
     name: string,
     userId: string,
     scheduleData: ScheduleList
   ) => {
     const targetSchedule = {
       id,
-      index,
+      // index,
       name,
       userId,
       ...scheduleData,
     };
 
     handleRModalOpen(targetSchedule);
-
-    console.log(targetSchedule);
   };
 
   return (
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
-        schedule.scheduleList.map((item, index) => {
+        schedule.scheduleList.map((item) => {
           const { top, height } = calculatePosition(
             item.startedAt,
             item.endedAt
@@ -157,11 +131,11 @@ const DetailSchedule = ({
               height={height}
               assignedBackgroundColor={assignedBackgroundColor}
               assignedBorderColor={assignedBorderColor}
-              key={`${schedule.id}-${index}`}
+              key={`${schedule.id}-${item.createdAt}`}
               onClick={() =>
                 getTargetSchedule(
                   schedule.id,
-                  index,
+                  // item.createdAt,
                   schedule.name,
                   schedule.userId,
                   item
@@ -172,7 +146,6 @@ const DetailSchedule = ({
                 <div className="title">{item.title}</div>
                 <div className="detail">{item.detail}</div>
                 <div className="document-url">{item.documentName}</div>
-                {/* <div className='documentUrl'>{item.documentUrl}</div> */}
               </div>
             </S.ScheduleBox>
           );

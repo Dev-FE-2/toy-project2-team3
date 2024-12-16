@@ -1,39 +1,24 @@
 import styled from 'styled-components';
-import { colors, border, padding } from '../../../../../../../styles';
+import { colors, border, padding } from '../../../../../../styles';
 import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
-import { SetStateAction } from 'react';
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../../../../../../state/store';
+import {
+  setClickedDate,
+  setIsDayClick,
+} from '../../../../../../slices/schedule/scheduleSlice';
 
 interface MainCalendarDaysProps {
-  currentSchedule: CurrentSchedule;
-  currentYear: number;
-  currentMonth: number;
   day: number;
   isCurrentMonth: boolean;
-  setIsDayClick: (prop: boolean) => void;
-  setClickedDate: React.Dispatch<SetStateAction<number[]>>;
 }
 
-const MainCalendarDays = ({
-  currentSchedule,
-  currentYear,
-  currentMonth,
-  day,
-  isCurrentMonth,
-  setIsDayClick,
-  setClickedDate,
-}: MainCalendarDaysProps) => {
+const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
+  const { currentMonth, currentYear } = useSelector(
+    (state: RootState) => state.schedule
+  );
+  const dispatch = useDispatch();
+
   const handleDayClick = () => {
     let adjustedYear = currentYear;
     let adjustedMonth = currentMonth;
@@ -53,8 +38,8 @@ const MainCalendarDays = ({
       }
     }
 
-    setClickedDate([adjustedYear, adjustedMonth, adjustedDay]);
-    setIsDayClick(true);
+    dispatch(setClickedDate([adjustedYear, adjustedMonth, adjustedDay]));
+    dispatch(setIsDayClick(true));
   };
 
   return (
@@ -64,12 +49,7 @@ const MainCalendarDays = ({
     >
       <S.MainCalendarDaysNumber>{day}</S.MainCalendarDaysNumber>
       <S.MainCalendarDaysContentsWrapper>
-        <MainCalendarDaysSchedules
-          currentSchedule={currentSchedule}
-          currentYear={currentYear}
-          currentMonth={currentMonth}
-          day={day}
-        />
+        <MainCalendarDaysSchedules day={day} />
       </S.MainCalendarDaysContentsWrapper>
     </S.MainCalendarDaysWrapper>
   );

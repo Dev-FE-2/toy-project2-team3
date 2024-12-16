@@ -1,60 +1,43 @@
 import styled from 'styled-components';
-import { border, colors, padding } from '../../../../../../../../styles';
-import { fetchDataFromDB } from '../../../../../../../../firebase/fetchDataFromDB';
-import { useCallback, useEffect, useState } from 'react';
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
+import { colors, border, padding } from '../../../../../../../styles';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../../../../../state/store';
+import type {
+  CurrentSchedule,
+  FormattedUserOrTeamScheduleData,
+  ScheduleData,
+} from '../../../../../../../types/schedule';
 
 interface MainCalendarDaysSchedulesProps {
-  currentSchedule: CurrentSchedule;
-  currentYear: number;
-  currentMonth: number;
   day: number;
 }
 
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface FormattedUserOrTeamScheduleData extends ScheduleData {
-  type: string;
-  name: string;
-  number: number;
-}
-
-const MainCalendarDaysSchedules = ({
-  currentSchedule,
-  currentYear,
-  currentMonth,
-  day,
-}: MainCalendarDaysSchedulesProps) => {
+const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
+  const { currentMonth, currentYear, currentSchedule, scheduleData } =
+    useSelector((state: RootState) => state.schedule);
   const [userScheduleData, setUserScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
   const [teamScheduleData, setTeamScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
+
+  useEffect(() => {
+    if (currentSchedule.type === 'user') {
+      const userScheduleData = formatUserSchedule(
+        currentSchedule,
+        scheduleData
+      );
+      setUserScheduleData(userScheduleData);
+    } else {
+      const teamScheduleData = formatTeamSchedule(
+        currentSchedule,
+        scheduleData
+      );
+      setTeamScheduleData(teamScheduleData);
+    }
+  }, [currentSchedule, scheduleData]);
 
   const formatUserSchedule = (
     currentSchedule: CurrentSchedule,
@@ -86,6 +69,8 @@ const MainCalendarDaysSchedules = ({
     currentSchedule: CurrentSchedule,
     scheduleData: ScheduleData[]
   ) => {
+    if (!currentSchedule.teamId) return [];
+
     const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
     const teamScheduleData = scheduleData.filter((schedule) =>
       teamMembersUserId.includes(schedule.userId)
@@ -106,29 +91,6 @@ const MainCalendarDaysSchedules = ({
 
     return formattedTeamSchedule;
   };
-
-  const fetchSchedules = useCallback(async () => {
-    const scheduleData = (await fetchDataFromDB({
-      table: 'Schedule',
-    })) as ScheduleData[];
-    if (currentSchedule.type === 'user') {
-      const userScheduleData = formatUserSchedule(
-        currentSchedule,
-        scheduleData
-      );
-      setUserScheduleData(userScheduleData);
-    } else {
-      const teamScheduleData = formatTeamSchedule(
-        currentSchedule,
-        scheduleData
-      );
-      setTeamScheduleData(teamScheduleData);
-    }
-  }, [currentSchedule]);
-
-  useEffect(() => {
-    fetchSchedules();
-  }, [fetchSchedules]);
 
   const isDateInRange = (currentDate: Date, startedAt: Date, endedAt: Date) => {
     return (

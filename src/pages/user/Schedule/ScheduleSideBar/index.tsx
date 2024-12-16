@@ -1,50 +1,20 @@
 import styled from 'styled-components';
 import TeamList from '../core/TeamList';
 import { border } from '../../../../styles';
+import type { RootState } from '../../../../state/store';
+import { useSelector } from 'react-redux';
 
-interface TeamData {
-  id: string;
-  name: string;
-  members: TeamMembersData[];
-}
-
-interface TeamMembersData {
-  name: string;
-  userId: string;
-  number: number;
-}
-
-interface CurrentSchedule {
-  type: string;
-  teamId: TeamMembersData[];
-  userId?: string;
-}
-
-interface ScheduleSideBarProps {
-  isSixWeek: boolean;
-  isDayClick: boolean;
-  teamData: TeamData[];
-  setCurrentSchedule: React.Dispatch<React.SetStateAction<CurrentSchedule>>;
-}
-
-const ScheduleSideBar = ({
-  isSixWeek,
-  isDayClick,
-  teamData,
-  setCurrentSchedule,
-}: ScheduleSideBarProps) => {
+const ScheduleSideBar = () => {
+  const { isSixWeek, isDayClick, teamData } = useSelector(
+    (state: RootState) => state.schedule
+  );
   const SIDEBAR_HEIGHT_STATUS = isSixWeek && !isDayClick;
 
   return (
     <S.Wrapper sideBarHeightStatus={SIDEBAR_HEIGHT_STATUS}>
       <S.Content>
         {teamData.map((team) => (
-          <TeamList
-            key={team.id}
-            name={team.name}
-            members={team.members}
-            setCurrentSchedule={setCurrentSchedule}
-          />
+          <TeamList key={team.id} name={team.name} members={team.members} />
         ))}
       </S.Content>
     </S.Wrapper>

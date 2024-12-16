@@ -7,63 +7,36 @@ import { border, colors, padding } from '../../../../../../styles';
 import { fetchUserInfo } from '../../../../../../firebase';
 import { User } from '../../../../../../types/interface';
 import styled from 'styled-components';
-
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
-
-interface ScheduleData {
-  id: string;
-  scheduleList: ScheduleList[];
-  userId: string;
-}
-
-interface TargetSchedule extends ScheduleList {
-  id: string;
-  index: number;
-  name: string;
-  userId: string;
-  documentName: string;
-  documentUrl: string;
-}
-
-interface NewScheduleEntry {
-  title: string;
-  startedAt: string;
-  endedAt: string;
-  detail: string;
-  documentName: string;
-  documentUrl: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-type ModalType = 'C' | 'R' | 'U' | 'D';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../../../../../../state/store';
+import {
+  setModalType,
+  setScheduleData,
+} from '../../../../../../slices/schedule/scheduleSlice';
+import type {
+  ModalType,
+  ScheduleData,
+  ScheduleList,
+} from '../../../../../../types/schedule';
 
 interface ScheduleModalContentsProps {
-  targetSchedule: TargetSchedule;
-  modalType: ModalType;
-  setModalType: (type: ModalType) => void;
   handleOnCloseModal: () => void;
 }
 
 const ScheduleModalContents = ({
-  modalType,
-  setModalType,
-  targetSchedule,
   handleOnCloseModal,
 }: ScheduleModalContentsProps) => {
+  const dispatch = useDispatch();
+  const { targetSchedule, modalType } = useSelector(
+    (state: RootState) => state.schedule
+  );
+
   const [title, setTitle] = useState('');
   const [startedAt, setStartedAt] = useState('');
   const [endedAt, setEndedAt] = useState('');
   const [detail, setDetail] = useState('');
-  const [documentName, setDocumentName] = useState('');
-  const [documentUrl, setDocumentUrl] = useState('');
+  const [documentName, setDocumentName] = useState<string | undefined>('');
+  const [documentUrl, setDocumentUrl] = useState<string | undefined>('');
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [titleError, setTitleError] = useState('');
@@ -81,19 +54,30 @@ const ScheduleModalContents = ({
     };
   }, []);
 
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const updateScheduleData = async () => {
+    const updatedScheduleData = (await fetchDataFromDB({
+      table: 'Schedule',
+    })) as ScheduleData[];
+    dispatch(setScheduleData(updatedScheduleData));
+  };
+
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
-    newSchedule: NewScheduleEntry
+    newSchedule: ScheduleList
   ) => {
+    console.log('함수 실행됨');
     const newStartedAt = new Date(newSchedule.startedAt).getTime();
     const newEndedAt = new Date(newSchedule.endedAt).getTime();
 
     if (newEndedAt < newStartedAt) {
+      console.log('종료 시간이 더 과거임');
       setTimeError('종료 시간은 시작 시간보다 과거일 수 없습니다.');
       return false;
     }
 
-    existingSchedules.map((schedule) => {
+    for (const schedule of existingSchedules) {
       const existingStartedAt = new Date(schedule.startedAt).getTime();
       const existingEndedAt = new Date(schedule.endedAt).getTime();
 
@@ -102,13 +86,13 @@ const ScheduleModalContents = ({
         (newEndedAt > existingStartedAt && newEndedAt <= existingEndedAt) ||
         (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt)
       ) {
+        console.log('기존 일정과 겹치는 시간대임');
         setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
         return false;
       }
-    });
+    }
 
     setTimeError('');
-
     return true;
   };
 
@@ -132,7 +116,7 @@ const ScheduleModalContents = ({
 
       setDetailError('');
 
-      const SCHEDULE_DATA = (await fetchDataFromDB({
+      const scheduleData = (await fetchDataFromDB({
         table: 'Schedule',
       })) as ScheduleData[];
 
@@ -150,7 +134,7 @@ const ScheduleModalContents = ({
       if (modalType === 'C') {
         const userId = currentUser ? currentUser.userId : null;
 
-        const existingUserSchedule = SCHEDULE_DATA.find(
+        const existingUserSchedule = scheduleData.find(
           (data) => data.userId === userId
         );
 
@@ -158,6 +142,7 @@ const ScheduleModalContents = ({
           existingUserSchedule &&
           !isValidSchedule(existingUserSchedule.scheduleList, newScheduleEntry)
         ) {
+          console.log('안돼');
           return;
         }
 
@@ -168,10 +153,9 @@ const ScheduleModalContents = ({
             key: existingUserSchedule
               ? `${existingUserSchedule.id}/scheduleList`
               : '',
-            data: existingUserSchedule
-              ? [...existingUserSchedule.scheduleList, newScheduleEntry]
-              : '',
+            data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
+          handleOnCloseModal();
         } else {
           // 존재하지 않던 유저의 스케줄 등록의 경우
           await saveDataToDB({
@@ -182,18 +166,44 @@ const ScheduleModalContents = ({
             },
           });
         }
+
+        await updateScheduleData();
+        handleOnCloseModal();
       } else if (modalType === 'U') {
+        const newScheduleEntry = {
+          title,
+          startedAt,
+          endedAt,
+          detail,
+          documentName,
+          documentUrl,
+          createdAt: targetSchedule.createdAt,
+          updatedAt: new Date().toISOString(),
+        };
+
         if (!isValidSchedule([targetSchedule], newScheduleEntry)) {
+          console.log('안돼');
           return;
         }
+
+        const updatedScheduleList = scheduleData
+          .find((data) => data.id === targetSchedule.id)
+          ?.scheduleList.map((schedule) => {
+            if (schedule.createdAt === targetSchedule.createdAt) {
+              return newScheduleEntry;
+            }
+            return schedule;
+          });
+
         // 유저의 스케줄 수정의 경우
         await saveDataToDB({
           table: 'Schedule',
-          key: targetSchedule.id
-            ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
-            : '',
-          data: newScheduleEntry,
+          key: targetSchedule.id ? `${targetSchedule.id}/scheduleList` : '',
+          data: updatedScheduleList,
         });
+
+        await updateScheduleData();
+        handleOnCloseModal();
       }
 
       setTitle('');
@@ -203,41 +213,52 @@ const ScheduleModalContents = ({
     } catch (error) {
       console.error('Schedule creation failed:', error);
     } finally {
-      handleOnCloseModal();
       setIsLoading(false);
     }
   };
 
   const deleteSchedule = async () => {
     try {
+      setIsLoading(true);
+
+      const scheduleData = (await fetchDataFromDB({
+        table: 'Schedule',
+      })) as ScheduleData[];
+
+      const clearScheduleEntry = {
+        title: '',
+        startedAt: '',
+        endedAt: '',
+        detail: '',
+        documentName: '',
+        documentUrl: '',
+        createdAt: '',
+        updatedAt: '',
+      };
+
+      const updatedScheduleList = scheduleData
+        .find((data) => data.id === targetSchedule.id)
+        ?.scheduleList.map((schedule) => {
+          if (schedule.createdAt === targetSchedule.createdAt) {
+            return clearScheduleEntry;
+          }
+          return schedule;
+        });
+
       if (confirm('일정을 삭제하시겠습니까?')) {
-        setIsLoading(true);
-        const clearScheduleEntry = {
-          title: '',
-          startedAt: '',
-          endedAt: '',
-          detail: '',
-          documentName: '',
-          documentUrl: '',
-          createdAt: '',
-          updatedAt: '',
-        };
-
-        console.log(targetSchedule.index);
-
         await saveDataToDB({
           table: 'Schedule',
-          key: targetSchedule.id
-            ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
-            : '',
-          data: clearScheduleEntry,
+          key: `${targetSchedule.id}/scheduleList`,
+          data: updatedScheduleList,
         });
+
+        await updateScheduleData();
       }
+      handleOnCloseModal();
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
     } finally {
       setIsLoading(false);
-      handleOnCloseModal();
     }
   };
 
@@ -248,10 +269,8 @@ const ScheduleModalContents = ({
     setDetail(targetSchedule.detail);
     setDocumentUrl(targetSchedule.documentUrl);
     setDocumentName(targetSchedule.documentName);
-    setModalType('U');
+    dispatch(setModalType('U'));
   };
-
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDetail(e.target.value);
@@ -260,7 +279,6 @@ const ScheduleModalContents = ({
       textareaRef.current.style.height = '0px';
       const scrollHeight = textareaRef.current.scrollHeight;
 
-      console.log(scrollHeight);
       textareaRef.current.style.height = scrollHeight + 'px';
     }
   };
@@ -326,6 +344,7 @@ const ScheduleModalContents = ({
           }
           onClick={() =>
             targetSchedule.documentName &&
+            targetSchedule.documentUrl &&
             handleFileDownload(
               targetSchedule.documentUrl,
               targetSchedule.documentName

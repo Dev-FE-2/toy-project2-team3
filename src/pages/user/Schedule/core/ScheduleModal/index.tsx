@@ -2,46 +2,14 @@ import styled from 'styled-components';
 import { border, colors, padding } from '../../../../../styles';
 import { MouseEvent } from 'react';
 import ScheduleModalContents from './ScheduleModalContents';
+import { useDispatch } from 'react-redux';
+import { setIsModalOpen } from '../../../../../slices/schedule/scheduleSlice';
 
-interface ScheduleList {
-  createdAt: string;
-  detail: string;
-  endedAt: string;
-  startedAt: string;
-  title: string;
-  updatedAt: string;
-}
+const ScheduleModal = () => {
+  const dispatch = useDispatch();
 
-interface TargetSchedule extends ScheduleList {
-  id: string;
-  index: number;
-  name: string;
-  userId: string;
-  documentName: string;
-  documentUrl: string;
-}
-
-type ModalType = 'C' | 'R' | 'U' | 'D';
-
-interface AddScheduleModalProps {
-  targetSchedule: TargetSchedule;
-  modalType: ModalType;
-  setModalType: (type: ModalType) => void;
-  setIsModalOpen: (isOpen: boolean) => void;
-}
-
-const ScheduleModal = ({
-  targetSchedule,
-  modalType,
-  setModalType,
-  setIsModalOpen,
-}: AddScheduleModalProps) => {
   const handleOnCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleBackgroundClick = () => {
-    handleOnCloseModal();
+    dispatch(setIsModalOpen(false));
   };
 
   const handleWrapperClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -49,7 +17,7 @@ const ScheduleModal = ({
   };
 
   return (
-    <S.ModalBackground onClick={handleBackgroundClick}>
+    <S.ModalBackground onClick={handleOnCloseModal}>
       <S.ModalWrapper onClick={handleWrapperClick}>
         <S.CloseIcon
           onClick={handleOnCloseModal}
@@ -57,12 +25,7 @@ const ScheduleModal = ({
         >
           close
         </S.CloseIcon>
-        <ScheduleModalContents
-          targetSchedule={targetSchedule}
-          modalType={modalType}
-          setModalType={setModalType}
-          handleOnCloseModal={handleOnCloseModal}
-        />
+        <ScheduleModalContents handleOnCloseModal={handleOnCloseModal} />
       </S.ModalWrapper>
     </S.ModalBackground>
   );
@@ -85,7 +48,6 @@ const S = {
     position: relative;
     background-color: ${colors.semantic.light};
     width: 333px;
-    /* height: 555px; */
     border-radius: ${border.radius.xs};
     padding: ${padding.md};
     display: flex;
