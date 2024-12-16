@@ -1,6 +1,6 @@
 import DetailScheduleWrapper from './DetailScheduleWrapper';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../state/store';
+import type { RootState } from '../../../../state/store';
 import MainCalendar from './MainCalendar';
 
 const ScheduleMain = () => {

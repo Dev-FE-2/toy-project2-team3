@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { border } from '../../../../../styles';
 import MonthPickerDetail from './MonthPickerDetail';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../state/store';
-import { MONTHS } from '../../constants';
+import type { RootState } from '../../../../../state/store';
+import { MONTHS } from '../../../../../constant/schedule';
 import {
   setCurrentMonth,
   setCurrentYear,

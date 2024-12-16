@@ -5,7 +5,7 @@ import type {
   TargetSchedule,
   ModalType,
   ScheduleData,
-} from '../../pages/user/Schedule/core/schedule';
+} from '../../types/schedule';
 
 interface ScheduleState {
   currentMonth: number;

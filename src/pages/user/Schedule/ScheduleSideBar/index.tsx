@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import TeamList from '../core/TeamList';
 import { border } from '../../../../styles';
-import { RootState } from '../../../../state/store';
+import type { RootState } from '../../../../state/store';
 import { useSelector } from 'react-redux';
 
 const ScheduleSideBar = () => {

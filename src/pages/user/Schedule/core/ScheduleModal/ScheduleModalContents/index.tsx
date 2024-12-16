@@ -8,12 +8,16 @@ import { fetchUserInfo } from '../../../../../../firebase';
 import { User } from '../../../../../../types/interface';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../../state/store';
+import type { RootState } from '../../../../../../state/store';
 import {
   setModalType,
   setScheduleData,
 } from '../../../../../../slices/schedule/scheduleSlice';
-import { ModalType, ScheduleData, ScheduleList } from '../../schedule';
+import type {
+  ModalType,
+  ScheduleData,
+  ScheduleList,
+} from '../../../../../../types/schedule';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;

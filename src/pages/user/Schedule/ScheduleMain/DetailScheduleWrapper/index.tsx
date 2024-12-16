@@ -4,13 +4,13 @@ import { border, colors } from '../../../../../styles';
 import DetailSchedule from './DetailSchedule';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../state/store';
-import {
+import type { RootState } from '../../../../../state/store';
+import type {
   CurrentSchedule,
   FormattedUserOrTeamScheduleData,
   ScheduleData,
   TeamMembersData,
-} from '../../core/schedule';
+} from '../../../../../types/schedule';
 
 const DetailScheduleWrapper = () => {
   const { currentSchedule, clickedDate, scheduleData } = useSelector(

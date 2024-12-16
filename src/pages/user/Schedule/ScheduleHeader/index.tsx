@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import MonthPicker from './MonthPicker';
 import { border } from '../../../../styles';
 import Button from '../../../../components/form/Button';
-import { RootState } from '../../../../state/store';
+import type { RootState } from '../../../../state/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsDayClick,

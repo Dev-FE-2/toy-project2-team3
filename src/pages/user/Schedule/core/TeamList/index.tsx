@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { colors } from '../../../../../styles';
 import { useDispatch } from 'react-redux';
 import { setCurrentSchedule } from '../../../../../slices/schedule/scheduleSlice';
-import { CurrentSchedule, TeamMembersData } from '../schedule';
+import type {
+  CurrentSchedule,
+  TeamMembersData,
+} from '../../../../../types/schedule';
 
 interface TeamListProps {
   name: string;

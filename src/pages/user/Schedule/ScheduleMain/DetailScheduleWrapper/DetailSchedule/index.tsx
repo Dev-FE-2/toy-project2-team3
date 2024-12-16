@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { colors, padding } from '../../../../../../styles';
-import {
+import type {
   FormattedUserOrTeamScheduleData,
   ScheduleList,
   TargetSchedule,
-} from '../../../core/schedule';
+} from '../../../../../../types/schedule';
 import { useDispatch } from 'react-redux';
 import {
   setIsModalOpen,

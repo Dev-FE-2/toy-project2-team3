@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { colors, border, padding } from '../../../../../../styles';
 import MainCalendarDaysSchedules from './MainCalendarDaysSchedules';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../../state/store';
+import type { RootState } from '../../../../../../state/store';
 import {
   setClickedDate,
   setIsDayClick,

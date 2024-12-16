@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import { colors, border, padding } from '../../../../../../../styles';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../state/store';
-import {
+import type { RootState } from '../../../../../../../state/store';
+import type {
   CurrentSchedule,
   FormattedUserOrTeamScheduleData,
   ScheduleData,
-} from '../../../../core/schedule';
+} from '../../../../../../../types/schedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;

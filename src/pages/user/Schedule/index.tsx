@@ -8,13 +8,17 @@ import ScheduleModal from './core/ScheduleModal';
 import { useFetchUserInfo } from '../../../hooks';
 import { Loading } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../state/store';
+import type { RootState } from '../../../state/store';
 import {
   setCurrentSchedule,
   setScheduleData,
   setTeamData,
 } from '../../../slices/schedule/scheduleSlice';
-import { ScheduleData, TeamData, TeamMembersData } from './core/schedule';
+import type {
+  ScheduleData,
+  TeamData,
+  TeamMembersData,
+} from '../../../types/schedule';
 
 const Schedule = () => {
   const dispatch = useDispatch();
