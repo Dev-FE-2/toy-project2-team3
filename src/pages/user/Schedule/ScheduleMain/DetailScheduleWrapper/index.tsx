@@ -13,7 +13,7 @@ import {
 } from '../../core/schedule';
 
 const DetailScheduleWrapper = () => {
-  const { currentSchedule, clickedDate } = useSelector(
+  const { currentSchedule, clickedDate, scheduleData } = useSelector(
     (state: RootState) => state.schedule
   );
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -33,6 +33,16 @@ const DetailScheduleWrapper = () => {
   const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
 
   const currentDate = `${currentTime.getFullYear()}-${currentTime.getMonth() + 1}-${currentTime.getDate()}`;
+
+  useEffect(() => {
+    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
+    const filteredScheduleData = teamScheduleData.filter((schedule) =>
+      schedule.scheduleList.some((item) =>
+        filterClickedDateTeamSchedule(item.startedAt, item.endedAt)
+      )
+    );
+    setClickedDateTeamScheduleData(filteredScheduleData);
+  }, [currentSchedule, scheduleData]);
 
   const filterClickedDateTeamSchedule = (
     startedAt: string,

@@ -4,6 +4,7 @@ import type {
   CurrentSchedule,
   TargetSchedule,
   ModalType,
+  ScheduleData,
 } from '../../pages/user/Schedule/core/schedule';
 
 interface ScheduleState {
@@ -17,6 +18,7 @@ interface ScheduleState {
   currentSchedule: CurrentSchedule;
   isDayClick: boolean;
   clickedDate: number[];
+  scheduleData: ScheduleData[];
 }
 
 const initialState: ScheduleState = {
@@ -33,7 +35,6 @@ const initialState: ScheduleState = {
     documentName: '',
     documentUrl: '',
     id: '',
-    index: 0,
     name: '',
     userId: '',
   },
@@ -47,6 +48,7 @@ const initialState: ScheduleState = {
   },
   isDayClick: false,
   clickedDate: [],
+  scheduleData: [],
 };
 
 const scheduleSlice = createSlice({
@@ -83,6 +85,9 @@ const scheduleSlice = createSlice({
     setClickedDate: (state, action: PayloadAction<number[]>) => {
       state.clickedDate = action.payload;
     },
+    setScheduleData: (state, action: PayloadAction<ScheduleData[]>) => {
+      state.scheduleData = action.payload;
+    },
   },
 });
 
@@ -97,6 +102,7 @@ export const {
   setCurrentSchedule,
   setIsDayClick,
   setClickedDate,
+  setScheduleData,
 } = scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../state/store';
 import {
   setCurrentSchedule,
+  setScheduleData,
   setTeamData,
 } from '../../../slices/schedule/scheduleSlice';
-import { TeamData, TeamMembersData } from './core/schedule';
+import { ScheduleData, TeamData, TeamMembersData } from './core/schedule';
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,17 @@ const Schedule = () => {
     (state: RootState) => state.schedule
   );
   const { userInfo, isLoading, error } = useFetchUserInfo();
+
+  useEffect(() => {
+    const fetchInitialScheduleData = async () => {
+      const scheduleData = (await fetchDataFromDB({
+        table: 'Schedule',
+      })) as ScheduleData[];
+      dispatch(setScheduleData(scheduleData));
+    };
+
+    fetchInitialScheduleData();
+  }, [dispatch]);
 
   const getTeamsData = async () => {
     const teamsData = (await fetchDataFromDB({ table: 'Teams' })) as TeamData[];

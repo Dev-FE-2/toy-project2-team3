@@ -1,10 +1,13 @@
 export {
+  setCurrentMonth,
+  setCurrentYear,
+  setIsSixWeek,
+  setTargetSchedule,
+  setModalType,
+  setIsModalOpen,
   setTeamData,
   setCurrentSchedule,
-  setTargetSchedule,
   setIsDayClick,
   setClickedDate,
-  setIsSixWeek,
-  setIsModalOpen,
-  setModalType,
+  setScheduleData,
 } from './scheduleSlice';

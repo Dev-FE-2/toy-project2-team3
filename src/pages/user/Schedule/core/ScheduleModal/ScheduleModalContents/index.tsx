@@ -9,7 +9,10 @@ import { User } from '../../../../../../types/interface';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../../../state/store';
-import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
+import {
+  setModalType,
+  setScheduleData,
+} from '../../../../../../slices/schedule/scheduleSlice';
 import { ScheduleData, ScheduleList } from '../../schedule';
 
 type ModalType = 'C' | 'R' | 'U' | 'D';
@@ -50,6 +53,13 @@ const ScheduleModalContents = ({
   }, []);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const updateScheduleData = async () => {
+    const updatedScheduleData = (await fetchDataFromDB({
+      table: 'Schedule',
+    })) as ScheduleData[];
+    dispatch(setScheduleData(updatedScheduleData));
+  };
 
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
@@ -102,7 +112,7 @@ const ScheduleModalContents = ({
 
       setDetailError('');
 
-      const SCHEDULE_DATA = (await fetchDataFromDB({
+      const scheduleData = (await fetchDataFromDB({
         table: 'Schedule',
       })) as ScheduleData[];
 
@@ -120,7 +130,7 @@ const ScheduleModalContents = ({
       if (modalType === 'C') {
         const userId = currentUser ? currentUser.userId : null;
 
-        const existingUserSchedule = SCHEDULE_DATA.find(
+        const existingUserSchedule = scheduleData.find(
           (data) => data.userId === userId
         );
 
@@ -150,6 +160,8 @@ const ScheduleModalContents = ({
             },
           });
         }
+
+        await updateScheduleData();
       } else if (modalType === 'U') {
         const newScheduleEntry = {
           title,
@@ -166,14 +178,14 @@ const ScheduleModalContents = ({
           return;
         }
 
-        const updatedScheduleList = SCHEDULE_DATA.find(
-          (data) => data.id === targetSchedule.id
-        )?.scheduleList.map((schedule) => {
-          if (schedule.createdAt === targetSchedule.createdAt) {
-            return newScheduleEntry;
-          }
-          return schedule;
-        });
+        const updatedScheduleList = scheduleData
+          .find((data) => data.id === targetSchedule.id)
+          ?.scheduleList.map((schedule) => {
+            if (schedule.createdAt === targetSchedule.createdAt) {
+              return newScheduleEntry;
+            }
+            return schedule;
+          });
 
         // 유저의 스케줄 수정의 경우
         await saveDataToDB({
@@ -181,6 +193,8 @@ const ScheduleModalContents = ({
           key: targetSchedule.id ? `${targetSchedule.id}/scheduleList` : '',
           data: updatedScheduleList,
         });
+
+        await updateScheduleData();
       }
 
       setTitle('');
@@ -201,7 +215,7 @@ const ScheduleModalContents = ({
     try {
       setIsLoading(true);
 
-      const SCHEDULE_DATA = (await fetchDataFromDB({
+      const scheduleData = (await fetchDataFromDB({
         table: 'Schedule',
       })) as ScheduleData[];
 
@@ -216,20 +230,22 @@ const ScheduleModalContents = ({
         updatedAt: '',
       };
 
-      const updatedScheduleList = SCHEDULE_DATA.find(
-        (data) => data.id === targetSchedule.id
-      )?.scheduleList.map((schedule) => {
-        if (schedule.createdAt === targetSchedule.createdAt) {
-          return clearScheduleEntry;
-        }
-        return schedule;
-      });
+      const updatedScheduleList = scheduleData
+        .find((data) => data.id === targetSchedule.id)
+        ?.scheduleList.map((schedule) => {
+          if (schedule.createdAt === targetSchedule.createdAt) {
+            return clearScheduleEntry;
+          }
+          return schedule;
+        });
 
       await saveDataToDB({
         table: 'Schedule',
         key: `${targetSchedule.id}/scheduleList`,
         data: updatedScheduleList,
       });
+
+      await updateScheduleData();
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
     } finally {
