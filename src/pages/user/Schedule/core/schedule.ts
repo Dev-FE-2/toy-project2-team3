@@ -41,7 +41,7 @@ interface FormattedUserOrTeamScheduleData extends ScheduleData {
 
 interface TargetSchedule extends ScheduleList {
   id: string;
-  index: number;
+  // index: number;
   name: string;
   userId: string;
 }

@@ -93,14 +93,14 @@ const DetailSchedule = ({
 
   const getTargetSchedule = (
     id: string,
-    index: number,
+    // index: number,
     name: string,
     userId: string,
     scheduleData: ScheduleList
   ) => {
     const targetSchedule = {
       id,
-      index,
+      // index,
       name,
       userId,
       ...scheduleData,
@@ -112,7 +112,7 @@ const DetailSchedule = ({
   return (
     <>
       {clickedDateTeamScheduleData.map((schedule) =>
-        schedule.scheduleList.map((item, index) => {
+        schedule.scheduleList.map((item) => {
           const { top, height } = calculatePosition(
             item.startedAt,
             item.endedAt
@@ -131,11 +131,11 @@ const DetailSchedule = ({
               height={height}
               assignedBackgroundColor={assignedBackgroundColor}
               assignedBorderColor={assignedBorderColor}
-              key={`${schedule.id}-${index}`}
+              key={`${schedule.id}-${item.createdAt}`}
               onClick={() =>
                 getTargetSchedule(
                   schedule.id,
-                  index,
+                  // item.createdAt,
                   schedule.name,
                   schedule.userId,
                   item

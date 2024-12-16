@@ -138,9 +138,7 @@ const ScheduleModalContents = ({
             key: existingUserSchedule
               ? `${existingUserSchedule.id}/scheduleList`
               : '',
-            data: existingUserSchedule
-              ? [...existingUserSchedule.scheduleList, newScheduleEntry]
-              : '',
+            data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
         } else {
           // 존재하지 않던 유저의 스케줄 등록의 경우
@@ -153,16 +151,35 @@ const ScheduleModalContents = ({
           });
         }
       } else if (modalType === 'U') {
+        const newScheduleEntry = {
+          title,
+          startedAt,
+          endedAt,
+          detail,
+          documentName,
+          documentUrl,
+          createdAt: targetSchedule.createdAt,
+          updatedAt: new Date().toISOString(),
+        };
+
         if (!isValidSchedule([targetSchedule], newScheduleEntry)) {
           return;
         }
+
+        const updatedScheduleList = SCHEDULE_DATA.find(
+          (data) => data.id === targetSchedule.id
+        )?.scheduleList.map((schedule) => {
+          if (schedule.createdAt === targetSchedule.createdAt) {
+            return newScheduleEntry;
+          }
+          return schedule;
+        });
+
         // 유저의 스케줄 수정의 경우
         await saveDataToDB({
           table: 'Schedule',
-          key: targetSchedule.id
-            ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
-            : '',
-          data: newScheduleEntry,
+          key: targetSchedule.id ? `${targetSchedule.id}/scheduleList` : '',
+          data: updatedScheduleList,
         });
       }
 
@@ -178,9 +195,16 @@ const ScheduleModalContents = ({
     }
   };
 
+  console.log(targetSchedule);
+
   const deleteSchedule = async () => {
     try {
       setIsLoading(true);
+
+      const SCHEDULE_DATA = (await fetchDataFromDB({
+        table: 'Schedule',
+      })) as ScheduleData[];
+
       const clearScheduleEntry = {
         title: '',
         startedAt: '',
@@ -192,12 +216,19 @@ const ScheduleModalContents = ({
         updatedAt: '',
       };
 
+      const updatedScheduleList = SCHEDULE_DATA.find(
+        (data) => data.id === targetSchedule.id
+      )?.scheduleList.map((schedule) => {
+        if (schedule.createdAt === targetSchedule.createdAt) {
+          return clearScheduleEntry;
+        }
+        return schedule;
+      });
+
       await saveDataToDB({
         table: 'Schedule',
-        key: targetSchedule.id
-          ? `${targetSchedule.id}/scheduleList/${targetSchedule.index}`
-          : '',
-        data: clearScheduleEntry,
+        key: `${targetSchedule.id}/scheduleList`,
+        data: updatedScheduleList,
       });
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);
