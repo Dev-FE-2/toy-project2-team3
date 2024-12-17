@@ -7,23 +7,19 @@ interface saveDataParams<T> {
   table: string;
   key?: string;
   data: T;
-  requireAuth?: boolean;
 }
 
 const saveDataToDB = async <T>({
   table,
   key,
   data,
-  requireAuth = false,
 }: saveDataParams<T>): SaveData => {
   try {
-    if (requireAuth) {
-      // 인증 필요 시, 사용자 확인
-      const user = auth.currentUser;
+    // 사용자 검증
+    const user = auth.currentUser;
 
-      if (!user) {
-        throw new Error('인증된 사용자가 아닙니다.');
-      }
+    if (!user) {
+      throw new Error('인증된 사용자가 아닙니다.');
     }
 
     const dbRef = key ? ref(database, `${table}/${key}`) : ref(database, table);
