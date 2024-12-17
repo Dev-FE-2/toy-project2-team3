@@ -5,7 +5,6 @@ import { saveDataToDB } from '../firebase';
 interface UseSaveDataParams {
   table: string;
   key?: string;
-  requireAuth?: boolean;
 }
 
 interface UseSaveDataReturn<T> {
@@ -17,7 +16,6 @@ interface UseSaveDataReturn<T> {
 function useSaveData<T>({
   table,
   key,
-  requireAuth = false,
 }: UseSaveDataParams): UseSaveDataReturn<T> {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -28,7 +26,7 @@ function useSaveData<T>({
 
     try {
       // 1. Firebase 데이터 저장
-      const savedKey = await saveDataToDB({ table, key, data, requireAuth });
+      const savedKey = await saveDataToDB({ table, key, data });
 
       // 2. SWR 캐시 갱신 (로컬 데이터와 서버 데이터 동기화)
       const cacheKey = key ? `${table}/${key}` : table;
