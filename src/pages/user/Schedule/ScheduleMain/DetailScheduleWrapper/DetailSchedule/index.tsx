@@ -1,29 +1,93 @@
 import styled from 'styled-components';
 import { colors, padding } from '../../../../../../styles';
 import type {
+  CurrentSchedule,
   FormattedUserOrTeamScheduleData,
+  ScheduleData,
   ScheduleList,
   TargetSchedule,
 } from '../../../../../../types/schedule';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsModalOpen,
   setModalType,
   setTargetSchedule,
 } from '../../../../../../slices/schedule/scheduleSlice';
+import useSWR from 'swr';
+import { COLLECTION_NAME } from '../../../../../../constant';
+import { Loading } from '../../../../../../components';
+import type { RootState } from '../../../../../../state/store';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;
   teamMembersLength: number;
-  clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
 }
 
 const DetailSchedule = ({
   formattedClickedDate,
   teamMembersLength,
-  clickedDateTeamScheduleData,
 }: DetailSchedulProps) => {
   const dispatch = useDispatch();
+  const { currentSchedule } = useSelector((state: RootState) => state.schedule);
+  const {
+    data: scheduleData = [],
+    isLoading,
+    error,
+  } = useSWR<ScheduleData[]>({ table: COLLECTION_NAME.schedule });
+
+  const isDateInRange = (startedAt: string, endedAt: string) => {
+    const cuttedStartedAt = startedAt.slice(0, 10);
+    const cuttedEndedAt = endedAt.slice(0, 10);
+
+    return (
+      formattedClickedDate === cuttedStartedAt ||
+      formattedClickedDate === cuttedEndedAt
+    );
+  };
+
+  const formatTeamSchedule = (
+    currentSchedule: CurrentSchedule,
+    scheduleData: ScheduleData[]
+  ) => {
+    const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
+    const teamScheduleData = scheduleData.filter((schedule) =>
+      teamMembersUserId.includes(schedule.userId)
+    );
+
+    const formattedTeamSchedule = teamScheduleData.map((schedule) => {
+      const teamMemberInfo = currentSchedule.teamId.find(
+        (info) => info.userId === schedule.userId
+      );
+
+      const filteredScheduleList = schedule.scheduleList.filter((item) =>
+        isDateInRange(item.startedAt, item.endedAt)
+      );
+
+      return {
+        ...schedule,
+        type: currentSchedule.type,
+        name: teamMemberInfo ? teamMemberInfo.name : '',
+        number: teamMemberInfo ? teamMemberInfo.number : 0,
+        scheduleList: filteredScheduleList,
+      };
+    });
+
+    return formattedTeamSchedule.filter(
+      (schedule) => schedule.scheduleList.length > 0
+    );
+  };
+
+  const filterScheduleData = () => {
+    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
+    const filteredScheduleData: FormattedUserOrTeamScheduleData[] =
+      teamScheduleData.filter((schedule) =>
+        schedule.scheduleList.some((item) =>
+          isDateInRange(item.startedAt, item.endedAt)
+        )
+      );
+
+    return filteredScheduleData;
+  };
 
   const handleRModalOpen = (targetSchedule: TargetSchedule) => {
     dispatch(setModalType('R'));
@@ -109,9 +173,12 @@ const DetailSchedule = ({
     handleRModalOpen(targetSchedule);
   };
 
+  if (isLoading) return <Loading />;
+  if (error) return <div>에러 발생</div>;
+
   return (
     <>
-      {clickedDateTeamScheduleData.map((schedule) =>
+      {filterScheduleData().map((schedule) =>
         schedule.scheduleList.map((item) => {
           const { top, height } = calculatePosition(
             item.startedAt,
@@ -135,7 +202,6 @@ const DetailSchedule = ({
               onClick={() =>
                 getTargetSchedule(
                   schedule.id,
-                  // item.createdAt,
                   schedule.name,
                   schedule.userId,
                   item
