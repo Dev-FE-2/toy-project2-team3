@@ -1,24 +1,24 @@
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../state/store';
+import type { RootState } from '../../../../../../state/store';
 
 const ModalHeader = () => {
-  const user = useSelector((state: RootState) => state.user);
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   return (
     <S.ModalHeader>
       <S.ModalHeaderRow>
         <div className="key">성명</div>
-        <div className="value">{user.userInfo?.name}</div>
+        <div className="value">{userInfo?.name}</div>
         <div className="key">사번</div>
-        <div className="value">{user.userInfo?.employeeNumber}</div>
+        <div className="value">{userInfo?.employeeNumber}</div>
       </S.ModalHeaderRow>
       <S.ModalHeaderRow>
         <div className="key">부서</div>
-        <div className="value">{user.userInfo?.department}</div>
+        <div className="value">{userInfo?.department}</div>
         <div className="key">직급</div>
-        <div className="value">{user.userInfo?.position}</div>
+        <div className="value">{userInfo?.position}</div>
       </S.ModalHeaderRow>
     </S.ModalHeader>
   );
