@@ -7,6 +7,7 @@ import { useFetchUserInfo } from '../../../../hooks';
 import { colors } from '../../../../styles';
 import NormalPayStub from './NormalPayStub';
 import { Loading, Pagination } from '../../../../components';
+import { ITEM_PER_PAGE } from '../../../../constant';
 
 export type Item = {
   id: string;
@@ -22,7 +23,6 @@ export type Item = {
 };
 
 const SalaryDetailsMain = () => {
-  const ITEMSPERPAGE = 10;
   const [salaryListData, setSalaryListData] = useState<Item[]>([]);
   const [currentPageItems, setCurrentPageItems] = useState<Item[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,8 +58,8 @@ const SalaryDetailsMain = () => {
 
   // 항목 필터링
   useEffect(() => {
-    const indexOfLastItem = currentPage * ITEMSPERPAGE;
-    const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
+    const indexOfLastItem = currentPage * ITEM_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
     const currentItemsSlice = salaryListData.slice(
       indexOfFirstItem,
       indexOfLastItem
@@ -110,7 +110,9 @@ const SalaryDetailsMain = () => {
       )}
 
       <S.PaginationContainer>
-        <Pagination maxPage={Math.ceil(salaryListData.length / ITEMSPERPAGE)} />
+        <Pagination
+          maxPage={Math.ceil(salaryListData.length / ITEM_PER_PAGE)}
+        />
       </S.PaginationContainer>
     </S.MainContainer>
   );

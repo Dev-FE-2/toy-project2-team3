@@ -2,9 +2,10 @@ import React, { useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
+import { AppDispatch } from '../../state/store';
+import type { RootState } from '../../state/store';
 import { setCurrentPage } from '../../slices/pagination/action';
-
+import { VISIBLE_PAGE_COUNT } from '../../constant';
 type PagiNationProps = {
   maxPage: number;
 };
@@ -14,19 +15,18 @@ const Pagination: React.FC<PagiNationProps> = ({ maxPage }) => {
   const currentPage = useSelector(
     (state: RootState) => state.pagination.currentPage
   );
-  const visiblePageCount = 10; // 한 페이지당 최대 10개의 버튼 생성
 
   const currentPageBase =
-    Math.floor((currentPage - 1) / visiblePageCount) * visiblePageCount + 1;
+    Math.floor((currentPage - 1) / VISIBLE_PAGE_COUNT) * VISIBLE_PAGE_COUNT + 1;
 
   const pageList = useMemo(() => {
     const pages = [];
-    for (let i = 0; i < visiblePageCount; i++) {
+    for (let i = 0; i < VISIBLE_PAGE_COUNT; i++) {
       const page = currentPageBase + i;
       if (page <= maxPage) pages.push(page);
     }
     return pages;
-  }, [currentPageBase, maxPage, visiblePageCount]);
+  }, [currentPageBase, maxPage, VISIBLE_PAGE_COUNT]);
 
   const handlePageChange = (newPage: number) => {
     dispatch(setCurrentPage(newPage)); // currentPage 상태 업데이트
