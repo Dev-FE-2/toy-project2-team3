@@ -1,27 +1,23 @@
 import styled from 'styled-components';
 import { colors } from '../../../../../../../styles';
-import { useFetchUserInfo } from '../../../../../../../hooks';
-import Loading from '../../../../../../../components/Loading';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../../../../state/store';
 const ModalHeader = () => {
-  const { userInfo, isLoading, error } = useFetchUserInfo();
-
-  if (isLoading) return <Loading />;
-  if (error) return <div>오류 발생: {error.message}</div>;
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <S.ModalHeader>
       <S.ModalHeaderRow>
         <div className="key">성명</div>
-        <div className="value">{userInfo?.name}</div>
+        <div className="value">{user.userInfo.name}</div>
         <div className="key">사번</div>
-        <div className="value">{userInfo?.employeeNumber}</div>
+        <div className="value">{user.userInfo.employeeNumber}</div>
       </S.ModalHeaderRow>
       <S.ModalHeaderRow>
         <div className="key">부서</div>
-        <div className="value">{userInfo?.department}</div>
+        <div className="value">{user.userInfo.department}</div>
         <div className="key">직급</div>
-        <div className="value">{userInfo?.position}</div>
+        <div className="value">{user.userInfo.position}</div>
       </S.ModalHeaderRow>
     </S.ModalHeader>
   );

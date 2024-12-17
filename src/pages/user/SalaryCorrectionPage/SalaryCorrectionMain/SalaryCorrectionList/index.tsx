@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import type { RootState } from '../../../../../state/store';
+import { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
 import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
-import { useFetchUserInfo } from '../../../../../hooks';
 import { ITEM_PER_PAGE } from '../../../../../constant';
 
 const formatDate = (dateString: string) => {
@@ -23,18 +22,19 @@ const SalaryCorrectionList = () => {
   const [currentPageItems, setCurrentPageItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const currentPage = useSelector(
     (state: RootState) => state.pagination.currentPage
   );
-  const { userInfo, isLoading } = useFetchUserInfo();
+
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
-          key: userInfo?.userId,
+          key: user.userInfo.userId as string,
         });
 
         if (data) {
@@ -51,13 +51,15 @@ const SalaryCorrectionList = () => {
       } catch (err) {
         console.error(err);
         setItems([]);
+      } finally {
+        setIsLoading(false); // 데이터를 가져온 후에 isLoading을 false로 설정
       }
     };
 
-    if (!isLoading && userInfo) {
+    if (user.userInfo) {
       fetchSalaryRequestData();
     }
-  }, [userInfo, isLoading]);
+  }, [user.userInfo]);
 
   // 현재 페이지의 항목 계산
   useEffect(() => {
@@ -96,9 +98,7 @@ const SalaryCorrectionList = () => {
         </div>
       </S.SalaryLabelContainer>
       <S.SalaryMainContainer>
-        {isLoading ? (
-          <div>로딩 중...</div>
-        ) : currentPageItems.length > 0 ? (
+        {currentPageItems.length > 0 ? (
           currentPageItems.map((item) => (
             <div
               className="salary__item-container"
