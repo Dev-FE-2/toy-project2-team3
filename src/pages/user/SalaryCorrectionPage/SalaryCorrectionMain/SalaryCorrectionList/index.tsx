@@ -8,6 +8,7 @@ import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { useFetchUserInfo } from '../../../../../hooks';
+import { ITEM_PER_PAGE } from '../../../../../constant';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -18,7 +19,6 @@ const formatDate = (dateString: string) => {
 };
 
 const SalaryCorrectionList = () => {
-  const ITEM_PER_PAGE = 10;
   const [items, setItems] = useState<SalaryRequest[]>([]);
   const [currentPageItems, setCurrentPageItems] = useState<SalaryRequest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);

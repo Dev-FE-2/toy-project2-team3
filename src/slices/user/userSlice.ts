@@ -66,6 +66,7 @@ const userSlice = createSlice({
         department: null,
         isAdmin: false,
         isActivated: false,
+        employeeNumber: null,
       };
       sessionStorage.removeItem('user');
     },
