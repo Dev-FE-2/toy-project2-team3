@@ -1,8 +1,8 @@
 import { styled } from 'styled-components';
 import { colors } from '../../../styles';
 
-const Attendance = () => {
-  return <S.Content>나의 근태 내용입니다.</S.Content>;
+const SalaryRequestPage = () => {
+  return <S.Content>임금 정정 요청 내용입니다.</S.Content>;
 };
 
 const S = {
@@ -13,4 +13,4 @@ const S = {
   `,
 };
 
-export default Attendance;
+export default SalaryRequestPage;
