@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootState } from '../../../../../state/store';
+import type { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
 import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
@@ -27,14 +27,14 @@ const SalaryCorrectionList = () => {
     (state: RootState) => state.pagination.currentPage
   );
 
-  const user = useSelector((state: RootState) => state.user);
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
-          key: user.userInfo.userId as string,
+          key: userInfo.userId as string,
         });
 
         if (data) {
@@ -56,10 +56,10 @@ const SalaryCorrectionList = () => {
       }
     };
 
-    if (user.userInfo) {
+    if (userInfo) {
       fetchSalaryRequestData();
     }
-  }, [user.userInfo]);
+  }, [userInfo]);
 
   // 현재 페이지의 항목 계산
   useEffect(() => {

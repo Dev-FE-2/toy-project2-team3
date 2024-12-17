@@ -2,7 +2,8 @@ import React, { useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
+import { AppDispatch } from '../../state/store';
+import type { RootState } from '../../state/store';
 import { setCurrentPage } from '../../slices/pagination/action';
 import { VISIBLE_PAGE_COUNT } from '../../constant';
 type PagiNationProps = {
