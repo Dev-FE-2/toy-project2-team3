@@ -1,7 +1,7 @@
 import SalaryDetailsMain from './SalaryDetailsMain';
 import styled from 'styled-components';
 
-const SalaryDetails = () => {
+const SalaryDetailsPage = () => {
   return (
     <S.SalaryContainer>
       <S.MainContainer>
@@ -26,4 +26,4 @@ const S = {
   `,
 };
 
-export default SalaryDetails;
+export default SalaryDetailsPage;

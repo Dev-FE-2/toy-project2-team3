@@ -5,16 +5,16 @@ import { URL, NESTED_PATHS } from '../constant';
 import { default as ProtectedRoute } from './ProtectedRoute';
 import { Layout } from '../components';
 import {
-  UserHome,
-  Login,
-  SignUp,
-  Schedule,
-  EditProfile,
-  Attendance,
-  EmployeeList,
-  SalaryRequest,
-  SalaryDetails,
-  SalaryCorrection,
+  UserHomePage,
+  LoginPage,
+  SignUpPage,
+  SchedulePage,
+  ProfilePage,
+  AttendancePage,
+  EmployeeListPage,
+  SalaryRequestPage,
+  SalaryDetailsPage,
+  SalaryCorrectionPage,
 } from '../pages';
 
 function Router() {
@@ -36,7 +36,7 @@ function Router() {
             path={URL.userHome.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <UserHome />
+                <UserHomePage />
               </ProtectedRoute>
             }
           />
@@ -45,7 +45,7 @@ function Router() {
             path={URL.editProfile.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <EditProfile />
+                <ProfilePage />
               </ProtectedRoute>
             }
           />
@@ -54,7 +54,7 @@ function Router() {
             path={URL.schedule.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Schedule />
+                <SchedulePage />
               </ProtectedRoute>
             }
           />
@@ -63,7 +63,7 @@ function Router() {
             path={URL.attendance.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Attendance />
+                <AttendancePage />
               </ProtectedRoute>
             }
           />
@@ -72,7 +72,7 @@ function Router() {
             path={URL.salaryCorrection.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <SalaryCorrection />
+                <SalaryCorrectionPage />
               </ProtectedRoute>
             }
           />
@@ -81,15 +81,15 @@ function Router() {
             path={URL.salaryDetails.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <SalaryDetails />
+                <SalaryDetailsPage />
               </ProtectedRoute>
             }
           />
         </Route>
 
         {/** Intro */}
-        <Route path={URL.login.link} element={<Login />} />
-        <Route path={URL.signup.link} element={<SignUp />} />
+        <Route path={URL.login.link} element={<LoginPage />} />
+        <Route path={URL.signup.link} element={<SignUpPage />} />
 
         {/**TODO - /intro/ 중첩 element로 IntroLayout 컴포넌트로 리팩토링 
          * 
@@ -104,9 +104,12 @@ function Router() {
         {/** admin */}
         <Route path={NESTED_PATHS.admin.link} element={<Layout />}>
           {/* 관리자 직원 목록 */}
-          <Route path={URL.employeeList.name} element={<EmployeeList />} />
+          <Route path={URL.employeeList.name} element={<EmployeeListPage />} />
           {/* 급여 정정 요청 페이지 */}
-          <Route path={URL.salaryRequest.name} element={<SalaryRequest />} />
+          <Route
+            path={URL.salaryRequest.name}
+            element={<SalaryRequestPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
