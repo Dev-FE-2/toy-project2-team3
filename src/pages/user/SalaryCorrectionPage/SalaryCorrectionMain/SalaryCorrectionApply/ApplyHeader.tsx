@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles';
-import { fetchDataFromDB } from '../../../../../../firebase';
-import type { Attendance } from '../../../../../../types/interface';
-import { useFetchUserInfo } from '../../../../../../hooks';
+import { colors } from '../../../../../styles';
+import { fetchDataFromDB } from '../../../../../firebase';
+import type { Attendance } from '../../../../../types/interface';
+import { useFetchUserInfo } from '../../../../../hooks';
 
 const ApplyHeader = () => {
   const today = new Date();

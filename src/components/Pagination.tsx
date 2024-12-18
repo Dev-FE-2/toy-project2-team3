@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles';
+import { colors } from '../styles';
 
 type PagiNationProps = {
   totalPage: number;

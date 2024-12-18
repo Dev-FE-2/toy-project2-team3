@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles';
-import { Item } from '../../../SalaryDetailsMain/';
+import { colors } from '../../../../../styles';
+import { Item } from '../SalaryDetailsMain';
 
 type BottomProps = {
   item: Item;

@@ -5,7 +5,7 @@ import { fetchDataFromDB } from '../../../firebase';
 import type { RootState } from '../../../state/store';
 import { colors } from '../../../styles';
 import NormalPayStub from './SalaryDetailsMain/NormalPayStub';
-import { Loading, Pagination } from '../../../components/';
+import { Loading, Pagination } from '../../../components';
 import { ITEM_PER_PAGE } from '../../../constant';
 import { useLocation } from 'react-router-dom';
 

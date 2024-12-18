@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import type { RootState } from '../../../../../state/store';
-import { colors } from '../../../../../styles';
-import { Pagination, Loading } from '../../../../../components';
-import AddPayStub from './AddPayStub';
-import type { SalaryRequest } from '../../../../../types/interface';
-import { fetchDataFromDB } from '../../../../../firebase';
-import { ITEM_PER_PAGE } from '../../../../../constant';
+import type { RootState } from '../../../../state/store';
+import { colors } from '../../../../styles';
+import { Pagination, Loading } from '../../../../components';
+import AddPayStub from './SalaryCorrectionList/AddPayStub';
+import type { SalaryRequest } from '../../../../types/interface';
+import { fetchDataFromDB } from '../../../../firebase';
+import { ITEM_PER_PAGE } from '../../../../constant';
 import { useLocation } from 'react-router-dom';
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);

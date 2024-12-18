@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { colors } from '../../../../../../../styles';
+import { colors } from '../../../../../../styles';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../../../../state/store';
+import { RootState } from '../../../../../../state/store';
 const ModalHeader = () => {
   const user = useSelector((state: RootState) => state.user);
 
