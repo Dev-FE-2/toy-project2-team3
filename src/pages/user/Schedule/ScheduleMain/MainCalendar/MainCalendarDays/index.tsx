@@ -19,10 +19,14 @@ const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
   );
   const dispatch = useDispatch();
 
-  const handleDayClick = () => {
+  const calculateAdjustedDate = (
+    day: number,
+    isCurrentMonth: boolean,
+    currentMonth: number,
+    currentYear: number
+  ) => {
     let adjustedYear = currentYear;
     let adjustedMonth = currentMonth;
-    const adjustedDay = day;
 
     if (!isCurrentMonth && day > 20) {
       adjustedMonth -= 1;
@@ -38,7 +42,17 @@ const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
       }
     }
 
-    dispatch(setClickedDate([adjustedYear, adjustedMonth, adjustedDay]));
+    return { adjustedYear, adjustedMonth };
+  };
+
+  const handleDayClick = () => {
+    const { adjustedYear, adjustedMonth } = calculateAdjustedDate(
+      day,
+      isCurrentMonth,
+      currentMonth,
+      currentYear
+    );
+    dispatch(setClickedDate([adjustedYear, adjustedMonth, day]));
     dispatch(setIsDayClick(true));
   };
 
