@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { saveDataToDB } from '../../../../../../utils';
 import FileUploading from '../../../../../../components/FileUploading';
 import Button from '../../../../../../components/form/Button';
@@ -7,11 +7,13 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../state/store';
 import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
-import type { ModalType, ScheduleList } from '../../../../../../types/schedule';
+import type { ModalType } from '../../../../../../types/schedule';
 import { useFetchUserInfo } from '../../../../../../hooks';
 import { COLLECTION_NAME } from '../../../../../../constant';
 import { Loading } from '../../../../../../components';
 import { useSchedule } from '../../../../../../hooks/useSchedule';
+import { useScheduleValidation } from '../../../../../../hooks/useScheduleValidation';
+import { useScheduleForm } from '../../../../../../hooks/useScheduleForm';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;
@@ -35,53 +37,43 @@ const ScheduleModalContents = ({
     error: scheduleFetchError,
     mutate,
   } = useSchedule();
-
-  const isFetchLoading = isUserFetchLoading || isScheduleFetchLoading;
-  const hasFetchError = userFetchError || scheduleFetchError;
-
-  const [title, setTitle] = useState('');
-  const [startedAt, setStartedAt] = useState('');
-  const [endedAt, setEndedAt] = useState('');
-  const [detail, setDetail] = useState('');
-  const [documentName, setDocumentName] = useState<string | undefined>('');
-  const [documentUrl, setDocumentUrl] = useState<string | undefined>('');
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const isFetchLoading = isUserFetchLoading || isScheduleFetchLoading;
+  const hasFetchError = userFetchError || scheduleFetchError;
+  const { isValidSchedule, timeError } = useScheduleValidation();
+  const {
+    title,
+    setTitle,
+    startedAt,
+    setStartedAt,
+    endedAt,
+    setEndedAt,
+    detail,
+    documentName,
+    setDocumentName,
+    documentUrl,
+    setDocumentUrl,
+    titleError,
+    detailError,
+    textareaRef,
+    resetForm,
+    onChangeTextarea,
+    validateForm,
+    scheduleDataEntry,
+  } = useScheduleForm(
+    modalType === 'R' || modalType === 'U'
+      ? { initialSchedule: targetSchedule }
+      : {}
+  );
 
-  const [titleError, setTitleError] = useState('');
-  const [detailError, setDetailError] = useState('');
-  const [timeError, setTimeError] = useState('');
-
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  const isValidSchedule = (
-    existingSchedules: ScheduleList[],
-    newSchedule: ScheduleList
-  ) => {
-    const newStartedAt = new Date(newSchedule.startedAt).getTime();
-    const newEndedAt = new Date(newSchedule.endedAt).getTime();
-
-    if (newEndedAt < newStartedAt) {
-      setTimeError('종료 시간은 시작 시간보다 과거일 수 없습니다.');
-      return false;
-    }
-
-    for (const schedule of existingSchedules) {
-      const existingStartedAt = new Date(schedule.startedAt).getTime();
-      const existingEndedAt = new Date(schedule.endedAt).getTime();
-
-      if (
-        (newStartedAt >= existingStartedAt && newStartedAt < existingEndedAt) ||
-        (newEndedAt > existingStartedAt && newEndedAt <= existingEndedAt) ||
-        (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt)
-      ) {
-        setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
-        return false;
-      }
-    }
-
-    setTimeError('');
-    return true;
+  const handleFileDownload = (fileUrl: string, fileName: string) => {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const editSchedule = async () => {
@@ -90,28 +82,12 @@ const ScheduleModalContents = ({
 
       setIsLoading(true);
 
-      if (!title.trim()) {
-        setTitleError('제목을 입력해주세요.');
-        return;
-      }
-
-      setTitleError('');
-
-      if (!detail.trim()) {
-        setDetailError('내용을 입력해주세요.');
-        return;
-      }
-
-      setDetailError('');
+      if (!validateForm()) return;
 
       const newScheduleEntry = {
-        title,
-        startedAt,
-        endedAt,
-        detail,
+        ...scheduleDataEntry,
         documentName: documentName || '',
         documentUrl: documentUrl || '',
-        createdAt: new Date().toISOString(),
         updatedAt: '',
       };
 
@@ -130,17 +106,12 @@ const ScheduleModalContents = ({
         }
 
         if (existingUserSchedule) {
-          // 이미 존재하는 유저의 스케줄 등록의 경우
           await saveDataToDB({
             table: COLLECTION_NAME.schedule,
             key: `${existingUserSchedule.id}/scheduleList`,
             data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
-
-          await mutate();
-          handleOnCloseModal();
         } else {
-          // 존재하지 않던 유저의 스케줄 등록의 경우
           await saveDataToDB({
             table: COLLECTION_NAME.schedule,
             data: {
@@ -149,22 +120,14 @@ const ScheduleModalContents = ({
             },
           });
         }
-
-        await mutate();
-        handleOnCloseModal();
       } else if (modalType === 'U') {
-        const newScheduleEntry = {
-          title,
-          startedAt,
-          endedAt,
-          detail,
-          documentName: documentName || '',
-          documentUrl: documentUrl || '',
+        const updatedScheduleEntry = {
+          ...newScheduleEntry,
           createdAt: targetSchedule.createdAt,
           updatedAt: new Date().toISOString(),
         };
 
-        if (!isValidSchedule([targetSchedule], newScheduleEntry)) {
+        if (!isValidSchedule([targetSchedule], updatedScheduleEntry)) {
           return;
         }
 
@@ -172,28 +135,23 @@ const ScheduleModalContents = ({
           .find((data) => data.id === targetSchedule.id)
           ?.scheduleList.map((schedule) => {
             if (schedule.createdAt === targetSchedule.createdAt) {
-              return newScheduleEntry;
+              return updatedScheduleEntry;
             }
             return schedule;
           });
 
-        // 유저의 스케줄 수정의 경우
         await saveDataToDB({
           table: COLLECTION_NAME.schedule,
           key: `${targetSchedule.id}/scheduleList`,
           data: updatedScheduleList,
         });
-
-        await mutate();
-        handleOnCloseModal();
       }
 
-      setTitle('');
-      setStartedAt('');
-      setEndedAt('');
-      setDetail('');
+      resetForm();
+      handleOnCloseModal();
+      await mutate();
     } catch (error) {
-      console.error('Schedule creation failed:', error);
+      console.error('일정 등록 및 수정 중 오류:', error);
     } finally {
       setIsLoading(false);
     }
@@ -234,40 +192,14 @@ const ScheduleModalContents = ({
       await mutate();
       handleOnCloseModal();
     } catch (error) {
-      console.error('데이터 삭제 중 오류:', error);
+      console.error('일정 삭제 중 오류:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleEditMode = () => {
-    setTitle(targetSchedule.title);
-    setStartedAt(targetSchedule.startedAt);
-    setEndedAt(targetSchedule.endedAt);
-    setDetail(targetSchedule.detail);
-    setDocumentUrl(targetSchedule.documentUrl);
-    setDocumentName(targetSchedule.documentName);
     dispatch(setModalType('U'));
-  };
-
-  const onChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDetail(e.target.value);
-
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = '0px';
-      const scrollHeight = textareaRef.current.scrollHeight;
-
-      textareaRef.current.style.height = scrollHeight + 'px';
-    }
-  };
-
-  const handleFileDownload = (fileUrl: string, fileName: string) => {
-    const link = document.createElement('a');
-    link.href = fileUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   if (isFetchLoading) return <Loading />;
@@ -280,7 +212,6 @@ const ScheduleModalContents = ({
         {modalType === 'C' && `새로운 일정 등록`}
         {modalType === 'U' && `${targetSchedule.name}님의 일정 수정`}
       </div>
-
       <div>제목</div>
       <S.Input
         modalType={modalType}
