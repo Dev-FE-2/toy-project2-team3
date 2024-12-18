@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { colors } from '../../../../../styles';
 import { useDispatch } from 'react-redux';
 import { setCurrentSchedule } from '../../../../../slices/schedule/scheduleSlice';
 import type {
   CurrentSchedule,
   TeamMembersData,
 } from '../../../../../types/schedule';
+import { assignColor } from '../../../../../utils/assignColor';
 
 interface TeamListProps {
   name: string;
@@ -17,21 +17,6 @@ const TeamList = ({ name, members }: TeamListProps) => {
 
   const handleTeamOrUserClick = ({ type, teamId, userId }: CurrentSchedule) => {
     dispatch(setCurrentSchedule({ type, teamId, userId }));
-  };
-
-  const assignColor = (number: number, type: string) => {
-    const colorSaturation = type === 'background' ? 's95' : 's60';
-    const color = [
-      colors.scale.secondary[colorSaturation],
-      colors.scale.tertiary[colorSaturation],
-      colors.scale.neutral[colorSaturation],
-      colors.scale.primary[colorSaturation],
-      colors.scale.danger[colorSaturation],
-    ];
-
-    const assingedColor = color[number % 5];
-
-    return assingedColor;
   };
 
   return (
@@ -86,13 +71,15 @@ const S = {
       margin: 0.5rem 0;
       display: flex;
       align-items: center;
+      text-align: center;
+      line-height: 1;
     }
   `,
   NumberCircle: styled.div<{
     assignedBackgroundColor: string;
     assignedBorderColor: string;
   }>`
-    margin-right: 4px;
+    margin: 0 4px 0 0;
     background-color: ${(props) => props.assignedBackgroundColor};
     border: 1px solid ${(props) => props.assignedBorderColor};
     width: 15px;

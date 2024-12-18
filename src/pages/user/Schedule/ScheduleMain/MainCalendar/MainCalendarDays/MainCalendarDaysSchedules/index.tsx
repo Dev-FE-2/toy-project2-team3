@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, border, padding } from '../../../../../../../styles';
+import { border, padding } from '../../../../../../../styles';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../../state/store';
@@ -9,6 +9,7 @@ import type {
   ScheduleData,
 } from '../../../../../../../types/schedule';
 import { useSchedule } from '../../../../../../../hooks/useSchedule';
+import { assignColor } from '../../../../../../../utils';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
@@ -101,21 +102,6 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
       currentDate.toDateString() === endedAt.toDateString() ||
       (currentDate > startedAt && currentDate < endedAt)
     );
-  };
-
-  const assignColor = (number: number, type: string) => {
-    const colorSaturation = type === 'background' ? 's95' : 's60';
-    const color = [
-      colors.scale.secondary[colorSaturation],
-      colors.scale.tertiary[colorSaturation],
-      colors.scale.neutral[colorSaturation],
-      colors.scale.primary[colorSaturation],
-      colors.scale.danger[colorSaturation],
-    ];
-
-    const assingedColor = color[number % 5];
-
-    return assingedColor;
   };
 
   const renderScheduleData = (

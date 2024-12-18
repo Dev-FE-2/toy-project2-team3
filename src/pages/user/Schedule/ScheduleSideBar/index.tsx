@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TeamList from '../core/TeamList';
+import TeamList from './TeamList';
 import { border } from '../../../../styles';
 import type { RootState } from '../../../../state/store';
 import { useSelector } from 'react-redux';
