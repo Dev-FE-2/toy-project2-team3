@@ -1,23 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { saveDataToDB } from '../../../../../../firebase/saveDataToDB';
-import { fetchDataFromDB } from '../../../../../../firebase/fetchDataFromDB';
 import FileUploading from '../../../../../../components/FileUploading';
 import Button from '../../../../../../components/form/Button';
 import { border, colors, padding } from '../../../../../../styles';
-import { fetchUserInfo } from '../../../../../../firebase';
-import { User } from '../../../../../../types/interface';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../state/store';
-import {
-  setModalType,
-  setScheduleData,
-} from '../../../../../../slices/schedule/scheduleSlice';
+import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
 import type {
   ModalType,
   ScheduleData,
   ScheduleList,
 } from '../../../../../../types/schedule';
+import { useFetchUserInfo } from '../../../../../../hooks';
+import useSWR from 'swr';
+import { COLLECTION_NAME } from '../../../../../../constant';
+import { Loading } from '../../../../../../components';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;
@@ -30,6 +28,19 @@ const ScheduleModalContents = ({
   const { targetSchedule, modalType } = useSelector(
     (state: RootState) => state.schedule
   );
+  const {
+    userInfo,
+    isLoading: isUserFetchLoading,
+    error: userFetchError,
+  } = useFetchUserInfo();
+  const {
+    data: scheduleData = [],
+    isLoading: isScheduleFetchLoading,
+    error: scheduleFetchError,
+  } = useSWR<ScheduleData[]>({ table: COLLECTION_NAME.schedule });
+
+  const isFetchLoading = isUserFetchLoading || isScheduleFetchLoading;
+  const hasFetchError = userFetchError || scheduleFetchError;
 
   const [title, setTitle] = useState('');
   const [startedAt, setStartedAt] = useState('');
@@ -42,37 +53,17 @@ const ScheduleModalContents = ({
   const [titleError, setTitleError] = useState('');
   const [detailError, setDetailError] = useState('');
   const [timeError, setTimeError] = useState('');
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const unSubscribe = fetchUserInfo((info) => {
-      setCurrentUser(info);
-    });
-
-    return () => {
-      unSubscribe();
-    };
-  }, []);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  const updateScheduleData = async () => {
-    const updatedScheduleData = (await fetchDataFromDB({
-      table: 'Schedule',
-    })) as ScheduleData[];
-    dispatch(setScheduleData(updatedScheduleData));
-  };
 
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
     newSchedule: ScheduleList
   ) => {
-    console.log('함수 실행됨');
     const newStartedAt = new Date(newSchedule.startedAt).getTime();
     const newEndedAt = new Date(newSchedule.endedAt).getTime();
 
     if (newEndedAt < newStartedAt) {
-      console.log('종료 시간이 더 과거임');
       setTimeError('종료 시간은 시작 시간보다 과거일 수 없습니다.');
       return false;
     }
@@ -86,7 +77,6 @@ const ScheduleModalContents = ({
         (newEndedAt > existingStartedAt && newEndedAt <= existingEndedAt) ||
         (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt)
       ) {
-        console.log('기존 일정과 겹치는 시간대임');
         setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
         return false;
       }
@@ -116,23 +106,19 @@ const ScheduleModalContents = ({
 
       setDetailError('');
 
-      const scheduleData = (await fetchDataFromDB({
-        table: 'Schedule',
-      })) as ScheduleData[];
-
       const newScheduleEntry = {
         title,
         startedAt,
         endedAt,
         detail,
-        documentName,
-        documentUrl,
+        documentName: documentName || '',
+        documentUrl: documentUrl || '',
         createdAt: new Date().toISOString(),
         updatedAt: '',
       };
 
       if (modalType === 'C') {
-        const userId = currentUser ? currentUser.userId : null;
+        const userId = userInfo && userInfo.userId;
 
         const existingUserSchedule = scheduleData.find(
           (data) => data.userId === userId
@@ -142,7 +128,6 @@ const ScheduleModalContents = ({
           existingUserSchedule &&
           !isValidSchedule(existingUserSchedule.scheduleList, newScheduleEntry)
         ) {
-          console.log('안돼');
           return;
         }
 
@@ -167,7 +152,6 @@ const ScheduleModalContents = ({
           });
         }
 
-        await updateScheduleData();
         handleOnCloseModal();
       } else if (modalType === 'U') {
         const newScheduleEntry = {
@@ -175,14 +159,13 @@ const ScheduleModalContents = ({
           startedAt,
           endedAt,
           detail,
-          documentName,
-          documentUrl,
+          documentName: documentName || '',
+          documentUrl: documentUrl || '',
           createdAt: targetSchedule.createdAt,
           updatedAt: new Date().toISOString(),
         };
 
         if (!isValidSchedule([targetSchedule], newScheduleEntry)) {
-          console.log('안돼');
           return;
         }
 
@@ -202,7 +185,6 @@ const ScheduleModalContents = ({
           data: updatedScheduleList,
         });
 
-        await updateScheduleData();
         handleOnCloseModal();
       }
 
@@ -220,10 +202,6 @@ const ScheduleModalContents = ({
   const deleteSchedule = async () => {
     try {
       setIsLoading(true);
-
-      const scheduleData = (await fetchDataFromDB({
-        table: 'Schedule',
-      })) as ScheduleData[];
 
       const clearScheduleEntry = {
         title: '',
@@ -251,8 +229,6 @@ const ScheduleModalContents = ({
           key: `${targetSchedule.id}/scheduleList`,
           data: updatedScheduleList,
         });
-
-        await updateScheduleData();
       }
       handleOnCloseModal();
     } catch (error) {
@@ -291,6 +267,9 @@ const ScheduleModalContents = ({
     link.click();
     document.body.removeChild(link);
   };
+
+  if (isFetchLoading) return <Loading />;
+  if (hasFetchError) return <div>오류 발생</div>;
 
   return (
     <>
