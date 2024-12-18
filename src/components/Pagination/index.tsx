@@ -1,83 +1,99 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
-import { setCurrentPage } from '../../slices/pagination/action';
-import { VISIBLE_PAGE_COUNT } from '../../constant';
+
 type PagiNationProps = {
-  maxPage: number;
+  totalPage: number;
+  limit: number;
+  page: number;
+  setPage: (page: number) => void;
 };
 
-const Pagination: React.FC<PagiNationProps> = ({ maxPage }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const currentPage = useSelector(
-    (state: RootState) => state.pagination.currentPage
-  );
+const sliceArrayByLimit = (totalPage: number, limit: number) => {
+  const pages = [];
+  for (let i = 1; i <= totalPage; i++) {
+    pages.push(i);
+  }
+  const result = [];
+  for (let i = 0; i < pages.length; i += limit) {
+    result.push(pages.slice(i, i + limit));
+  }
+  return result;
+};
 
-  const currentPageBase =
-    Math.floor((currentPage - 1) / VISIBLE_PAGE_COUNT) * VISIBLE_PAGE_COUNT + 1;
+const Pagination: React.FC<PagiNationProps> = ({
+  totalPage,
+  limit,
+  page,
+  setPage,
+}) => {
+  const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
+  const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
 
-  const pageList = useMemo(() => {
-    const pages = [];
-    for (let i = 0; i < VISIBLE_PAGE_COUNT; i++) {
-      const page = currentPageBase + i;
-      if (page <= maxPage) pages.push(page);
+  // 컴포넌트 마운트 시 URL에서 페이지 번호를 가져와 상태 초기화
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const pageParam = parseInt(searchParams.get('page') || '1', 10);
+    if (pageParam >= 1 && pageParam <= totalPage) {
+      setPage(pageParam);
+    } else {
+      setPage(1); // 유효하지 않은 경우 기본값 설정
     }
-    return pages;
-  }, [currentPageBase, maxPage, VISIBLE_PAGE_COUNT]);
+  }, [totalPage, setPage]);
+
+  useEffect(() => {
+    const slicedPageArray = sliceArrayByLimit(totalPage, limit);
+    setTotalPageArray(slicedPageArray);
+    setCurrentPageArray(slicedPageArray[0] || []);
+  }, [totalPage, limit]);
+
+  useEffect(() => {
+    if (totalPageArray.length > 0) {
+      if (page % limit === 1) {
+        setCurrentPageArray(totalPageArray[Math.floor(page / limit)]);
+      } else if (page % limit === 0) {
+        setCurrentPageArray(totalPageArray[Math.floor(page / limit) - 1]);
+      }
+    }
+  }, [page, totalPageArray, limit]);
+
+  // 페이지 변경 시 URL 업데이트
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams(window.location.search);
+    newSearchParams.set('page', page.toString());
+    window.history.pushState(
+      {},
+      '',
+      `${window.location.pathname}?${newSearchParams}`
+    );
+  }, [page]);
 
   const handlePageChange = (newPage: number) => {
-    dispatch(setCurrentPage(newPage)); // currentPage 상태 업데이트
-    sessionStorage.setItem('currentPage', newPage.toString()); // sessionStorage에 페이지 저장
-    const currentPath = window.location.pathname; // 현재 페이지 URL 경로 가져오기
-    window.history.pushState({ page: newPage }, `Page ${newPage}`, currentPath);
+    if (newPage >= 1 && newPage <= totalPage) {
+      setPage(newPage);
+    }
   };
-
-  useEffect(() => {
-    // 페이지가 처음 로드될 때 sessionStorage에서 currentPage 상태를 확인
-    const savedPage = sessionStorage.getItem('currentPage');
-    const initialPage = savedPage ? Number(savedPage) : 1; // sessionStorage 값이 있으면 사용, 없으면 기본값 1
-
-    dispatch(setCurrentPage(initialPage)); // 초기 페이지 설정
-  }, [dispatch]);
-
-  useEffect(() => {
-    const handlePopState = (event) => {
-      if (event.state && event.state.page) {
-        dispatch(setCurrentPage(event.state.page)); // 이전 페이지로 이동
-      } else {
-        dispatch(setCurrentPage(1)); // 상태가 없으면 기본 페이지로 이동
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [dispatch]);
 
   return (
     <S.PaginationContainer>
       <S.MoveButton
-        onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-        disabled={currentPage === 1}
+        onClick={() => handlePageChange(Math.max(page - 1, 1))}
+        disabled={page === 1}
       >
         Previous
       </S.MoveButton>
-      {pageList.map((page) => (
+      {currentPageArray.map((pageNumber) => (
         <S.PageButton
-          key={page}
-          onClick={() => handlePageChange(page)}
-          isActive={page === currentPage}
+          key={pageNumber}
+          onClick={() => handlePageChange(pageNumber)}
+          isActive={pageNumber === page}
         >
-          {page}
+          {pageNumber}
         </S.PageButton>
       ))}
       <S.MoveButton
-        onClick={() => handlePageChange(Math.min(currentPage + 1, maxPage))}
-        disabled={currentPage === maxPage}
+        onClick={() => handlePageChange(Math.min(page + 1, totalPage))}
+        disabled={page === totalPage}
       >
         Next
       </S.MoveButton>
@@ -106,7 +122,7 @@ const S = {
       background-color: ${({ isActive }) =>
         isActive
           ? `${colors.semantic.hover.primary}`
-          : `${colors.semantic.hover.tertiary}`};
+          : `${colors.semantic.hover.secondary}`};
     }
     &:disabled {
       background-color: ${colors.semantic.disabled};

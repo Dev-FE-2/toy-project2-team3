@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RootState } from '../../../../../state/store';
+import type { RootState } from '../../../../../state/store';
 import { colors } from '../../../../../styles';
 import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
 import { fetchDataFromDB } from '../../../../../firebase';
 import { ITEM_PER_PAGE } from '../../../../../constant';
-
+import { useLocation } from 'react-router-dom';
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -23,18 +23,21 @@ const SalaryCorrectionList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SalaryRequest | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const currentPage = useSelector(
-    (state: RootState) => state.pagination.currentPage
-  );
 
-  const user = useSelector((state: RootState) => state.user);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pageParam = queryParams.get('page');
+  const initialPage = pageParam ? parseInt(pageParam, 10) : 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchSalaryRequestData = async () => {
       try {
         const data = await fetchDataFromDB<SalaryRequest>({
           table: 'SalaryRequest',
-          key: user.userInfo.userId as string,
+          key: userInfo.userId as string,
         });
 
         if (data) {
@@ -56,10 +59,10 @@ const SalaryCorrectionList = () => {
       }
     };
 
-    if (user.userInfo) {
+    if (userInfo) {
       fetchSalaryRequestData();
     }
-  }, [user.userInfo]);
+  }, [userInfo]);
 
   // 현재 페이지의 항목 계산
   useEffect(() => {
@@ -78,6 +81,8 @@ const SalaryCorrectionList = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
+
+  const totalPage = Math.ceil(items.length / ITEM_PER_PAGE);
 
   if (isLoading) return <Loading />;
 
@@ -131,7 +136,12 @@ const SalaryCorrectionList = () => {
       </S.SalaryMainContainer>
 
       <S.PaginationContainer>
-        <Pagination maxPage={Math.ceil(items.length / ITEM_PER_PAGE)} />
+        <Pagination
+          totalPage={totalPage}
+          limit={ITEM_PER_PAGE}
+          page={currentPage}
+          setPage={setCurrentPage}
+        />
       </S.PaginationContainer>
       {isModalOpen && selectedItem && (
         <AddPayStub item={selectedItem} onClose={closeModal} />

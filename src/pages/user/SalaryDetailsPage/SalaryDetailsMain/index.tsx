@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { fetchDataFromDB } from '../../../../firebase';
 import type { RootState } from '../../../../state/store';
-import { useFetchUserInfo } from '../../../../hooks';
 import { colors } from '../../../../styles';
 import NormalPayStub from './NormalPayStub';
 import { Loading, Pagination } from '../../../../components';
 import { ITEM_PER_PAGE } from '../../../../constant';
+import { useLocation } from 'react-router-dom';
 
 export type Item = {
   id: string;
@@ -27,11 +27,14 @@ const SalaryDetailsMain = () => {
   const [currentPageItems, setCurrentPageItems] = useState<Item[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const currentPage = useSelector(
-    (state: RootState) => state.pagination.currentPage
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pageParam = queryParams.get('page');
+  const initialPage = pageParam ? parseInt(pageParam, ITEM_PER_PAGE) : 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
-  const { userInfo, isLoading, error } = useFetchUserInfo();
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchSalaryListData = async () => {
@@ -51,6 +54,8 @@ const SalaryDetailsMain = () => {
         }
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSalaryListData();
@@ -77,8 +82,9 @@ const SalaryDetailsMain = () => {
     setSelectedItem(null);
   };
 
+  const totalPage = Math.ceil(salaryListData.length / ITEM_PER_PAGE);
+
   if (isLoading) return <Loading />;
-  if (error) return <div>오류 발생: {error.message}</div>;
 
   return (
     <S.MainContainer>
@@ -111,7 +117,10 @@ const SalaryDetailsMain = () => {
 
       <S.PaginationContainer>
         <Pagination
-          maxPage={Math.ceil(salaryListData.length / ITEM_PER_PAGE)}
+          totalPage={totalPage}
+          limit={ITEM_PER_PAGE}
+          page={currentPage}
+          setPage={setCurrentPage}
         />
       </S.PaginationContainer>
     </S.MainContainer>
