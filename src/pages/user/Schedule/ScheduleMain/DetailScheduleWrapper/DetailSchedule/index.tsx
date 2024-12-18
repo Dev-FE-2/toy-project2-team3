@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import { colors, padding } from '../../../../../../styles';
 import type {
-  CurrentSchedule,
-  FormattedUserOrTeamScheduleData,
-  ScheduleData,
   ScheduleList,
   TargetSchedule,
 } from '../../../../../../types/schedule';
@@ -16,6 +13,7 @@ import {
 import type { RootState } from '../../../../../../state/store';
 import { useSchedule } from '../../../../../../hooks/useSchedule';
 import { assignColor } from '../../../../../../utils';
+import { formatTeamSchedule } from '../../../../../../utils/formatTeamSchedule';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;
@@ -40,48 +38,21 @@ const DetailSchedule = ({
     );
   };
 
-  const formatTeamSchedule = (
-    currentSchedule: CurrentSchedule,
-    scheduleData: ScheduleData[]
-  ) => {
-    const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
-    const teamScheduleData = scheduleData.filter((schedule) =>
-      teamMembersUserId.includes(schedule.userId)
-    );
-
-    const formattedTeamSchedule = teamScheduleData.map((schedule) => {
-      const teamMemberInfo = currentSchedule.teamId.find(
-        (info) => info.userId === schedule.userId
-      );
-
-      const filteredScheduleList = schedule.scheduleList.filter((item) =>
+  const filterScheduleData = () => {
+    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
+    console.log(teamScheduleData);
+    const formattedTeamScheduleData = teamScheduleData.map((schedule) => {
+      const filteredScheduleData = schedule.scheduleList.filter((item) =>
         isDateInRange(item.startedAt, item.endedAt)
       );
 
       return {
         ...schedule,
-        type: currentSchedule.type,
-        name: teamMemberInfo ? teamMemberInfo.name : '',
-        number: teamMemberInfo ? teamMemberInfo.number : 0,
-        scheduleList: filteredScheduleList,
+        scheduleList: filteredScheduleData,
       };
     });
 
-    return formattedTeamSchedule.filter(
-      (schedule) => schedule.scheduleList.length > 0
-    );
-  };
-
-  const filterScheduleData = () => {
-    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
-    const filteredScheduleData: FormattedUserOrTeamScheduleData[] =
-      teamScheduleData.filter((schedule) =>
-        schedule.scheduleList.some((item) =>
-          isDateInRange(item.startedAt, item.endedAt)
-        )
-      );
-
-    return filteredScheduleData;
+    return formattedTeamScheduleData;
   };
 
   const handleRModalOpen = (targetSchedule: TargetSchedule) => {
@@ -92,7 +63,7 @@ const DetailSchedule = ({
 
   const SCHEDULE_GRID_WIDTH = (1250 - 40) / teamMembersLength - 0.3;
 
-  const calculatePosition = (startedAt: string, endedAt: string) => {
+  const calculateSchedulePosition = (startedAt: string, endedAt: string) => {
     const cuttedStartedAt = startedAt.slice(0, 10);
     const cuttedEndedAt = endedAt.slice(0, 10);
 
@@ -102,7 +73,6 @@ const DetailSchedule = ({
     let top = 0;
     let height = 0;
 
-    // startedAt === formattedClickedDate === endedAt
     if (
       cuttedStartedAt === formattedClickedDate &&
       cuttedEndedAt === formattedClickedDate
@@ -112,18 +82,14 @@ const DetailSchedule = ({
 
       top = startMinutes * 2;
       height = (endMinutes - startMinutes) * 2;
-    }
-    // startedAt === formattedClickedDate !== endedAt
-    else if (
+    } else if (
       cuttedStartedAt === formattedClickedDate &&
       cuttedEndedAt !== formattedClickedDate
     ) {
       const startMinutes = startDate.getHours() * 60 + startDate.getMinutes();
       top = startMinutes * 2;
       height = (24 * 60 - startMinutes) * 2;
-    }
-    // startedAt !== formattedClickedDate === endedAt
-    else if (
+    } else if (
       cuttedStartedAt !== formattedClickedDate &&
       cuttedEndedAt === formattedClickedDate
     ) {
@@ -137,14 +103,12 @@ const DetailSchedule = ({
 
   const getTargetSchedule = (
     id: string,
-    // index: number,
     name: string,
     userId: string,
     scheduleData: ScheduleList
   ) => {
     const targetSchedule = {
       id,
-      // index,
       name,
       userId,
       ...scheduleData,
@@ -157,7 +121,7 @@ const DetailSchedule = ({
     <>
       {filterScheduleData().map((schedule) =>
         schedule.scheduleList.map((item) => {
-          const { top, height } = calculatePosition(
+          const { top, height } = calculateSchedulePosition(
             item.startedAt,
             item.endedAt
           );

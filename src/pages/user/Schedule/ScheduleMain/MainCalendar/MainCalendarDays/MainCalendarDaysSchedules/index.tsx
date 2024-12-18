@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 import { border, padding } from '../../../../../../../styles';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../../state/store';
-import type {
-  CurrentSchedule,
-  FormattedUserOrTeamScheduleData,
-  ScheduleData,
-} from '../../../../../../../types/schedule';
+import type { FormattedUserOrTeamScheduleData } from '../../../../../../../types/schedule';
 import { useSchedule } from '../../../../../../../hooks/useSchedule';
 import { assignColor } from '../../../../../../../utils';
+import { formatUserSchedule } from '../../../../../../../utils/formatUserSchedule';
+import { formatTeamSchedule } from '../../../../../../../utils/formatTeamSchedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
@@ -19,82 +17,13 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
   const { currentMonth, currentYear, currentSchedule } = useSelector(
     (state: RootState) => state.schedule
   );
-  const [userScheduleData, setUserScheduleData] = useState<
-    FormattedUserOrTeamScheduleData[]
-  >([]);
-  const [teamScheduleData, setTeamScheduleData] = useState<
-    FormattedUserOrTeamScheduleData[]
-  >([]);
   const { scheduleData = [] } = useSchedule();
 
-  useEffect(() => {
-    if (currentSchedule.type === 'user') {
-      const userScheduleData = formatUserSchedule(
-        currentSchedule,
-        scheduleData
-      );
-      setUserScheduleData(userScheduleData);
-    } else {
-      const teamScheduleData = formatTeamSchedule(
-        currentSchedule,
-        scheduleData
-      );
-      setTeamScheduleData(teamScheduleData);
-    }
+  const teamOrUserscheduleData = useMemo(() => {
+    return currentSchedule.type === 'user'
+      ? formatUserSchedule(currentSchedule, scheduleData)
+      : formatTeamSchedule(currentSchedule, scheduleData);
   }, [currentSchedule, scheduleData]);
-
-  const formatUserSchedule = (
-    currentSchedule: CurrentSchedule,
-    scheduleData: ScheduleData[]
-  ) => {
-    const userScheduleData = scheduleData.find(
-      (schedule) => schedule.userId === currentSchedule.userId
-    );
-
-    const userInfo = currentSchedule.teamId.find((id) =>
-      userScheduleData ? id.userId === userScheduleData.userId : ''
-    );
-
-    const formattedUserSchedule = userScheduleData
-      ? [
-          {
-            type: currentSchedule.type,
-            name: userInfo ? userInfo.name : '',
-            number: userInfo ? userInfo.number : 0,
-            ...userScheduleData,
-          },
-        ]
-      : [];
-
-    return formattedUserSchedule;
-  };
-
-  const formatTeamSchedule = (
-    currentSchedule: CurrentSchedule,
-    scheduleData: ScheduleData[]
-  ) => {
-    if (!currentSchedule.teamId) return [];
-
-    const teamMembersUserId = currentSchedule.teamId.map((id) => id.userId);
-    const teamScheduleData = scheduleData.filter((schedule) =>
-      teamMembersUserId.includes(schedule.userId)
-    );
-
-    const formattedTeamSchedule = teamScheduleData.map((schedule) => {
-      const teamMemberInfo = currentSchedule.teamId.find(
-        (info) => info.userId === schedule.userId
-      );
-
-      return {
-        ...schedule,
-        type: currentSchedule.type,
-        name: teamMemberInfo ? teamMemberInfo.name : '',
-        number: teamMemberInfo ? teamMemberInfo.number : 0,
-      };
-    });
-
-    return formattedTeamSchedule;
-  };
 
   const isDateInRange = (currentDate: Date, startedAt: Date, endedAt: Date) => {
     return (
@@ -134,13 +63,9 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
 
   return (
     <>
-      {currentSchedule.type === 'team'
-        ? teamScheduleData.flatMap((scheduleData) =>
-            renderScheduleData(scheduleData)
-          )
-        : userScheduleData.flatMap((scheduleData) =>
-            renderScheduleData(scheduleData)
-          )}
+      {teamOrUserscheduleData.flatMap((scheduleData) =>
+        renderScheduleData(scheduleData)
+      )}
     </>
   );
 };
