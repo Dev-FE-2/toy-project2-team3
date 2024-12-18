@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { saveDataToDB } from '../../../../../../firebase/saveDataToDB';
+import { saveDataToDB } from '../../../../../../utils';
 import FileUploading from '../../../../../../components/FileUploading';
 import Button from '../../../../../../components/form/Button';
 import { border, colors, padding } from '../../../../../../styles';
@@ -47,6 +47,7 @@ const ScheduleModalContents = ({
   const [documentUrl, setDocumentUrl] = useState<string | undefined>('');
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   const [titleError, setTitleError] = useState('');
   const [detailError, setDetailError] = useState('');
   const [timeError, setTimeError] = useState('');

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
-import ScheduleModal from './core/ScheduleModal';
+import ScheduleModal from './common/ScheduleModal';
 import { useFetchUserInfo } from '../../../hooks';
 import { Loading } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
