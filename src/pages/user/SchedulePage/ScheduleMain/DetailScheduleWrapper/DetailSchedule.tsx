@@ -1,19 +1,19 @@
 import styled from 'styled-components';
-import { colors, padding } from '../../../../../../styles';
+import { colors, padding } from '../../../../../styles';
 import type {
   ScheduleList,
   TargetSchedule,
-} from '../../../../../../types/schedule';
+} from '../../../../../types/schedule';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsModalOpen,
   setModalType,
   setTargetSchedule,
-} from '../../../../../../slices/schedule/scheduleSlice';
-import type { RootState } from '../../../../../../state/store';
-import { useSchedule } from '../../../../../../hooks/useSchedule';
-import { assignColor } from '../../../../../../utils';
-import { formatTeamSchedule } from '../../../../../../utils/formatTeamSchedule';
+} from '../../../../../slices/schedule/scheduleSlice';
+import type { RootState } from '../../../../../state/store';
+import { useSchedule } from '../../../../../hooks/useSchedule';
+import { assignColor } from '../../../../../utils';
+import { formatTeamSchedule } from '../../../../../utils/formatTeamSchedule';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;

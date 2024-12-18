@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { saveDataToDB } from '../../../../../../utils';
-import FileUploading from '../../../../../../components/FileUploading';
-import Button from '../../../../../../components/form/Button';
-import { border, colors, padding } from '../../../../../../styles';
+import { saveDataToDB } from '../../../../../utils';
+import FileUploading from '../../../../../components/FileUploading';
+import Button from '../../../../../components/form/Button';
+import { border, colors, padding } from '../../../../../styles';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import type { RootState } from '../../../../../../state/store';
-import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
-import type { ModalType } from '../../../../../../types/schedule';
-import { useFetchUserInfo } from '../../../../../../hooks';
-import { COLLECTION_NAME } from '../../../../../../constant';
-import { Loading } from '../../../../../../components';
-import { useSchedule } from '../../../../../../hooks/useSchedule';
-import { useScheduleValidation } from '../../../../../../hooks/useScheduleValidation';
-import { useScheduleForm } from '../../../../../../hooks/useScheduleForm';
+import type { RootState } from '../../../../../state/store';
+import { setModalType } from '../../../../../slices/schedule/scheduleSlice';
+import type { ModalType } from '../../../../../types/schedule';
+import { useFetchUserInfo } from '../../../../../hooks';
+import { COLLECTION_NAME } from '../../../../../constant';
+import { Loading } from '../../../../../components';
+import { useSchedule } from '../../../../../hooks/useSchedule';
+import { useScheduleValidation } from '../../../../../hooks/useScheduleValidation';
+import { useScheduleForm } from '../../../../../hooks/useScheduleForm';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;

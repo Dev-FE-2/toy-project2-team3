@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setCurrentSchedule } from '../../../../../slices/schedule/scheduleSlice';
+import { setCurrentSchedule } from '../../../../slices/schedule/scheduleSlice';
 import type {
   CurrentSchedule,
   TeamMembersData,
-} from '../../../../../types/schedule';
-import { assignColor } from '../../../../../utils/assignColor';
+} from '../../../../types/schedule';
+import { assignColor } from '../../../../utils/assignColor';
 
 interface TeamListProps {
   name: string;

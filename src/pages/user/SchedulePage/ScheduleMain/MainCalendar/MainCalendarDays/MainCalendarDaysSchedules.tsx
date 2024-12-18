@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { border, padding } from '../../../../../../../styles';
+import { border, padding } from '../../../../../../styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../../../../state/store';
-import type { FormattedUserOrTeamScheduleData } from '../../../../../../../types/schedule';
-import { useSchedule } from '../../../../../../../hooks/useSchedule';
-import { assignColor } from '../../../../../../../utils';
-import { formatUserSchedule } from '../../../../../../../utils/formatUserSchedule';
-import { formatTeamSchedule } from '../../../../../../../utils/formatTeamSchedule';
+import type { RootState } from '../../../../../../state/store';
+import type { FormattedUserOrTeamScheduleData } from '../../../../../../types/schedule';
+import { useSchedule } from '../../../../../../hooks/useSchedule';
+import { assignColor } from '../../../../../../utils';
+import { formatUserSchedule } from '../../../../../../utils/formatUserSchedule';
+import { formatTeamSchedule } from '../../../../../../utils/formatTeamSchedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
