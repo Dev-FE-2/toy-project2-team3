@@ -13,6 +13,7 @@ interface UserState {
     department: string | null;
     isAdmin: boolean;
     isActivated: boolean;
+    employeeNumber: string | null;
   };
 }
 
@@ -35,6 +36,7 @@ const initialState: UserState = savedUserInfo
         department: null,
         isAdmin: null,
         isActivated: null,
+        employeeNumber: null,
       },
     };
 
@@ -66,6 +68,7 @@ const userSlice = createSlice({
         department: null,
         isAdmin: false,
         isActivated: false,
+        employeeNumber: null,
       };
       sessionStorage.removeItem('user');
     },

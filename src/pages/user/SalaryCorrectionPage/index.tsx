@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SalaryCorrectionHeader from './SalaryCorrectionHeader';
 import SalaryCorrectionMiddle from './SalaryCorrectionMain';
 
-const SalaryCorrection = () => {
+const SalaryCorrectionPage = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleVisibilityChange = () => {
@@ -43,4 +43,4 @@ const S = {
   `,
 };
 
-export default SalaryCorrection;
+export default SalaryCorrectionPage;

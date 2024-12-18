@@ -1,13 +1,15 @@
 import { colors } from '../styles';
 
 export const assignColor = (number: number, type: string) => {
-  const colorSaturation = type === 'background' ? 's95' : 's60';
+  const typeBase =
+    type === 'background' ? colors.semantic.hover : colors.semantic;
+
   const color = [
-    colors.scale.secondary[colorSaturation],
-    colors.scale.tertiary[colorSaturation],
-    colors.scale.neutral[colorSaturation],
-    colors.scale.primary[colorSaturation],
-    colors.scale.danger[colorSaturation],
+    typeBase.primary,
+    typeBase.warning,
+    typeBase.secondary,
+    typeBase.danger,
+    typeBase.success,
   ];
 
   const assingedColor = color[number % 5];

@@ -21,6 +21,7 @@ type UserState = Pick<
   | 'department'
   | 'isActivated'
   | 'isAdmin'
+  | 'employeeNumber'
 >;
 type ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 type ClickEventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
@@ -63,6 +64,7 @@ const LoginForm = () => {
           department: userInfo.department,
           isAdmin: userInfo.isAdmin,
           isActivated: userInfo.isActivated,
+          employeeNumber: userInfo.employeeNumber,
         })
       );
 

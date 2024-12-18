@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
-import ScheduleModal from '../SchedulePage/common/ScheduleModal';
+import ScheduleModal from './common/ScheduleModal';
 import { useFetchUserInfo } from '../../../hooks';
 import { Loading } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import type { TeamData, TeamMembersData } from '../../../types/schedule';
 import { useSchedule } from '../../../hooks/useSchedule';
 import { useTeam } from '../../../hooks/useTeam';
 
-const Schedule = () => {
+const SchedulePage = () => {
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((state: RootState) => state.schedule);
   const {
@@ -79,4 +79,4 @@ const S = {
   `,
 };
 
-export default Schedule;
+export default SchedulePage;

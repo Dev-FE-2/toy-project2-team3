@@ -81,11 +81,11 @@ const S = {
       }
 
       &:valid {
-        border-color: ${colors.semantic.border};
+        border-color: ${colors.semantic.border.light};
       }
 
       &:invalid:placeholder-shown {
-        border-color: ${colors.semantic.border};
+        border-color: ${colors.semantic.border.light};
       }
 
       &:invalid {
