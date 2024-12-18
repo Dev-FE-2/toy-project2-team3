@@ -134,17 +134,15 @@ const ScheduleModalContents = ({
         if (existingUserSchedule) {
           // 이미 존재하는 유저의 스케줄 등록의 경우
           await saveDataToDB({
-            table: 'Schedule',
-            key: existingUserSchedule
-              ? `${existingUserSchedule.id}/scheduleList`
-              : '',
+            table: COLLECTION_NAME.schedule,
+            key: `${existingUserSchedule.id}/scheduleList`,
             data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
           handleOnCloseModal();
         } else {
           // 존재하지 않던 유저의 스케줄 등록의 경우
           await saveDataToDB({
-            table: 'Schedule',
+            table: COLLECTION_NAME.schedule,
             data: {
               userId,
               scheduleList: [newScheduleEntry],
@@ -180,8 +178,8 @@ const ScheduleModalContents = ({
 
         // 유저의 스케줄 수정의 경우
         await saveDataToDB({
-          table: 'Schedule',
-          key: targetSchedule.id ? `${targetSchedule.id}/scheduleList` : '',
+          table: COLLECTION_NAME.schedule,
+          key: `${targetSchedule.id}/scheduleList`,
           data: updatedScheduleList,
         });
 
