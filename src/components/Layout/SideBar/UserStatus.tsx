@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import type { RootState } from '../../../../state/store';
-import { colors, font, padding } from '../../../../styles';
-import UserProfilePhoto from '../../../UserProfilePhoto';
+import type { RootState } from '../../../state/store';
+import { colors, font, padding } from '../../../styles';
+import UserProfilePhoto from '../../UserProfilePhoto';
 import LoggoutButton from './LoggoutButton';
 import defaultImage from 'public/avatar.svg';
 
@@ -29,7 +29,7 @@ const UserStatus = ({ style }: UserStatusProps) => {
     <S.UserStatusWrap padding={padding}>
       <S.UserStatus>
         <UserProfilePhoto
-          width="40"
+          width="50"
           imageUrl={userInfo.profileImgUrl ?? defaultImage}
           userName={userInfo.name ?? '알 수 없는 사용자'}
           onClick={handleProfile}
@@ -66,7 +66,8 @@ const S = {
     .user-state {
       display: flex;
       flex-direction: column;
-      gap: ${padding.xs};
+      gap: ${padding.sm};
+      line-height: 1;
 
       .user-name {
         font-weight: 500;

@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { getAuth, signOut } from 'firebase/auth';
-import { logout } from '../../../../../slices/user/actions';
-import { colors } from '../../../../../styles';
+import { logout } from '../../../slices/user/actions';
+import { colors } from '../../../styles';
 
 const UserStatus = () => {
   const dispatch = useDispatch();
