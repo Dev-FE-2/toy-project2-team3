@@ -328,13 +328,13 @@ const S = {
   ApplyMiddleContainer: styled.div`
     width: 100%;
     min-height: 25vh;
-    border-bottom: 2px solid ${colors.semantic.border};
+    border-bottom: 2px solid ${colors.semantic.border.light};
   `,
   ApplyTitleContainer: styled.div`
     font-size: 20px;
     font-weight: bold;
     max-height: 40%;
-    border: 2px solid ${colors.semantic.border};
+    border: 2px solid ${colors.semantic.border.light};
     display: flex;
     padding: 15px;
     align-items: center;
@@ -366,7 +366,7 @@ const S = {
       max-width: 15%;
       height: 5vh;
       margin-right: 2.3vw;
-      border: 1px solid ${colors.semantic.border};
+      border: 1px solid ${colors.semantic.border.light};
       border-radius: 8px;
       margin-bottom: 1.5vh;
       background-color: ${colors.semantic.background.light};
@@ -376,7 +376,7 @@ const S = {
       height: 5vh;
       border-radius: 8px;
       margin-right: 2vw;
-      border: 1px solid ${colors.semantic.border};
+      border: 1px solid ${colors.semantic.border.light};
       margin-bottom: 1.5vh;
       background-color: ${colors.semantic.background.light};
     }
@@ -385,7 +385,7 @@ const S = {
       height: 5vh;
       border-radius: 8px;
       margin-right: 5vw;
-      border: 1px solid ${colors.semantic.border};
+      border: 1px solid ${colors.semantic.border.light};
       margin-bottom: 1.5vh;
       background-color: ${colors.semantic.background.light};
     }

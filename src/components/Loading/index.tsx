@@ -33,7 +33,7 @@ const S = {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      border: 5px solid ${colors.semantic.border};
+      border: 5px solid ${colors.semantic.border.light};
       border-top: 5px solid ${colors.semantic.secondary};
       animation: ${spin} 1s linear infinite;
     }
