@@ -4,13 +4,7 @@ import { URL } from '../../../constant';
 import { colors, padding } from '../../../styles';
 import LogoImage from '../../../assets/pokemonBall.svg';
 
-interface BrandLogoProps {
-  style: {
-    padding: string;
-  };
-}
-
-const BrandLogo = ({ style }: BrandLogoProps) => {
+const BrandLogo = ({ style }: { style: { padding: string } }) => {
   const { padding } = style;
 
   return (
@@ -26,13 +20,11 @@ const BrandLogo = ({ style }: BrandLogoProps) => {
 };
 
 const S = {
-  Logo: styled.article<BrandLogoProps['style']>`
+  Logo: styled.article<{ padding: string }>`
     display: flex;
     align-items: center;
-    /* justify-content: center; */
     gap: ${padding.md};
-    height: 80px;
-    padding: ${(props) => props.padding};
+    padding: 40px ${(props) => props.padding};
 
     .logo-image {
       height: 40px;
