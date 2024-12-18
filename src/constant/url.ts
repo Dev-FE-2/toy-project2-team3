@@ -35,10 +35,10 @@ const URL: UrlType = {
     name: 'userHome',
     link: '/userHome',
   },
-  editProfile: {
+  profile: {
     text: '나의 정보',
-    name: 'editProfile',
-    link: '/editProfile',
+    name: 'profile',
+    link: '/profile',
   },
   schedule: {
     text: '나의 업무',

@@ -27,7 +27,7 @@ function Router() {
           {/* Layout 중첩 라우팅 */}
 
           {/* 기본 경로 리다이렉트 설정 */}
-          <Route index element={<Navigate to={URL.schedule.link} replace />} />
+          <Route index element={<Navigate to={URL.userHome.link} replace />} />
 
           {/* user */}
 
@@ -42,7 +42,7 @@ function Router() {
           />
           {/* 회원 정보 페이지 */}
           <Route
-            path={URL.editProfile.name}
+            path={URL.profile.name}
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <ProfilePage />
@@ -67,14 +67,10 @@ function Router() {
               </ProtectedRoute>
             }
           />
-          {/* 급여 정정 신청 페이지 */}
+          {/* 나의 급여 페이지 */}
           <Route
-            path={URL.salaryCorrection.name}
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <SalaryCorrectionPage />
-              </ProtectedRoute>
-            }
+            path={URL.salary.name}
+            element={<Navigate to={URL.salaryDetails.link} replace />}
           />
           {/* 급여 내역 페이지 */}
           <Route
@@ -82,6 +78,15 @@ function Router() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <SalaryDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* 급여 정정 신청 페이지 */}
+          <Route
+            path={URL.salaryCorrection.name}
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <SalaryCorrectionPage />
               </ProtectedRoute>
             }
           />

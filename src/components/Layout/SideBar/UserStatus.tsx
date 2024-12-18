@@ -5,6 +5,7 @@ import type { RootState } from '../../../state/store';
 import { colors, font, padding } from '../../../styles';
 import UserProfilePhoto from '../../UserProfilePhoto';
 import defaultImage from 'public/avatar.svg';
+import { URL } from '../../../constant';
 
 type UserStatusProps = {
   style: {
@@ -21,7 +22,7 @@ const UserStatus = ({ style }: UserStatusProps) => {
   );
 
   const handleProfile = () => {
-    navigate('/editProfile');
+    navigate(URL.profile.link);
   };
 
   return isLoggedIn ? (
