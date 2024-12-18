@@ -5,25 +5,19 @@ import DetailSchedule from './DetailSchedule';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../../state/store';
 import type { TeamMembersData } from '../../../../../types/schedule';
+import { formatDate } from '../../../../../utils/formatDate';
 
 const DetailScheduleWrapper = () => {
   const { currentSchedule, clickedDate } = useSelector(
     (state: RootState) => state.schedule
   );
   const [currentTime, setCurrentTime] = useState(new Date());
-
   const teamMembersInfo = currentSchedule.teamId;
   const teamMembersLength = teamMembersInfo.length;
-
   const totalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
   const timeLinePosition = (totalMinutes / 60) * 120 + 40;
-
-  const [year, month, day] = clickedDate;
-  const formattedMonth = String(month).padStart(2, '0');
-  const formattedDay = String(day).padStart(2, '0');
-  const formattedClickedDate = `${year}-${formattedMonth}-${formattedDay}`;
-
   const currentDate = `${currentTime.getFullYear()}-${currentTime.getMonth() + 1}-${currentTime.getDate()}`;
+  const formattedClickedDate = formatDate(clickedDate);
 
   useEffect(() => {
     const getCurrentTime = setInterval(() => {
