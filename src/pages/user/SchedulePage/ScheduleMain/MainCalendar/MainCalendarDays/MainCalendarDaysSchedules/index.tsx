@@ -78,7 +78,7 @@ const S = {
     width: 95%;
     height: auto;
     min-height: 21px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     background-color: ${(props) => props.assignedBackgroundColor};
     border: 1px solid ${(props) => props.assignedBorderColor};

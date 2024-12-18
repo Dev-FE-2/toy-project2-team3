@@ -68,10 +68,9 @@ const S = {
       font-size: 1rem;
       font-weight: 500;
       padding-left: 1rem;
-      margin: 0.5rem 0;
+      margin: 14px 0;
       display: flex;
       align-items: center;
-      text-align: center;
       line-height: 1;
     }
   `,
@@ -79,7 +78,7 @@ const S = {
     assignedBackgroundColor: string;
     assignedBorderColor: string;
   }>`
-    margin: 0 4px 0 0;
+    margin: 2px 4px 0 0;
     background-color: ${(props) => props.assignedBackgroundColor};
     border: 1px solid ${(props) => props.assignedBorderColor};
     width: 15px;

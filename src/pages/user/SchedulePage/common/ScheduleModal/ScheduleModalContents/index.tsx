@@ -262,6 +262,7 @@ const ScheduleModalContents = ({
               targetSchedule.documentName
             )
           }
+          className="hasDocument"
           readOnly
         />
       ) : (
@@ -302,7 +303,7 @@ const ScheduleModalContents = ({
       )}
       {modalType === 'R' && (
         <S.ButtonWrapper>
-          <Button color="success" text="수정" onClick={handleEditMode} />
+          <Button color="primary" text="수정" onClick={handleEditMode} />
           <Button
             color={isLoading ? 'disabled' : 'danger'}
             text="삭제"
@@ -322,15 +323,23 @@ const S = {
     padding: 0 ${padding.md};
     border: ${border.default};
     border-radius: ${border.radius.xs};
-
+    margin: -6px 0 0 0;
     ${(props) => props.documentName && `cursor: pointer;`};
 
     ${(props) =>
       props.modalType === 'R' || props.documentName
-        ? `background-color: ${colors.scale.neutral.s95};
-          outline: none
+        ? `background-color: ${colors.semantic.background.light};
+          outline: none;
+          border: none;
           `
         : `outline-color: ${colors.semantic.hover.primary};`};
+
+    &.hasDocument {
+      background-color: ${colors.semantic.background.light};
+      color: ${(props) => (props.documentName ? colors.semantic.primary : '')};
+      outline: none;
+      border: none;
+    }
   `,
   Textarea: styled.textarea<{ modalType: ModalType }>`
     width: 100%;
@@ -344,8 +353,9 @@ const S = {
 
     ${(props) =>
       props.modalType === 'R'
-        ? `background-color: ${colors.scale.neutral.s95};
-          outline: none
+        ? `background-color: ${colors.semantic.background.light};
+          outline: none;
+          border: none;
           `
         : `outline-color: ${colors.semantic.hover.primary};`}
   `,
