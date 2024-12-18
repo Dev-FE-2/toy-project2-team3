@@ -40,7 +40,6 @@ const S = {
     text-align: center;
     font-size: 12px;
     border-radius: 30px;
-    /* max-width: 70px; */
     max-width: ${(props) => props.maxWidth && props.maxWidth};
     max-height: ${(props) => props.maxHeight && props.maxHeight};
     cursor: pointer;
