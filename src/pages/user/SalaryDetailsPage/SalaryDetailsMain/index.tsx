@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { fetchDataFromDB } from '../../../../firebase';
+import { fetchDataFromDB } from '../../../../utils';
 import type { RootState } from '../../../../state/store';
 import { useFetchUserInfo } from '../../../../hooks';
 import { colors } from '../../../../styles';

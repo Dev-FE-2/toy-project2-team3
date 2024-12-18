@@ -6,7 +6,7 @@ import { colors } from '../../../../../styles';
 import { Pagination, Loading } from '../../../../../components';
 import AddPayStub from './AddPayStub';
 import type { SalaryRequest } from '../../../../../types/interface';
-import { fetchDataFromDB } from '../../../../../firebase';
+import { fetchDataFromDB } from '../../../../../utils';
 import { useFetchUserInfo } from '../../../../../hooks';
 
 const formatDate = (dateString: string) => {
