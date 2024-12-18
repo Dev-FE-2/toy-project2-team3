@@ -267,7 +267,7 @@ const S = {
     min-height: 6vh;
     justify-content: space-between;
     padding: 20px;
-    border-bottom: 1px solid ${colors.semantic.border};
+    border-bottom: 1px solid ${colors.semantic.border.light};
 
     .date {
       flex: 1;

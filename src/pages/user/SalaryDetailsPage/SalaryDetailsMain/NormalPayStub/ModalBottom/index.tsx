@@ -62,7 +62,7 @@ const S = {
 
   ItemCeil: styled.div`
     min-width: 25%;
-    border: 1px solid ${colors.semantic.border};
+    border: 1px solid ${colors.semantic.border.light};
     display: inline-block;
 
     .value {
@@ -73,7 +73,7 @@ const S = {
   ItemCeilDouble: styled.div`
     min-width: 50%;
     min-height: 3.3vh;
-    border: 0.5px solid ${colors.semantic.border};
+    border: 0.5px solid ${colors.semantic.border.light};
     display: inline-flex;
     align-items: center;
     justify-content: center;

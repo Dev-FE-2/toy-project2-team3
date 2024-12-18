@@ -159,7 +159,7 @@ const S = {
     }
     .title__value {
     width: 25%;
-    border: 1px solid ${colors.semantic.border};
+    border: 1px solid ${colors.semantic.border.light};
     text-align:center; 
     .value{
     color: #4B89DC;
@@ -172,7 +172,7 @@ const S = {
     }
     .detail__value {
         min-width: 62%;
-        border: 1px solid ${colors.semantic.border};
+        border: 1px solid ${colors.semantic.border.light};
         text-align:center;
     }
     }
@@ -181,7 +181,7 @@ const S = {
   MonthContainer: styled.div`
     min-width: 3.4vw;
     min-height: 16vh;
-    border: 1px solid ${colors.semantic.border};
+    border: 1px solid ${colors.semantic.border.light};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -190,7 +190,7 @@ const S = {
 
   otherMonthContainer: styled.div`
     min-height: 12vh;
-    border: 1px solid ${colors.semantic.border};
+    border: 1px solid ${colors.semantic.border.light};
     display: flex;
     align-items: center;
     justify-content: center;
