@@ -65,6 +65,8 @@ const SalaryDetailsMain = () => {
   useEffect(() => {
     const indexOfLastItem = currentPage * ITEM_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
+    const indexOfLastItem = currentPage * ITEM_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEM_PER_PAGE;
     const currentItemsSlice = salaryListData.slice(
       indexOfFirstItem,
       indexOfLastItem

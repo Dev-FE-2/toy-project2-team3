@@ -1,2 +1,2 @@
-export { default as EmployeeList } from './EmployeeList';
-export { default as SalaryRequest } from './SalaryRequest';
+export { default as EmployeeListPage } from './EmployeeListPage';
+export { default as SalaryRequestPage } from './SalaryRequestPage';

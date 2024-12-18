@@ -4,8 +4,8 @@ export const border = {
   widthValue: 1,
   width: '1px',
   style: 'solid',
-  color: colors.semantic.border,
-  default: `1px solid ${colors.semantic.border}`,
+  color: colors.semantic.border.light,
+  default: `1px solid ${colors.semantic.border.light}`,
   radius: {
     xs: '4px',
     sm: '8px',

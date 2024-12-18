@@ -20,7 +20,7 @@ import type {
   TeamMembersData,
 } from '../../../types/schedule';
 
-const Schedule = () => {
+const SchedulePage = () => {
   const dispatch = useDispatch();
   const { teamData, isModalOpen } = useSelector(
     (state: RootState) => state.schedule
@@ -95,4 +95,4 @@ const S = {
   `,
 };
 
-export default Schedule;
+export default SchedulePage;
