@@ -13,10 +13,8 @@ import {
   setModalType,
   setTargetSchedule,
 } from '../../../../../../slices/schedule/scheduleSlice';
-import useSWR from 'swr';
-import { COLLECTION_NAME } from '../../../../../../constant';
-import { Loading } from '../../../../../../components';
 import type { RootState } from '../../../../../../state/store';
+import { useSchedule } from '../../../../../../hooks/useSchedule';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;
@@ -29,11 +27,7 @@ const DetailSchedule = ({
 }: DetailSchedulProps) => {
   const dispatch = useDispatch();
   const { currentSchedule } = useSelector((state: RootState) => state.schedule);
-  const {
-    data: scheduleData = [],
-    isLoading,
-    error,
-  } = useSWR<ScheduleData[]>({ table: COLLECTION_NAME.schedule });
+  const { scheduleData = [] } = useSchedule();
 
   const isDateInRange = (startedAt: string, endedAt: string) => {
     const cuttedStartedAt = startedAt.slice(0, 10);
@@ -172,9 +166,6 @@ const DetailSchedule = ({
 
     handleRModalOpen(targetSchedule);
   };
-
-  if (isLoading) return <Loading />;
-  if (error) return <div>에러 발생</div>;
 
   return (
     <>

@@ -3,11 +3,14 @@ import TeamList from '../core/TeamList';
 import { border } from '../../../../styles';
 import type { RootState } from '../../../../state/store';
 import { useSelector } from 'react-redux';
+import { useTeam } from '../../../../hooks/useTeam';
 
 const ScheduleSideBar = () => {
-  const { isSixWeek, isDayClick, teamData } = useSelector(
+  const { isSixWeek, isDayClick } = useSelector(
     (state: RootState) => state.schedule
   );
+  const { teamData } = useTeam();
+
   const SIDEBAR_HEIGHT_STATUS = isSixWeek && !isDayClick;
 
   return (

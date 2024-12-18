@@ -7,15 +7,11 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../state/store';
 import { setModalType } from '../../../../../../slices/schedule/scheduleSlice';
-import type {
-  ModalType,
-  ScheduleData,
-  ScheduleList,
-} from '../../../../../../types/schedule';
+import type { ModalType, ScheduleList } from '../../../../../../types/schedule';
 import { useFetchUserInfo } from '../../../../../../hooks';
-import useSWR from 'swr';
 import { COLLECTION_NAME } from '../../../../../../constant';
 import { Loading } from '../../../../../../components';
+import { useSchedule } from '../../../../../../hooks/useSchedule';
 
 interface ScheduleModalContentsProps {
   handleOnCloseModal: () => void;
@@ -34,10 +30,11 @@ const ScheduleModalContents = ({
     error: userFetchError,
   } = useFetchUserInfo();
   const {
-    data: scheduleData = [],
+    scheduleData = [],
     isLoading: isScheduleFetchLoading,
     error: scheduleFetchError,
-  } = useSWR<ScheduleData[]>({ table: COLLECTION_NAME.schedule });
+    mutate,
+  } = useSchedule();
 
   const isFetchLoading = isUserFetchLoading || isScheduleFetchLoading;
   const hasFetchError = userFetchError || scheduleFetchError;
@@ -138,6 +135,8 @@ const ScheduleModalContents = ({
             key: `${existingUserSchedule.id}/scheduleList`,
             data: [...existingUserSchedule.scheduleList, newScheduleEntry],
           });
+
+          await mutate();
           handleOnCloseModal();
         } else {
           // 존재하지 않던 유저의 스케줄 등록의 경우
@@ -150,6 +149,7 @@ const ScheduleModalContents = ({
           });
         }
 
+        await mutate();
         handleOnCloseModal();
       } else if (modalType === 'U') {
         const newScheduleEntry = {
@@ -183,6 +183,7 @@ const ScheduleModalContents = ({
           data: updatedScheduleList,
         });
 
+        await mutate();
         handleOnCloseModal();
       }
 
@@ -228,6 +229,8 @@ const ScheduleModalContents = ({
           data: updatedScheduleList,
         });
       }
+
+      await mutate();
       handleOnCloseModal();
     } catch (error) {
       console.error('데이터 삭제 중 오류:', error);

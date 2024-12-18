@@ -8,20 +8,23 @@ import type {
   FormattedUserOrTeamScheduleData,
   ScheduleData,
 } from '../../../../../../../types/schedule';
+import { useSchedule } from '../../../../../../../hooks/useSchedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
 }
 
 const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
-  const { currentMonth, currentYear, currentSchedule, scheduleData } =
-    useSelector((state: RootState) => state.schedule);
+  const { currentMonth, currentYear, currentSchedule } = useSelector(
+    (state: RootState) => state.schedule
+  );
   const [userScheduleData, setUserScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
   const [teamScheduleData, setTeamScheduleData] = useState<
     FormattedUserOrTeamScheduleData[]
   >([]);
+  const { scheduleData = [] } = useSchedule();
 
   useEffect(() => {
     if (currentSchedule.type === 'user') {

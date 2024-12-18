@@ -7,18 +7,10 @@ import { useFetchUserInfo } from '../../../hooks';
 import { Loading } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../state/store';
-import {
-  setCurrentSchedule,
-  setScheduleData,
-  setTeamData,
-} from '../../../slices/schedule/scheduleSlice';
-import type {
-  ScheduleData,
-  TeamData,
-  TeamMembersData,
-} from '../../../types/schedule';
-import useSWR from 'swr';
-import { COLLECTION_NAME } from '../../../constant';
+import { setCurrentSchedule } from '../../../slices/schedule/scheduleSlice';
+import type { TeamData, TeamMembersData } from '../../../types/schedule';
+import { useSchedule } from '../../../hooks/useSchedule';
+import { useTeam } from '../../../hooks/useTeam';
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -28,39 +20,34 @@ const Schedule = () => {
     isLoading: isUserFetchLoading,
     error: userFetchError,
   } = useFetchUserInfo();
-  const { error: isShceduleFetchLoading, isLoading: scheduleFetchError } =
-    useSWR<ScheduleData[]>(
-      { table: COLLECTION_NAME.schedule },
-      { onSuccess: (data) => dispatch(setScheduleData(data)) }
-    );
-  const { error: isTeamFetchLoading, isLoading: teamFetchError } = useSWR<
-    TeamData[]
-  >(
-    { table: COLLECTION_NAME.teams },
-    {
-      onSuccess: (data) => {
-        dispatch(setTeamData(data));
-        getCurrentUserTeamsData(data);
-      },
+  const { error: isScheduleFetchLoading, isLoading: scheduleFetchError } =
+    useSchedule();
+  const {
+    error: isTeamFetchLoading,
+    isLoading: teamFetchError,
+    mutate,
+  } = useTeam((data: TeamData[]) => {
+    if (!userInfo) {
+      mutate();
+    } else {
+      getCurrentUserTeamsData(data);
     }
-  );
+  });
 
   const isLoading =
-    isUserFetchLoading || isShceduleFetchLoading || isTeamFetchLoading;
+    isUserFetchLoading || isScheduleFetchLoading || isTeamFetchLoading;
   const hasError = userFetchError || scheduleFetchError || teamFetchError;
 
   const getCurrentUserTeamsData = (teamData: TeamData[]) => {
-    if (teamData) {
+    if (userInfo) {
       const currentUserTeams = teamData.find((team) =>
-        team.members.some(
-          (member) => userInfo && member.userId === userInfo.userId
-        )
+        team.members.some((member) => member.userId === userInfo.userId)
       )?.members as TeamMembersData[];
 
       dispatch(
         setCurrentSchedule({
           type: 'team',
-          teamId: currentUserTeams && currentUserTeams,
+          teamId: currentUserTeams || [],
           userId: '',
         })
       );
