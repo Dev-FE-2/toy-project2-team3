@@ -107,7 +107,7 @@ const S = {
       background-color: ${({ isActive }) =>
         isActive
           ? `${colors.semantic.hover.primary}`
-          : `${colors.semantic.hover.tertiary}`};
+          : `${colors.semantic.hover.secondary}`};
     }
     &:disabled {
       background-color: ${colors.semantic.disabled};
