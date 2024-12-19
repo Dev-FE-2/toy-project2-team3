@@ -1,5 +1,5 @@
 import { styled, keyframes } from 'styled-components';
-import { padding, colors } from '../../styles';
+import { padding, colors } from '../styles';
 
 const Loading = () => {
   return (

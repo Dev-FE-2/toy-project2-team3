@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { URL } from '../../../constant';
-import { colors, padding } from '../../../styles';
+import { URL } from '../../constant';
+import { colors, padding } from '../../styles';
 import LogoImage from '../../../assets/pokemonBall.svg';
 
 const BrandLogo = ({ style }: { style: { padding: string } }) => {

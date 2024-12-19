@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useLogout } from '../../../hooks';
-import { hexToRgba } from '../../../utils';
-import { colors, padding } from '../../../styles';
-import { Icon } from '../../../components';
-import { NAV_ITEM } from '../../../constant';
+import { useLogout } from '../../hooks';
+import { hexToRgba } from '../../utils';
+import { colors, padding } from '../../styles';
+import { Icon } from '..';
+import { NAV_ITEM } from '../../constant';
 
 const Navigation = ({ style }: { style: { padding: string } }) => {
   const navigate = useNavigate();

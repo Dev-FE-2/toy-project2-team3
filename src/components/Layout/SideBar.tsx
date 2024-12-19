@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { border, padding, colors } from '../../../styles';
+import { border, padding, colors } from '../../styles';
 import BrandLogo from './BrandLogo';
 import Navigation from './Navigation';
 import UserStatus from './UserStatus';

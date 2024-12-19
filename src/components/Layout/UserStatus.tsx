@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import type { RootState } from '../../../state/store';
-import { colors, font, padding } from '../../../styles';
-import UserProfilePhoto from '../../UserProfilePhoto';
+import type { RootState } from '../../state/store';
+import { colors, font, padding } from '../../styles';
+import UserProfilePhoto from '../UserProfilePhoto';
 import defaultImage from 'public/avatar.svg';
-import { URL } from '../../../constant';
+import { URL } from '../../constant';
 
 type UserStatusProps = {
   style: {
