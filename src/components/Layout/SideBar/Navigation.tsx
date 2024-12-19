@@ -3,87 +3,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useLogout } from '../../../hooks';
 import { hexToRgba } from '../../../utils';
-import { URL } from '../../../constant';
 import { colors, padding } from '../../../styles';
 import { Icon } from '../../../components';
-
-type NavItem = {
-  icon: string;
-  text: string;
-  link: string;
-  name: string;
-  hasSubNav: boolean;
-  firstSubNav: string;
-  isSubNav: boolean;
-  parentNav: string;
-  iconSize?: number;
-};
-
-const getNavItems = (
-  navItem: Pick<NavItem, 'text' | 'link' | 'name'>,
-  {
-    hasSubNav,
-    firstSubNav,
-    isSubNav,
-    parentNav,
-    icon,
-    iconSize,
-  }: Omit<NavItem, 'text' | 'link' | 'name'>
-) => ({
-  ...navItem,
-  hasSubNav,
-  firstSubNav,
-  isSubNav,
-  parentNav,
-  icon,
-  iconSize,
-});
-
-const navItems = [
-  getNavItems(URL.userHome, {
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: false,
-    parentNav: '',
-    icon: 'home',
-  }),
-  getNavItems(URL.profile, {
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: false,
-    parentNav: '',
-    icon: 'person',
-  }),
-  getNavItems(URL.schedule, {
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: false,
-    parentNav: '',
-    icon: 'calendar_today',
-    iconSize: 22,
-  }),
-  getNavItems(URL.salary, {
-    hasSubNav: true,
-    firstSubNav: `${URL.salaryDetails.link}`,
-    isSubNav: false,
-    parentNav: '',
-    icon: 'attach_money',
-  }),
-  getNavItems(URL.salaryDetails, {
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: true,
-    parentNav: `${URL.salary.link}`,
-    icon: '',
-  }),
-  getNavItems(URL.salaryCorrection, {
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: true,
-    parentNav: `${URL.salary.link}`,
-    icon: '',
-  }),
-];
+import { NAV_ITEM } from '../../../constant';
 
 const Navigation = ({ style }: { style: { padding: string } }) => {
   const navigate = useNavigate();
@@ -97,7 +19,7 @@ const Navigation = ({ style }: { style: { padding: string } }) => {
 
   return (
     <S.Navigation padding={style.padding}>
-      {navItems.map((navItem) =>
+      {NAV_ITEM.map((navItem) =>
         navItem.hasSubNav ? (
           <S.NavItem
             onClick={() => handleToggle(navItem.firstSubNav)}
@@ -203,9 +125,6 @@ const S = {
     &.has-sub-nav.selected {
       background-color: ${hexToRgba(colors.semantic.primary, 0.05)};
       border-right: 3px solid ${colors.semantic.primary};
-    }
-
-    .nav-text {
     }
   `,
   NavText: styled.div`
