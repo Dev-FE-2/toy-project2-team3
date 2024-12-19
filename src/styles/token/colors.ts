@@ -116,7 +116,7 @@ const semantic = {
   danger: scale.danger.s600,
   warning: scale.warning.s600,
   neutral: scale.neutral.s600, // 배경, 보조 텍스트, 구분선
-  nuetralVariant: scale.neutralVariant.s600, // 보조적인 배경, 비활성 상태 UI
+  neutralVariant: scale.neutralVariant.s600, // 보조적인 배경, 비활성 상태 UI
   light: scale.neutral.s50,
   dark: scale.neutral.s800,
   info: scale.neutral.s600,
