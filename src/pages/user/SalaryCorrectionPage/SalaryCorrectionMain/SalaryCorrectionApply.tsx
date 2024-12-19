@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ApplyHeader from './ApplyHeader';
-import type { OvertimeRecord } from './ApplyMiddle';
-import ApplyMiddle from './ApplyMiddle';
-import ApplyBottom from './ApplyBottom';
+import ApplyHeader from './SalaryCorrectionApply/ApplyHeader';
+import type { OvertimeRecord } from './SalaryCorrectionApply/ApplyMiddle';
+import ApplyMiddle from './SalaryCorrectionApply/ApplyMiddle';
+import ApplyBottom from './SalaryCorrectionApply/ApplyBottom';
 
 type ApplyProps = {
   isVisible: boolean;

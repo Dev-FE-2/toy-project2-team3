@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../styles';
-import type { Item } from '../index';
-import ModalHeader from './ModalHeader';
-import ModalMiddle from './ModalMiddle';
-import ModalBottom from './ModalBottom';
+import { colors } from '../../../../styles';
+import type { Item } from './SalaryDetailsMain';
+import ModalHeader from './NormalPayStub/ModalHeader';
+import ModalMiddle from './NormalPayStub/ModalMiddle';
+import ModalBottom from './NormalPayStub/ModalBottom';
 interface NormalPayStubProps {
   item: Item;
   onClose: () => void;

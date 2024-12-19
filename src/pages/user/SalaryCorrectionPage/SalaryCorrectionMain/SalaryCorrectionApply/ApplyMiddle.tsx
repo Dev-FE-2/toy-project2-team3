@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles';
-import { uploadFile, deleteFile } from '../../../../../../utils';
-import { useFetchUserInfo } from '../../../../../../hooks';
+import { colors } from '../../../../../styles';
+import { uploadFile, deleteFile } from '../../../../../utils';
+import { useFetchUserInfo } from '../../../../../hooks';
 
 export type RequestDetail = {
   requestDetail: string;

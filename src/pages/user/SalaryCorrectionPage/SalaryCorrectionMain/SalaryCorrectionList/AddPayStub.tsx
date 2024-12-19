@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../../styles';
-import type { SalaryRequest } from '../../../../../../types/interface';
-import ModalHeader from './ModalHeader';
-import ModalMiddle from './ModalMiddle';
+import { colors } from '../../../../../styles';
+import type { SalaryRequest } from '../../../../../types/interface';
+import ModalHeader from './AddPayStub/ModalHeader';
+import ModalMiddle from './AddPayStub/ModalMiddle';
 
 type AddPayStubProps = {
   item: SalaryRequest;

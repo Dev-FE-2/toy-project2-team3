@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../../../../../../styles';
-import { useFetchUserInfo } from '../../../../../../../hooks';
-import { fetchDataFromDB } from '../../../../../../../utils';
-import { getFilteredFileNames } from '../../../SalaryCorrectionApply/ApplyMiddle';
+import { colors } from '../../../../../../styles';
+import { useFetchUserInfo } from '../../../../../../hooks';
+import { fetchDataFromDB } from '../../../../../../utils';
+import { getFilteredFileNames } from '../../SalaryCorrectionApply/ApplyMiddle';
 import type {
   SalaryRequest,
   SalaryRequestItem,
-} from '../../../../../../../types/interface';
+} from '../../../../../../types/interface';
 
 type ModalMiddleProps = {
   item: SalaryRequest;

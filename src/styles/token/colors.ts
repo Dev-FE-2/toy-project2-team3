@@ -28,6 +28,7 @@ const scale = {
     s950: raw.cyan.r950,
   },
   neutral: {
+    s0: raw.neutral.r0,
     s50: raw.neutral.r50,
     s100: raw.neutral.r100,
     s200: raw.neutral.r200,
@@ -39,6 +40,7 @@ const scale = {
     s800: raw.neutral.r800,
     s900: raw.neutral.r900,
     s950: raw.neutral.r950,
+    s1000: raw.neutral.r1000,
   },
   neutralVariant: {
     s50: raw.stone.r50,
@@ -114,11 +116,11 @@ const semantic = {
   danger: scale.danger.s600,
   warning: scale.warning.s600,
   neutral: scale.neutral.s600, // 배경, 보조 텍스트, 구분선
-  nuetralVariant: scale.neutralVariant.s600, // 보조적인 배경, 비활성 상태 UI
-  dark: scale.neutral.s600,
-  light: scale.neutral.s100,
-  disabled: scale.neutralVariant.s600,
+  neutralVariant: scale.neutralVariant.s600, // 보조적인 배경, 비활성 상태 UI
+  light: scale.neutral.s50,
+  dark: scale.neutral.s800,
   info: scale.neutral.s600,
+  disabled: scale.neutralVariant.s600,
   hover: {
     primary: scale.primary.s400,
     secondary: scale.secondary.s400,
@@ -130,13 +132,13 @@ const semantic = {
     info: scale.info.s400,
   },
   background: {
-    light: scale.neutral.s100,
+    light: scale.neutral.s0,
     dark: scale.neutralVariant.s300,
   },
   text: {
     light: scale.neutral.s50,
-    gray: scale.neutral.s600,
     dark: scale.neutral.s800,
+    info: scale.neutral.s600,
   },
   border: {
     light: scale.neutral.s300,

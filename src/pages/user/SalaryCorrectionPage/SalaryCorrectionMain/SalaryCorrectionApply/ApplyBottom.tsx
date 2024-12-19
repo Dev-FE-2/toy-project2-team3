@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useFetchUserInfo } from '../../../../../../hooks/';
-import { saveDataToDB } from '../../../../../../utils';
-import type { OvertimeRecord } from '../ApplyMiddle';
-import type { SalaryRequest } from '../../../../../../types/interface';
-import { colors } from '../../../../../../styles';
-import Loading from '../../../../../../components/Loading';
-import { fetchDataFromDB } from '../../../../../../utils';
-import { CoreModal } from '../../../../../../components';
+import { useFetchUserInfo } from '../../../../../hooks';
+import { saveDataToDB } from '../../../../../utils';
+import type { OvertimeRecord } from './ApplyMiddle';
+import type { SalaryRequest } from '../../../../../types/interface';
+import { colors } from '../../../../../styles';
+import Loading from '../../../../../components/Loading';
+import { fetchDataFromDB } from '../../../../../utils';
+import { CoreModal } from '../../../../../components';
 
 type ApplyBottomProps = {
   overtimeTotal: number;
