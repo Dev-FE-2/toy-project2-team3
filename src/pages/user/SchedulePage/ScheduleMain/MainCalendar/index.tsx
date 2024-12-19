@@ -11,43 +11,42 @@ const MainCalendar = () => {
     (state: RootState) => state.schedule
   );
   const dispatch = useDispatch();
-  const FIRST_DAY_OF_MONTH = new Date(currentYear, currentMonth - 1, 1);
-  const LAST_DAY_OF_MONTH = new Date(currentYear, currentMonth, 0);
-  const totalDays = LAST_DAY_OF_MONTH.getDate();
+  const calculateDays = (year: number, month: number) => {
+    const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1);
+    const lastDayOfMonth = new Date(currentYear, currentMonth, 0);
+    const totalDays = lastDayOfMonth.getDate();
+    const currentMonthDays = Array.from({ length: totalDays }, (_, i) => i + 1);
 
-  const startDayOfWeek = FIRST_DAY_OF_MONTH.getDay();
-  const lastDayOfPrevMonth = new Date(
+    const startDayOfWeek = firstDayOfMonth.getDay();
+    const lastDayOfPrevMonth = new Date(year, month - 1, 0).getDate();
+    const prevMonthDays = Array.from(
+      { length: startDayOfWeek },
+      (_, i) => lastDayOfPrevMonth - startDayOfWeek + i + 1
+    );
+
+    const TOTAL_DISPLAYED_DAYS =
+      prevMonthDays.length + currentMonthDays.length > 35 ? 42 : 35;
+
+    const nextMonthDays = Array.from(
+      {
+        length:
+          TOTAL_DISPLAYED_DAYS -
+          (prevMonthDays.length + currentMonthDays.length),
+      },
+      (_, i) => i + 1
+    );
+
+    return { prevMonthDays, currentMonthDays, nextMonthDays };
+  };
+
+  const { prevMonthDays, currentMonthDays, nextMonthDays } = calculateDays(
     currentYear,
-    currentMonth - 1,
-    0
-  ).getDate();
-  const prevMonthDays = Array.from(
-    { length: startDayOfWeek },
-    (_, i) => lastDayOfPrevMonth - startDayOfWeek + i + 1
+    currentMonth
   );
-
-  const currentMonthDays = Array.from({ length: totalDays }, (_, i) => i + 1);
-
-  const TOTAL_DISPLAYED_DAYS =
-    prevMonthDays.length + currentMonthDays.length > 35 ? 42 : 35;
-
-  const isSixWeekCalendar = TOTAL_DISPLAYED_DAYS === 42;
-
-  if (isSixWeekCalendar) {
-    dispatch(setIsSixWeek(true));
-  } else {
-    dispatch(setIsSixWeek(false));
-  }
-
-  const nextMonthDays = Array.from(
-    {
-      length:
-        TOTAL_DISPLAYED_DAYS - (prevMonthDays.length + currentMonthDays.length),
-    },
-    (_, i) => i + 1
-  );
-
   const allDays = [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
+
+  const isSixWeekCalendar = allDays.length > 35 ? 42 : 35;
+  dispatch(setIsSixWeek(isSixWeekCalendar === 42));
 
   return (
     <>

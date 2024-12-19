@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { colors, border } from '../../../../../../styles';
-import { MONTHS } from '../../../../../../constant/schedule';
+import { colors, border } from '../../../../../styles';
+import { MONTHS } from '../../../../../constant/schedule';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../../../../../../state/store';
+import type { RootState } from '../../../../../state/store';
 
 interface MonthPickerDetailProps {
   handleMonthClick: (clickedMonth: number) => void;
