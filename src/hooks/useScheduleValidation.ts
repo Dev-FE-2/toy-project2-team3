@@ -17,6 +17,14 @@ export const useScheduleValidation = () => {
       return false;
     }
 
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    const timeDifference = newEndedAt - newStartedAt;
+
+    if (timeDifference > ONE_DAY) {
+      setTimeError('일정은 최대 24시간까지만 등록 가능합니다.');
+      return false;
+    }
+
     const checkedExistingSchedule = isUpdate
       ? existingSchedules.filter(
           (schedule) => schedule.createdAt !== newSchedule.createdAt
