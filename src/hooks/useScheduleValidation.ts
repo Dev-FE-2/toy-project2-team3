@@ -6,7 +6,8 @@ export const useScheduleValidation = () => {
 
   const isValidSchedule = (
     existingSchedules: ScheduleList[],
-    newSchedule: ScheduleList
+    newSchedule: ScheduleList,
+    isUpdate: boolean = false
   ): boolean => {
     const newStartedAt = new Date(newSchedule.startedAt).getTime();
     const newEndedAt = new Date(newSchedule.endedAt).getTime();
@@ -16,15 +17,22 @@ export const useScheduleValidation = () => {
       return false;
     }
 
-    for (const schedule of existingSchedules) {
+    const checkedExistingSchedule = isUpdate
+      ? existingSchedules.filter(
+          (schedule) => schedule.createdAt !== newSchedule.createdAt
+        )
+      : existingSchedules;
+
+    for (const schedule of checkedExistingSchedule) {
       const existingStartedAt = new Date(schedule.startedAt).getTime();
       const existingEndedAt = new Date(schedule.endedAt).getTime();
 
-      if (
+      const isOverlap =
         (newStartedAt >= existingStartedAt && newStartedAt < existingEndedAt) ||
         (newEndedAt > existingStartedAt && newEndedAt <= existingEndedAt) ||
-        (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt)
-      ) {
+        (newStartedAt <= existingStartedAt && newEndedAt >= existingEndedAt);
+
+      if (isOverlap) {
         setTimeError('기존 일정과 겹치는 시간대입니다. 일정을 확인해주세요.');
         return false;
       }

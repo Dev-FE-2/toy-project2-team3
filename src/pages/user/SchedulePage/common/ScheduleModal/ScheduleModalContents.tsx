@@ -127,7 +127,13 @@ const ScheduleModalContents = ({
           updatedAt: new Date().toISOString(),
         };
 
-        if (!isValidSchedule([targetSchedule], updatedScheduleEntry)) {
+        if (
+          !isValidSchedule(
+            [targetSchedule],
+            updatedScheduleEntry,
+            modalType === 'U'
+          )
+        ) {
           return;
         }
 
