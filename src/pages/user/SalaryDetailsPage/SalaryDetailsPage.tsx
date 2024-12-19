@@ -72,6 +72,11 @@ const SalaryDetailsMain = () => {
     setCurrentPageItems(currentItemsSlice);
   }, [currentPage, salaryListData]);
 
+  useEffect(() => {
+    const newPage = pageParam ? parseInt(pageParam, 10) : 1;
+    setCurrentPage(newPage);
+  }, [location.search]);
+
   const handleItemClick = (item: Item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
