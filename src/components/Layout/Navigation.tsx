@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { useLogout } from '../../hooks';
 import { hexToRgba } from '../../utils';
 import { colors, padding } from '../../styles';
-import { Icon } from '..';
 import { NAV_ITEM } from '../../constant';
+import { Icon } from '../../components';
+import { default as NavText } from './NavText';
 
 const Navigation = ({ style }: { style: { padding: string } }) => {
   const navigate = useNavigate();
@@ -59,23 +60,6 @@ const Navigation = ({ style }: { style: { padding: string } }) => {
   );
 };
 
-const NavText = ({
-  text,
-  icon,
-  iconSize,
-}: {
-  text: string;
-  icon: string;
-  iconSize?: number;
-}) => {
-  return (
-    <S.NavText>
-      {icon && <Icon name={icon} size={iconSize} />}
-      {text}
-    </S.NavText>
-  );
-};
-
 const S = {
   Navigation: styled.nav<{ padding: string }>`
     flex: 1;
@@ -126,12 +110,6 @@ const S = {
       background-color: ${hexToRgba(colors.semantic.primary, 0.05)};
       border-right: 3px solid ${colors.semantic.primary};
     }
-  `,
-  NavText: styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: ${padding.sm};
   `,
 };
 
