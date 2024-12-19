@@ -27,7 +27,7 @@ function Router() {
           {/* Layout 중첩 라우팅 */}
 
           {/* 기본 경로 리다이렉트 설정 */}
-          <Route index element={<Navigate to={URL.userHome.link} replace />} />
+          <Route index element={<Navigate to={URL.profile.link} replace />} />
 
           {/* user */}
 

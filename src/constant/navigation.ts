@@ -2,14 +2,14 @@ import { URL } from '../constant';
 import { NavItem } from '../types';
 
 const NAV_ITEM: NavItem[] = [
-  {
-    ...URL.userHome,
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: false,
-    parentNav: '',
-    icon: 'home',
-  },
+  // {
+  //   ...URL.userHome,
+  //   hasSubNav: false,
+  //   firstSubNav: '',
+  //   isSubNav: false,
+  //   parentNav: '',
+  //   icon: 'home',
+  // },
   {
     ...URL.profile,
     hasSubNav: false,
