@@ -345,6 +345,10 @@ const S = {
       color: ${(props) => (props.documentName ? colors.semantic.primary : '')};
       outline: none;
       border: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   `,
   Textarea: styled.textarea<{ modalType: ModalType }>`
