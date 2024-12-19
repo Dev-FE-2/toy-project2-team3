@@ -5,15 +5,19 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../../../state/store';
 import type { FormattedUserOrTeamScheduleData } from '../../../../../../types/schedule';
 import { useSchedule } from '../../../../../../hooks/useSchedule';
-import { assignColor } from '../../../../../../utils';
+import { assignColor, calculateAdjustedDate } from '../../../../../../utils';
 import { formatUserSchedule } from '../../../../../../utils/formatUserSchedule';
 import { formatTeamSchedule } from '../../../../../../utils/formatTeamSchedule';
 
 interface MainCalendarDaysSchedulesProps {
   day: number;
+  isCurrentMonth: boolean;
 }
 
-const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
+const MainCalendarDaysSchedules = ({
+  day,
+  isCurrentMonth,
+}: MainCalendarDaysSchedulesProps) => {
   const { currentMonth, currentYear, currentSchedule } = useSelector(
     (state: RootState) => state.schedule
   );
@@ -27,9 +31,8 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
 
   const isDateInRange = (currentDate: Date, startedAt: Date, endedAt: Date) => {
     return (
-      currentDate.toDateString() === startedAt.toDateString() ||
-      currentDate.toDateString() === endedAt.toDateString() ||
-      (currentDate > startedAt && currentDate < endedAt)
+      currentDate.getTime() >= startedAt.setHours(0, 0, 0, 0) &&
+      currentDate.getTime() <= endedAt.setHours(23, 59, 59, 999)
     );
   };
 
@@ -42,13 +45,19 @@ const MainCalendarDaysSchedules = ({ day }: MainCalendarDaysSchedulesProps) => {
     );
     const assignedBorderColor = assignColor(scheduleData.number, 'border');
 
+    const { adjustedYear, adjustedMonth } = calculateAdjustedDate(
+      day,
+      isCurrentMonth,
+      currentMonth,
+      currentYear
+    );
+    const adjustedDate = new Date(adjustedYear, adjustedMonth - 1, day);
+
     return scheduleData.scheduleList
       .filter((data) => {
         const startDate = new Date(data.startedAt);
         const endDate = new Date(data.endedAt);
-        const currentDate = new Date(currentYear, currentMonth - 1, day);
-
-        return isDateInRange(currentDate, startDate, endDate);
+        return isDateInRange(adjustedDate, startDate, endDate);
       })
       .map((data) => (
         <S.MainCalendarDaysContents
