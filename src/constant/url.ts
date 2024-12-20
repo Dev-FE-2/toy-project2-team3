@@ -1,4 +1,4 @@
-type UrlType = {
+type Url = {
   [key: string]: {
     text: string;
     name: string;
@@ -6,7 +6,7 @@ type UrlType = {
   };
 };
 
-const NESTED_PATHS: UrlType = {
+const NESTED_PATHS: Url = {
   index: {
     text: 'index',
     name: '',
@@ -24,7 +24,7 @@ const NESTED_PATHS: UrlType = {
   },
 };
 
-const URL: UrlType = {
+const URL: Url = {
   index: {
     text: 'index',
     name: '',
@@ -35,10 +35,10 @@ const URL: UrlType = {
     name: 'userHome',
     link: '/userHome',
   },
-  editProfile: {
+  profile: {
     text: '나의 정보',
-    name: 'editProfile',
-    link: '/editProfile',
+    name: 'profile',
+    link: '/profile',
   },
   schedule: {
     text: '나의 업무',

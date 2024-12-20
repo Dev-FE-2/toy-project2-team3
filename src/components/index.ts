@@ -8,3 +8,4 @@ export { default as PageTitle } from './IntroLayout/PageTitle';
 export { default as PageContainer } from './IntroLayout/PageContainer';
 export { default as IntroLayout } from './IntroLayout';
 export { default as UserProfilePhoto } from './UserProfilePhoto';
+export { default as Icon } from './Icon';
