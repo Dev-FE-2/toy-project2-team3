@@ -72,6 +72,11 @@ const SalaryCorrectionList = () => {
     setCurrentPageItems(currentItemsSlice);
   }, [currentPage, items]); // items가 변경될 때도 currentPageItems를 업데이트
 
+  useEffect(() => {
+    const newPage = pageParam ? parseInt(pageParam, 10) : 1;
+    setCurrentPage(newPage);
+  }, [location.search]);
+
   const handleItemClick = (item: SalaryRequest) => {
     setSelectedItem(item);
     setIsModalOpen(true);
