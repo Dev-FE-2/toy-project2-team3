@@ -10,14 +10,14 @@ const NAV_ITEM: NavItem[] = [
   //   parentNav: '',
   //   icon: 'home',
   // },
-  {
-    ...URL.profile,
-    hasSubNav: false,
-    firstSubNav: '',
-    isSubNav: false,
-    parentNav: '',
-    icon: 'person',
-  },
+  // {
+  //   ...URL.profile,
+  //   hasSubNav: false,
+  //   firstSubNav: '',
+  //   isSubNav: false,
+  //   parentNav: '',
+  //   icon: 'person',
+  // },
   {
     ...URL.schedule,
     hasSubNav: false,
