@@ -43,41 +43,8 @@ const S = {
     max-width: ${(props) => props.maxWidth && props.maxWidth};
     max-height: ${(props) => props.maxHeight && props.maxHeight};
     cursor: pointer;
-    ${(props) =>
-      props.color === 'primary' &&
-      `background-color: ${colors.scale.primary.s200};
-       color: ${colors.semantic.primary};
-       `}
-    ${(props) =>
-      props.color === 'secondary' &&
-      `background-color: ${colors.scale.secondary.s200};
-       color: ${colors.semantic.secondary};
-       `}
-    ${(props) =>
-      props.color === 'neutral' &&
-      `background-color: ${colors.scale.neutral.s200};
-       color: ${colors.semantic.neutral};
-       `}
-    ${(props) =>
-      props.color === 'neutralVariant' &&
-      `background-color: ${colors.scale.neutralVariant.s200};
-       color: ${colors.semantic.nuetralVariant};
-       `}
-    ${(props) =>
-      props.color === 'success' &&
-      `background-color: ${colors.scale.success.s200};
-       color: ${colors.semantic.success};
-       `}
-    ${(props) =>
-      props.color === 'danger' &&
-      `background-color: ${colors.scale.danger.s200};
-       color: ${colors.semantic.danger};
-       `}
-    ${(props) =>
-      props.color === 'warning' &&
-      `background-color: ${colors.scale.warning.s200};
-       color: ${colors.semantic.warning};
-       `}
+    background-color: ${({ color }) => colors.scale[color].s200};
+    color: ${({ color }) => colors.semantic[color]};
   `,
 };
 
