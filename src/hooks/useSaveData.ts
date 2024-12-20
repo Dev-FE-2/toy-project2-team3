@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
-import { saveDataToDB } from '../firebase';
+import { saveDataToDB } from '../utils';
 
 interface UseSaveDataParams {
   table: string;

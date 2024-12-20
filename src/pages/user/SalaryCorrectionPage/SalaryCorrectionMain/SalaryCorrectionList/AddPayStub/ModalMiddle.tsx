@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../../../../../../styles';
 import { useFetchUserInfo } from '../../../../../../hooks';
-import { fetchDataFromDB } from '../../../../../../firebase';
+import { fetchDataFromDB } from '../../../../../../utils';
 import { getFilteredFileNames } from '../../SalaryCorrectionApply/ApplyMiddle';
 import type {
   SalaryRequest,

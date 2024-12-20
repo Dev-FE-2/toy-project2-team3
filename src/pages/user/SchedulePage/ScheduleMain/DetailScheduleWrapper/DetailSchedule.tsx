@@ -1,29 +1,59 @@
 import styled from 'styled-components';
-import { colors, padding } from '../../../../../../styles';
+import { colors, padding } from '../../../../../styles';
 import type {
-  FormattedUserOrTeamScheduleData,
   ScheduleList,
   TargetSchedule,
-} from '../../../../../../types/schedule';
-import { useDispatch } from 'react-redux';
+} from '../../../../../types/schedule';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsModalOpen,
   setModalType,
   setTargetSchedule,
-} from '../../../../../../slices/schedule/scheduleSlice';
+} from '../../../../../slices/schedule/scheduleSlice';
+import type { RootState } from '../../../../../state/store';
+import { useSchedule } from '../../../../../hooks/useSchedule';
+import { assignColor } from '../../../../../utils';
+import { formatTeamSchedule } from '../../../../../utils/formatTeamSchedule';
 
 interface DetailSchedulProps {
   formattedClickedDate: string;
   teamMembersLength: number;
-  clickedDateTeamScheduleData: FormattedUserOrTeamScheduleData[];
 }
 
 const DetailSchedule = ({
   formattedClickedDate,
   teamMembersLength,
-  clickedDateTeamScheduleData,
 }: DetailSchedulProps) => {
   const dispatch = useDispatch();
+  const { currentSchedule } = useSelector((state: RootState) => state.schedule);
+  const { scheduleData = [] } = useSchedule();
+
+  const isDateInRange = (startedAt: string, endedAt: string) => {
+    const cuttedStartedAt = startedAt.slice(0, 10);
+    const cuttedEndedAt = endedAt.slice(0, 10);
+
+    return (
+      formattedClickedDate === cuttedStartedAt ||
+      formattedClickedDate === cuttedEndedAt
+    );
+  };
+
+  const filterScheduleData = () => {
+    const teamScheduleData = formatTeamSchedule(currentSchedule, scheduleData);
+    console.log(teamScheduleData);
+    const formattedTeamScheduleData = teamScheduleData.map((schedule) => {
+      const filteredScheduleData = schedule.scheduleList.filter((item) =>
+        isDateInRange(item.startedAt, item.endedAt)
+      );
+
+      return {
+        ...schedule,
+        scheduleList: filteredScheduleData,
+      };
+    });
+
+    return formattedTeamScheduleData;
+  };
 
   const handleRModalOpen = (targetSchedule: TargetSchedule) => {
     dispatch(setModalType('R'));
@@ -33,7 +63,7 @@ const DetailSchedule = ({
 
   const SCHEDULE_GRID_WIDTH = (1250 - 40) / teamMembersLength - 0.3;
 
-  const calculatePosition = (startedAt: string, endedAt: string) => {
+  const calculateSchedulePosition = (startedAt: string, endedAt: string) => {
     const cuttedStartedAt = startedAt.slice(0, 10);
     const cuttedEndedAt = endedAt.slice(0, 10);
 
@@ -43,7 +73,6 @@ const DetailSchedule = ({
     let top = 0;
     let height = 0;
 
-    // startedAt === formattedClickedDate === endedAt
     if (
       cuttedStartedAt === formattedClickedDate &&
       cuttedEndedAt === formattedClickedDate
@@ -53,18 +82,14 @@ const DetailSchedule = ({
 
       top = startMinutes * 2;
       height = (endMinutes - startMinutes) * 2;
-    }
-    // startedAt === formattedClickedDate !== endedAt
-    else if (
+    } else if (
       cuttedStartedAt === formattedClickedDate &&
       cuttedEndedAt !== formattedClickedDate
     ) {
       const startMinutes = startDate.getHours() * 60 + startDate.getMinutes();
       top = startMinutes * 2;
       height = (24 * 60 - startMinutes) * 2;
-    }
-    // startedAt !== formattedClickedDate === endedAt
-    else if (
+    } else if (
       cuttedStartedAt !== formattedClickedDate &&
       cuttedEndedAt === formattedClickedDate
     ) {
@@ -76,31 +101,14 @@ const DetailSchedule = ({
     return { top, height };
   };
 
-  const assignColor = (number: number, type: string) => {
-    const colorSaturation = type === 'background' ? 's95' : 's60';
-    const color = [
-      colors.scale.secondary[colorSaturation],
-      colors.scale.tertiary[colorSaturation],
-      colors.scale.neutral[colorSaturation],
-      colors.scale.primary[colorSaturation],
-      colors.scale.danger[colorSaturation],
-    ];
-
-    const assingedColor = color[number % 5];
-
-    return assingedColor;
-  };
-
   const getTargetSchedule = (
     id: string,
-    // index: number,
     name: string,
     userId: string,
     scheduleData: ScheduleList
   ) => {
     const targetSchedule = {
       id,
-      // index,
       name,
       userId,
       ...scheduleData,
@@ -111,9 +119,9 @@ const DetailSchedule = ({
 
   return (
     <>
-      {clickedDateTeamScheduleData.map((schedule) =>
+      {filterScheduleData().map((schedule) =>
         schedule.scheduleList.map((item) => {
-          const { top, height } = calculatePosition(
+          const { top, height } = calculateSchedulePosition(
             item.startedAt,
             item.endedAt
           );
@@ -135,7 +143,6 @@ const DetailSchedule = ({
               onClick={() =>
                 getTargetSchedule(
                   schedule.id,
-                  // item.createdAt,
                   schedule.name,
                   schedule.userId,
                   item

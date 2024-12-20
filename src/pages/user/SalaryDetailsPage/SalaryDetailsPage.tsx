@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { fetchDataFromDB } from '../../../firebase';
+import { fetchDataFromDB } from '../../../utils';
 import type { RootState } from '../../../state/store';
 import { colors } from '../../../styles';
 import NormalPayStub from './SalaryDetailsMain/NormalPayStub';
@@ -44,6 +44,7 @@ const SalaryDetailsMain = () => {
           table: 'Salary',
           key: userInfo.userId,
         });
+        console.log(data);
         if (data && Array.isArray(data)) {
           // 최신순으로 정렬
           const sortedData = data.sort(

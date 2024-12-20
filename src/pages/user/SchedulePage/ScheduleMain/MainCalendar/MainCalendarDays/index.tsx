@@ -7,6 +7,7 @@ import {
   setClickedDate,
   setIsDayClick,
 } from '../../../../../../slices/schedule/scheduleSlice';
+import { calculateAdjustedDate } from '../../../../../../utils';
 
 interface MainCalendarDaysProps {
   day: number;
@@ -20,25 +21,13 @@ const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
   const dispatch = useDispatch();
 
   const handleDayClick = () => {
-    let adjustedYear = currentYear;
-    let adjustedMonth = currentMonth;
-    const adjustedDay = day;
-
-    if (!isCurrentMonth && day > 20) {
-      adjustedMonth -= 1;
-      if (adjustedMonth < 1) {
-        adjustedMonth = 12;
-        adjustedYear -= 1;
-      }
-    } else if (!isCurrentMonth && day <= 20) {
-      adjustedMonth += 1;
-      if (adjustedMonth > 12) {
-        adjustedMonth = 1;
-        adjustedYear += 1;
-      }
-    }
-
-    dispatch(setClickedDate([adjustedYear, adjustedMonth, adjustedDay]));
+    const { adjustedYear, adjustedMonth } = calculateAdjustedDate(
+      day,
+      isCurrentMonth,
+      currentMonth,
+      currentYear
+    );
+    dispatch(setClickedDate([adjustedYear, adjustedMonth, day]));
     dispatch(setIsDayClick(true));
   };
 
@@ -49,7 +38,7 @@ const MainCalendarDays = ({ day, isCurrentMonth }: MainCalendarDaysProps) => {
     >
       <S.MainCalendarDaysNumber>{day}</S.MainCalendarDaysNumber>
       <S.MainCalendarDaysContentsWrapper>
-        <MainCalendarDaysSchedules day={day} />
+        <MainCalendarDaysSchedules day={day} isCurrentMonth={isCurrentMonth} />
       </S.MainCalendarDaysContentsWrapper>
     </S.MainCalendarDaysWrapper>
   );
@@ -73,7 +62,7 @@ const S = {
       background-color: ${({ isCurrentMonth }) =>
         isCurrentMonth
           ? colors.semantic.hover.primary
-          : colors.scale.neutral.s95};
+          : colors.semantic.hover.secondary};
     }
   `,
   MainCalendarDaysNumber: styled.div`

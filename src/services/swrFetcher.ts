@@ -1,4 +1,4 @@
-import { fetchDataFromDB } from '../firebase';
+import { fetchDataFromDB } from '../utils';
 
 export type FetchParams = {
   table: string;
