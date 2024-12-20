@@ -2,76 +2,60 @@ import styled from 'styled-components';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleMain from './ScheduleMain';
 import ScheduleSideBar from './ScheduleSideBar';
-import { useEffect } from 'react';
-import { fetchDataFromDB } from '../../../firebase/fetchDataFromDB';
-import ScheduleModal from './core/ScheduleModal';
+import ScheduleModal from './common/ScheduleModal';
 import { useFetchUserInfo } from '../../../hooks';
 import { Loading } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../state/store';
-import {
-  setCurrentSchedule,
-  setScheduleData,
-  setTeamData,
-} from '../../../slices/schedule/scheduleSlice';
-import type {
-  ScheduleData,
-  TeamData,
-  TeamMembersData,
-} from '../../../types/schedule';
+import { setCurrentSchedule } from '../../../slices/schedule/scheduleSlice';
+import type { TeamData, TeamMembersData } from '../../../types/schedule';
+import { useSchedule } from '../../../hooks/useSchedule';
+import { useTeam } from '../../../hooks/useTeam';
 
 const SchedulePage = () => {
   const dispatch = useDispatch();
-  const { teamData, isModalOpen } = useSelector(
-    (state: RootState) => state.schedule
-  );
-  const { userInfo, isLoading, error } = useFetchUserInfo();
+  const { isModalOpen } = useSelector((state: RootState) => state.schedule);
+  const {
+    userInfo,
+    isLoading: isUserFetchLoading,
+    error: userFetchError,
+  } = useFetchUserInfo();
+  const { error: isScheduleFetchLoading, isLoading: scheduleFetchError } =
+    useSchedule();
+  const {
+    error: isTeamFetchLoading,
+    isLoading: teamFetchError,
+    mutate,
+  } = useTeam((data: TeamData[]) => {
+    if (!userInfo) {
+      mutate();
+    } else {
+      getCurrentUserTeamsData(data);
+    }
+  });
 
-  useEffect(() => {
-    const fetchInitialScheduleData = async () => {
-      const scheduleData = (await fetchDataFromDB({
-        table: 'Schedule',
-      })) as ScheduleData[];
-      dispatch(setScheduleData(scheduleData));
-    };
+  const isLoading =
+    isUserFetchLoading || isScheduleFetchLoading || isTeamFetchLoading;
+  const hasError = userFetchError || scheduleFetchError || teamFetchError;
 
-    fetchInitialScheduleData();
-  }, [dispatch]);
+  const getCurrentUserTeamsData = (teamData: TeamData[]) => {
+    if (userInfo) {
+      const currentUserTeams = teamData.find((team) =>
+        team.members.some((member) => member.userId === userInfo.userId)
+      )?.members as TeamMembersData[];
 
-  const getTeamsData = async () => {
-    const teamsData = (await fetchDataFromDB({ table: 'Teams' })) as TeamData[];
-
-    dispatch(setTeamData(teamsData));
-
-    return teamsData;
+      dispatch(
+        setCurrentSchedule({
+          type: 'team',
+          teamId: currentUserTeams || [],
+          userId: '',
+        })
+      );
+    }
   };
-
-  const getCurrentUserTeamsData = () => {
-    const currentUserTeams = teamData.find((team) =>
-      team.members.some(
-        (member) => userInfo && member.userId === userInfo.userId
-      )
-    )?.members as TeamMembersData[];
-
-    dispatch(
-      setCurrentSchedule({
-        type: 'team',
-        teamId: currentUserTeams,
-        userId: '',
-      })
-    );
-  };
-
-  useEffect(() => {
-    getCurrentUserTeamsData();
-  }, [userInfo]);
-
-  useEffect(() => {
-    getTeamsData();
-  }, []);
 
   if (isLoading) return <Loading />;
-  if (error) return <div>오류 발생: {error.message}</div>;
+  if (hasError) return <div>오류 발생</div>;
 
   return (
     <>

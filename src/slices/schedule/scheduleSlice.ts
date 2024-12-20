@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type {
-  TeamData,
   CurrentSchedule,
   TargetSchedule,
   ModalType,
-  ScheduleData,
 } from '../../types/schedule';
 
 interface ScheduleState {
@@ -14,11 +12,9 @@ interface ScheduleState {
   targetSchedule: TargetSchedule;
   modalType: ModalType;
   isModalOpen: boolean;
-  teamData: TeamData[];
   currentSchedule: CurrentSchedule;
   isDayClick: boolean;
   clickedDate: number[];
-  scheduleData: ScheduleData[];
 }
 
 const initialState: ScheduleState = {
@@ -40,7 +36,6 @@ const initialState: ScheduleState = {
   },
   modalType: 'C',
   isModalOpen: false,
-  teamData: [],
   currentSchedule: {
     type: '',
     teamId: [],
@@ -48,7 +43,6 @@ const initialState: ScheduleState = {
   },
   isDayClick: false,
   clickedDate: [],
-  scheduleData: [],
 };
 
 const scheduleSlice = createSlice({
@@ -73,9 +67,6 @@ const scheduleSlice = createSlice({
     setIsModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isModalOpen = action.payload;
     },
-    setTeamData: (state, action: PayloadAction<TeamData[]>) => {
-      state.teamData = action.payload;
-    },
     setCurrentSchedule: (state, action: PayloadAction<CurrentSchedule>) => {
       state.currentSchedule = action.payload;
     },
@@ -84,9 +75,6 @@ const scheduleSlice = createSlice({
     },
     setClickedDate: (state, action: PayloadAction<number[]>) => {
       state.clickedDate = action.payload;
-    },
-    setScheduleData: (state, action: PayloadAction<ScheduleData[]>) => {
-      state.scheduleData = action.payload;
     },
   },
 });
@@ -98,11 +86,9 @@ export const {
   setTargetSchedule,
   setModalType,
   setIsModalOpen,
-  setTeamData,
   setCurrentSchedule,
   setIsDayClick,
   setClickedDate,
-  setScheduleData,
 } = scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

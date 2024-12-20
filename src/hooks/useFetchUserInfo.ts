@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchUserInfo } from '../firebase/fetchUserInfo';
+import { fetchUserInfo } from '../utils/fetchUserInfo';
 import type { User } from '../types/interface';
 
 const useFetchUserInfo = () => {
